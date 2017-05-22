@@ -13,9 +13,12 @@ public:
   ~TextWindow();
 
   void setContent(std::vector<std::string> const& lines);
+  int getCh();
   void render();
 
 private:
   WINDOW * mWindow;
   std::vector<std::string> mBuffer;
+  int mCursorY;
+  int mTextOffsetY;
 };

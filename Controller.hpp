@@ -2,8 +2,6 @@
 
 #include <ncurses.h>
 
-#include "TextWindow.hpp"
-
 class Controller
 {
 public:
