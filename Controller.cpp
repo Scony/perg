@@ -31,5 +31,10 @@ void Controller::run()
     tw.setContent(mFiles[0].peekBuffer());
 
   tw.render();
-  tw.getCh();
+  int ch;
+  while (ch != 'q')
+    {
+      ch = tw.getCh();
+      mb.setContent(std::to_string(ch));
+    }
 }
