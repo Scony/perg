@@ -4,8 +4,17 @@
 #include "TextWindow.hpp"
 #include "StatusBar.hpp"
 
-Controller::Controller(WINDOW * window)
+Controller::Controller(WINDOW * window, const std::vector<std::string>& fileNames)
 {
+  for (const auto& fileName : fileNames)
+    try
+      {
+	mFiles.push_back(File(fileName));
+      }
+    catch (...)
+      {
+      }
+
   getmaxyx(stdscr, mRows, mCols);
   mvwprintw(window, 0, 0, "hello world");
 }
@@ -21,7 +30,11 @@ void Controller::run()
   for (int i = 1; i < mRows*3; i++)
     lines.push_back(lines[i-1] + "x");
 
-  tw.setContent(lines);
+  if (mFiles.size() == 0)
+    tw.setContent(std::vector<std::string>());
+  else
+    tw.setContent(mFiles[0].peekBuffer());
+
   tw.render();
   tw.getCh();
 }
