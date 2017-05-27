@@ -1,8 +1,9 @@
 #include "Grep.hpp"
 
-Grep::Grep(const std::vector<std::string>& lines)
+Grep::Grep(const std::vector<std::string>& lines, std::string name)
 {
   mLines = lines;
+  mName = name;
 }
 
 const std::vector<std::string>& Grep::peekBuffer()
@@ -17,7 +18,7 @@ Grep Grep::grep(std::string pattern)
     if (line.find(pattern) != std::string::npos)
       linesMatching.push_back(line);
 
-  Grep g = Grep(linesMatching);
+  Grep g = Grep(linesMatching, pattern);
   mGreps.push_back(g);
 
   return g;

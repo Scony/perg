@@ -6,7 +6,7 @@
 class Grep
 {
 public:
-  Grep(const std::vector<std::string>& lines);
+  Grep(const std::vector<std::string>& lines, std::string name = "");
   virtual ~Grep() {};
 
   const std::vector<std::string>& peekBuffer();
