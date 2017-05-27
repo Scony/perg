@@ -12,6 +12,7 @@ public:
   ~Minibuffer();
 
   void setContent(std::string content);
+  std::string readStr();
   void render();
 
 private:

@@ -17,6 +17,8 @@ TextWindow::~TextWindow()
 void TextWindow::setContent(std::vector<std::string> const& lines)
 {
   mBuffer = lines;
+  // TODO: recalculate
+  render();
 }
 
 int TextWindow::getCh()

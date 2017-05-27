@@ -21,6 +21,20 @@ void Minibuffer::setContent(std::string content)
   wrefresh(mWindow);
 }
 
+std::string Minibuffer::readStr()
+{
+  char buff[255] = { 0 };
+
+  wclear(mWindow);
+  echo();
+  mvwgetstr(mWindow, 0, 0, buff);
+  noecho();
+  wclear(mWindow);
+  wrefresh(mWindow);
+
+  return std::string(buff);
+}
+
 void Minibuffer::render()
 {
 }

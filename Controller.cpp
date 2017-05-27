@@ -34,9 +34,18 @@ void Controller::run()
     }
 
   tw.render();
-  int ch;
+  int ch = -1;
   while (ch != 'q')
     {
+      if (ch == 'g')
+	{
+	  auto str = mb.readStr();
+	  sb.setContent(str);
+	  auto grep = mFiles[0].grep(str);
+	  tw.setContent(grep.peekBuffer());
+	  sb.setContent(grep.getName());
+	}
+
       ch = tw.getCh();
       mb.setContent(std::to_string(ch));
     }

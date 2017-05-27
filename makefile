@@ -1,5 +1,5 @@
 all:
-	g++ -std=c++11 *.cpp -lncurses -o perg
+	g++ -g -std=c++11 *.cpp -lncurses -o perg
 
 clean:
 	find -name '*~' | xargs rm -f
