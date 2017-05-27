@@ -1,4 +1,5 @@
 #include <vector>
+#include <algorithm>
 
 #include "Controller.hpp"
 #include "File.hpp"
@@ -38,7 +39,7 @@ void Controller::run()
 	ch = wgetch(mWindow);		// TODO: some other window
       else
 	{
-	  mStatusBar->setContent(mGreps[mCurrentGid]->getName());
+	  mStatusBar->setContent(mGreps[mCurrentGid]->getName() + " (" + std::to_string(mCurrentGid) + ")");
 	  mTextWindows[mCurrentGid]->render();
 	  ch = mTextWindows[mCurrentGid]->getCh();
 	}
@@ -51,6 +52,38 @@ void Controller::run()
 	  auto grep = mGreps[mCurrentGid]->grep(str);
 	  addGrep(grep);
 	  mCurrentGid = grep->getGid();
+	}
+      else if (mCurrentGid != -1 and ch == 544)	// CTRL+LEFT
+	{
+	  std::vector<int> gids;
+	  for (const auto& pair : mGreps)
+	    gids.push_back(pair.first);
+	  std::sort(gids.begin(), gids.end());
+	  for (int i = 0; i < gids.size(); i++)
+	    if (gids[i] == mCurrentGid)
+	      {
+		if (i == 0)
+		  mCurrentGid = gids[gids.size()-1];
+		else
+		  mCurrentGid = gids[i-1];
+		break;
+	      }
+	}
+      else if (mCurrentGid != -1 and ch == 559)	// CTRL+RIGHT
+	{
+	  std::vector<int> gids;
+	  for (const auto& pair : mGreps)
+	    gids.push_back(pair.first);
+	  std::sort(gids.begin(), gids.end());
+	  for (int i = 0; i < gids.size(); i++)
+	    if (gids[i] == mCurrentGid)
+	      {
+		if (i == gids.size() - 1)
+		  mCurrentGid = gids[0];
+		else
+		  mCurrentGid = gids[i+1];
+		break;
+	      }
 	}
       else
 	mMinibuffer->setContent(std::to_string(ch));
