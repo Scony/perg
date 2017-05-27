@@ -14,9 +14,7 @@ Controller::Controller(WINDOW * window, const std::vector<std::string>& fileName
     try
       {
 	auto file = std::shared_ptr<Grep>(new File(fileName));
-	mGreps.insert({file->getGid(), file});
-	mTextWindows.insert({file->getGid(), std::make_shared<TextWindow>(0, 0, mCols, mRows-2)});
-	mTextWindows[file->getGid()]->setContent(mGreps[file->getGid()]->peekBuffer());
+	addGrep(file);
 	mCurrentGid = file->getGid();
       }
     catch (...)
@@ -47,11 +45,21 @@ void Controller::run()
 
       if (ch == 'q')
 	break;
-
-      if (ch == 'g')
+      else if (mCurrentGid != -1 and ch == 'g')
 	{
 	  auto str = mMinibuffer->readStr();
-	  // TODO: add new grep and update mCurrentGid
+	  auto grep = mGreps[mCurrentGid]->grep(str);
+	  addGrep(grep);
+	  mCurrentGid = grep->getGid();
 	}
+      else
+	mMinibuffer->setContent(std::to_string(ch));
     }
+}
+
+void Controller::addGrep(std::shared_ptr<Grep> grep)
+{
+  mGreps.insert({grep->getGid(), grep});
+  mTextWindows.insert({grep->getGid(), std::make_shared<TextWindow>(0, 0, mCols, mRows-2)});
+  mTextWindows[grep->getGid()]->setContent(mGreps[grep->getGid()]->peekBuffer());
 }

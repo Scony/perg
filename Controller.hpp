@@ -19,6 +19,9 @@ public:
   void run();
 
 private:
+  void addGrep(std::shared_ptr<Grep> grep);
+
+private:
   int mCols;
   int mRows;
 
