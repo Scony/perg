@@ -1,7 +1,10 @@
 #include "Grep.hpp"
 
+int Grep::sNextGid = 0;
+
 Grep::Grep(const std::vector<std::string>& lines, std::string name)
 {
+  mGid = sNextGid++;
   mLines = lines;
   mName = name;
 }
@@ -22,6 +25,11 @@ Grep Grep::grep(std::string pattern)
   mGreps.push_back(g);
 
   return g;
+}
+
+int Grep::getGid()
+{
+  return mGid;
 }
 
 const std::string& Grep::getName()

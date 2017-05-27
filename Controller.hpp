@@ -3,14 +3,16 @@
 #include <ncurses.h>
 #include <vector>
 #include <string>
+#include <memory>
+#include <map>
 
-#include "File.hpp"
+#include "Grep.hpp"
+#include "StatusBar.hpp"
+#include "Minibuffer.hpp"
+#include "TextWindow.hpp"
 
 class Controller
 {
-public:
-  enum Keyboard { PAGE_UP = 339, PAGE_DOWN = 338 };
-
 public:
   Controller(WINDOW * window, const std::vector<std::string>& fileNames);
 
@@ -20,5 +22,12 @@ private:
   int mCols;
   int mRows;
 
-  std::vector<File> mFiles;
+  std::map<int, std::shared_ptr<Grep> > mGreps;
+  std::map<int, std::shared_ptr<TextWindow> > mTextWindows;
+  int mCurrentGid;
+
+  std::unique_ptr<StatusBar> mStatusBar;
+  std::unique_ptr<Minibuffer> mMinibuffer;
+
+  WINDOW * mWindow;
 };
