@@ -28,7 +28,10 @@ void Controller::run()
   if (mFiles.size() == 0)
     tw.setContent(std::vector<std::string>());
   else
-    tw.setContent(mFiles[0].peekBuffer());
+    {
+      tw.setContent(mFiles[0].peekBuffer());
+      sb.setContent(mFiles[0].getName());
+    }
 
   tw.render();
   int ch;

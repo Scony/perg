@@ -10,6 +10,7 @@ public:
   StatusBar(int x, int y, int cols); // rows = 1
   ~StatusBar();
 
+  void setContent(std::string content);
   void render();
 
 private:

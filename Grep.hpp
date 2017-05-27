@@ -10,7 +10,9 @@ public:
   virtual ~Grep() {};
 
   const std::vector<std::string>& peekBuffer();
+  const std::string& getName();
 
 protected:
   std::vector<std::string> mLines;
+  std::string mName;
 };

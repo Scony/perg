@@ -17,6 +17,14 @@ StatusBar::~StatusBar()
   delwin(mWindow);
 }
 
+void StatusBar::setContent(std::string content)
+{
+  std::string rFill = std::string(mCols - content.size() - 4, '-');
+  wclear(mWindow);
+  mvwprintw(mWindow, 0, 0, ("-- " + content + " " + rFill).c_str());
+  wrefresh(mWindow);
+}
+
 void StatusBar::render()
 {
 }

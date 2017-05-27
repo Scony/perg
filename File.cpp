@@ -6,6 +6,8 @@
 File::File(std::string fileName) :
   Grep(std::vector<std::string>())
 {
+  mName = fileName;
+
   std::ifstream fileStream(fileName.c_str());
   if (!fileStream.is_open())
     throw std::runtime_error("Cannot open file");
