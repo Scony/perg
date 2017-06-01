@@ -53,7 +53,7 @@ void Controller::run()
 	  addGrep(grep);
 	  mCurrentGid = grep->getGid();
 	}
-      else if (mCurrentGid != -1 and ch == 544)	// CTRL+LEFT
+      else if (mCurrentGid != -1 and std::string(keyname(ch)) == "kLFT5")	// CTRL+LEFT
 	{
 	  std::vector<int> gids;
 	  for (const auto& pair : mGreps)
@@ -69,7 +69,7 @@ void Controller::run()
 		break;
 	      }
 	}
-      else if (mCurrentGid != -1 and ch == 559)	// CTRL+RIGHT
+      else if (mCurrentGid != -1 and std::string(keyname(ch)) == "kRIT5")	// CTRL+RIGHT
 	{
 	  std::vector<int> gids;
 	  for (const auto& pair : mGreps)
