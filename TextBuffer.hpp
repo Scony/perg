@@ -12,14 +12,21 @@ public:
   using Iterator = std::vector<std::string>::iterator;
 
 public:
-  std::pair<Iterator, Iterator> slice(unsigned pos, unsigned len);
   unsigned size();
-  // void waitForNewData();
+  void applyFunctionToSlice(std::function<void>(Iterator, Iterator), unsigned pos, unsigned len);
+  void waitForNewData();
 
-  void append(const Buffer& data);
+  void appendData(const Buffer& data);
 
 private:
   Buffer mBuffer;
+  unsigned mExpectedBufferSize;
   std::mutex mBufferLock;
   std::condition_variable mNewData;
+
+private:
+  TextBuffer(const TextBuffer&) = delete;
+  TextBuffer& operator=(const TextBuffer&) = delete;
+  TextBuffer(TextBuffer&&) = delete;
+  TextBuffer& operator=(TextBuffer&&) = delete;
 };
