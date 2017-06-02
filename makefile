@@ -1,6 +1,6 @@
 all:
-	g++ -g -std=c++11 *.cpp -lncurses -o perg
+	mkdir -p build && cd build && cmake .. && make -j
 
 clean:
 	find -name '*~' | xargs rm -f
-	rm -f perg
+	rm -rf build
