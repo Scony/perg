@@ -15,7 +15,7 @@ public:
   TextBuffer();
 
   unsigned size();
-  void applyFunctionToSlice(std::function<void>(Iterator, Iterator), unsigned pos, unsigned len);
+  void applyFunctionToSlice(std::function<void(Iterator, Iterator)> function, unsigned pos, unsigned len);
   void waitForNewData();
 
   void appendData(const Buffer& data);
