@@ -12,6 +12,8 @@ public:
   using Iterator = std::vector<std::string>::iterator;
 
 public:
+  TextBuffer();
+
   unsigned size();
   void applyFunctionToSlice(std::function<void>(Iterator, Iterator), unsigned pos, unsigned len);
   void waitForNewData();
