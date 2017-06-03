@@ -3,22 +3,23 @@
 #include <ncurses.h>
 #include <vector>
 #include <string>
+#include <memory>
 
 #include "Window.hpp"
+#include "TextBuffer.hpp"
 
 class TextWindow : public Window
 {
 public:
-  TextWindow(int x, int y, int cols, int rows);
+  TextWindow(std::shared_ptr<TextBuffer> buffer, int x, int y, int cols, int rows);
   ~TextWindow();
 
-  void setContent(std::vector<std::string> const& lines);
   int getCh();
   void render();
 
 private:
   WINDOW * mWindow;
-  std::vector<std::string> mBuffer;
+  std::shared_ptr<TextBuffer> mBuffer;
   int mCursorY;
   int mTextOffsetY;
 };

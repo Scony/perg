@@ -93,6 +93,5 @@ void Controller::run()
 void Controller::addGrep(std::shared_ptr<Grep> grep)
 {
   mGreps.insert({grep->getGid(), grep});
-  mTextWindows.insert({grep->getGid(), std::make_shared<TextWindow>(0, 0, mCols, mRows-2)});
-  // mTextWindows[grep->getGid()]->setContent(mGreps[grep->getGid()]->peekBuffer());
+  mTextWindows.insert({grep->getGid(), std::make_shared<TextWindow>(grep->getBuffer(), 0, 0, mCols, mRows-2)});
 }

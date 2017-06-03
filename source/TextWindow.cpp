@@ -1,7 +1,8 @@
 #include "TextWindow.hpp"
 
-TextWindow::TextWindow(int x, int y, int cols, int rows) :
-  Window(x, y, cols, rows)
+TextWindow::TextWindow(std::shared_ptr<TextBuffer> buffer, int x, int y, int cols, int rows) :
+  Window(x, y, cols, rows),
+  mBuffer(buffer)
 {
   mWindow = newwin(rows, cols, y, x);
   keypad(mWindow, TRUE);
@@ -12,13 +13,6 @@ TextWindow::TextWindow(int x, int y, int cols, int rows) :
 TextWindow::~TextWindow()
 {
   delwin(mWindow);
-}
-
-void TextWindow::setContent(std::vector<std::string> const& lines)
-{
-  mBuffer = lines;
-  // TODO: recalculate
-  render();
 }
 
 int TextWindow::getCh()
@@ -46,7 +40,7 @@ int TextWindow::getCh()
 	case KEY_DOWN:
 	  if (mCursorY == mRows - 1)
 	    {
-	      if (mBuffer.size() - mTextOffsetY > mRows)
+	      if (mBuffer->size() - mTextOffsetY > mRows)
 		{
 		  mTextOffsetY++;
 		  render();
@@ -63,7 +57,7 @@ int TextWindow::getCh()
 
 	case KEY_NPAGE:		// PAGE DOWN
 	  {
-	    int maxTextOffsetY = mBuffer.size() - mRows;
+	    int maxTextOffsetY = mBuffer->size() - mRows;
 	    if (maxTextOffsetY < 0)
 	      break;
 	    mTextOffsetY = mTextOffsetY + mRows < maxTextOffsetY ? mTextOffsetY + mRows : maxTextOffsetY;
@@ -85,7 +79,18 @@ int TextWindow::getCh()
 void TextWindow::render()
 {
   wclear(mWindow);
-  for (int i = 0; i < mRows and i < mBuffer.size(); i++)
-    mvwprintw(mWindow, i, 0, mBuffer[i+mTextOffsetY].c_str());
+  auto& pos = mTextOffsetY;
+  auto len = std::min((unsigned)mRows, mBuffer->size()-pos);
+  auto renderer = [&](TextBuffer::Iterator begin, TextBuffer::Iterator end) {
+    int i = 0;
+    auto it = begin;
+    while (it != end)
+      {
+	mvwprintw(mWindow, i, 0, it->c_str());
+	i++;
+	it++;
+      }
+  };
+  mBuffer->applyFunctionToSlice(renderer, pos, len);
   wmove(mWindow, mCursorY, 0);
 }
