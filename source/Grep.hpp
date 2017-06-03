@@ -4,24 +4,27 @@
 #include <string>
 #include <memory>
 
-class Grep
+#include "TextBuffer.hpp"
+
+class Grep			// TODO: disable copying and moving
 {
 public:
-  Grep(const std::vector<std::string>& lines, std::string name = "");
+  Grep(std::function<void(std::shared_ptr<TextBuffer>)> workerFunction,
+       std::string name = "");
   virtual ~Grep() {};
 
-  const std::vector<std::string>& peekBuffer();
   std::shared_ptr<Grep> grep(std::string pattern);
 
   int getGid();
+  std::shared_ptr<TextBuffer> getBuffer();
   const std::string& getName();
   // const std::vector<Grep>& getGreps();
 
 protected:
   int mGid;
-  std::vector<std::string> mLines;
+  std::shared_ptr<TextBuffer> mBuffer;
   std::string mName;
-  std::vector<std::shared_ptr<Grep> > mGreps;
+  // std::vector<std::shared_ptr<Grep> > mGreps;
 
   static int sNextGid;
 };

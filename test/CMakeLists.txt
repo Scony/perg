@@ -10,6 +10,8 @@ add_executable(perg-test
   main.cpp
   TextBufferTest.cpp
   ../source/TextBuffer.cpp
+  GrepTest.cpp
+  ../source/Grep.cpp
 )
 
 target_link_libraries(perg-test gtest gtest_main)
