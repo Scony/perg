@@ -15,14 +15,16 @@ public:
   TextBuffer();
 
   unsigned size();
+  bool isFull();
   void applyFunctionToSlice(std::function<void(Iterator, Iterator)> function, unsigned pos, unsigned len);
-  void waitForNewData();
+  // void waitForNewData();
 
   void appendData(const Buffer& data);
+  void seal();
 
 private:
   Buffer mBuffer;
-  unsigned mExpectedBufferSize;
+  bool mFull;
   std::mutex mBufferLock;
   std::condition_variable mNewData;
 

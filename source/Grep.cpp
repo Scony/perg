@@ -22,6 +22,7 @@ std::shared_ptr<Grep> Grep::grep(std::string pattern)
   // mGreps.push_back(g);
 
   // return g;
+  return std::shared_ptr<Grep>(nullptr);
 }
 
 int Grep::getGid()

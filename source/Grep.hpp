@@ -6,7 +6,7 @@
 
 #include "TextBuffer.hpp"
 
-class Grep			// TODO: disable copying and moving
+class Grep
 {
 public:
   Grep(std::function<void(std::shared_ptr<TextBuffer>)> workerFunction,
@@ -27,4 +27,10 @@ protected:
   // std::vector<std::shared_ptr<Grep> > mGreps;
 
   static int sNextGid;
+
+private:
+  Grep(const Grep&) = delete;
+  Grep& operator=(const Grep&) = delete;
+  Grep(Grep&&) = delete;
+  Grep& operator=(Grep&&) = delete;
 };

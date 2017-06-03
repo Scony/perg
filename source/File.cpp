@@ -23,4 +23,5 @@ void File::readFile(std::string fileName, std::shared_ptr<TextBuffer> output)
     lines.push_back(line);
 
   output->appendData(lines);
+  output->seal();
 }

@@ -2,13 +2,19 @@
 
 #include "TextBuffer.hpp"
 
-TextBuffer::TextBuffer()
+TextBuffer::TextBuffer() :
+  mFull(false)
 {
 }
 
 unsigned TextBuffer::size()
 {
   return mBuffer.size();
+}
+
+bool TextBuffer::isFull()
+{
+  return mFull;
 }
 
 void TextBuffer::applyFunctionToSlice(std::function<void(Iterator, Iterator)> function, unsigned pos, unsigned len)
@@ -20,4 +26,9 @@ void TextBuffer::applyFunctionToSlice(std::function<void(Iterator, Iterator)> fu
 void TextBuffer::appendData(const Buffer& data)
 {
   mBuffer.insert(mBuffer.end(), data.begin(), data.end());
+}
+
+void TextBuffer::seal()
+{
+  mFull = true;
 }
