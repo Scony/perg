@@ -2,13 +2,15 @@
 
 TextWindow::TextWindow(std::shared_ptr<TextBuffer> buffer, int x, int y, int cols, int rows) :
   Window(x, y, cols, rows),
-  mBuffer(buffer)
+  mWindow(newwin(rows, cols, y, x)),
+  mBuffer(buffer),
+  mCursorY(0),
+  mTextOffsetY(0),
+  mPreviousTextOffsetY(-1),
+  mPreviousBufferSize(-1)
 {
-  mWindow = newwin(rows, cols, y, x);
   keypad(mWindow, TRUE);
-  wtimeout(mWindow, 100);	// 100ms
-  mCursorY = 0;
-  mTextOffsetY = 0;
+  wtimeout(mWindow, mWindowTimeoutMs);
 }
 
 TextWindow::~TextWindow()
@@ -74,7 +76,17 @@ int TextWindow::getCh()
 
 void TextWindow::render()
 {
-  wclear(mWindow);
+  if (mPreviousTextOffsetY != mTextOffsetY || mPreviousBufferSize != mBuffer->size())
+    {
+      mPreviousTextOffsetY = mTextOffsetY;
+      mPreviousBufferSize = mBuffer->size();
+      forceRender();
+    }
+  wmove(mWindow, mCursorY, 0);
+}
+
+void TextWindow::forceRender()
+{
   auto& pos = mTextOffsetY;
   auto len = std::min((unsigned)mRows, mBuffer->size()-pos);
   auto renderer = [&](TextBuffer::Iterator begin, TextBuffer::Iterator end) {
@@ -87,6 +99,8 @@ void TextWindow::render()
 	it++;
       }
   };
+
+  wclear(mWindow);
   mBuffer->applyFunctionToSlice(renderer, pos, len);
-  wmove(mWindow, mCursorY, 0);
+  // wmove(mWindow, mCursorY, 0);
 }

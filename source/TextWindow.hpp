@@ -16,10 +16,16 @@ public:
 
   int getCh();
   void render();
-
 private:
+  static const unsigned mWindowTimeoutMs = 1000;
+
+  void forceRender();
+
   WINDOW * mWindow;
   std::shared_ptr<TextBuffer> mBuffer;
   int mCursorY;
   int mTextOffsetY;
+
+  int mPreviousTextOffsetY;
+  int mPreviousBufferSize;
 };
