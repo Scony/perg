@@ -17,7 +17,7 @@ public:
   int getCh();
   void render();
 private:
-  static const unsigned mWindowTimeoutMs = 1000;
+  static const unsigned mWindowTimeoutMs = 100;
 
   void forceRender();
 

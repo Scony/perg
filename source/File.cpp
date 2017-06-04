@@ -20,8 +20,14 @@ void File::readFile(std::string fileName, std::shared_ptr<TextBuffer> output)
   std::vector<std::string> lines;
   std::string line;
   while (getline(fileStream, line))
-    lines.push_back(line);
+    {
+      lines.push_back(line);
+      if (lines.size() >= mLinesToFlush)
+	{
+	  output->appendData(lines);
+	  lines.clear();
+	}
+    }
 
-  output->appendData(lines);
   output->seal();
 }
