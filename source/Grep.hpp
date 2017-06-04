@@ -31,6 +31,9 @@ protected:
   static int sNextGid;
 
 private:
+  void grepWorker(std::shared_ptr<TextBuffer> ouput);
+
+private:
   Grep(const Grep&) = delete;
   Grep& operator=(const Grep&) = delete;
   Grep(Grep&&) = delete;

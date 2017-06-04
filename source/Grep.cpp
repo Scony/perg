@@ -1,4 +1,8 @@
+#include <functional>
+
 #include "Grep.hpp"
+
+using namespace std::placeholders;
 
 int Grep::sNextGid = 0;
 
@@ -19,16 +23,10 @@ Grep::~Grep()
 
 std::shared_ptr<Grep> Grep::grep(std::string pattern)
 {
-  // std::vector<std::string> linesMatching;
-  // for (const auto& line : mLines)
-  //   if (line.find(pattern) != std::string::npos)
-  //     linesMatching.push_back(line);
-
-  // auto g = std::make_shared<Grep>(linesMatching, pattern);
+  auto newGrep = std::make_shared<Grep>(std::bind(&Grep::grepWorker, this, _1), pattern);
   // mGreps.push_back(g);
 
-  // return g;
-  return std::shared_ptr<Grep>(nullptr);
+  return newGrep;
 }
 
 int Grep::getGid()
@@ -50,3 +48,11 @@ const std::string& Grep::getName()
 // {
 //   return mGreps;
 // }
+
+void Grep::grepWorker(std::shared_ptr<TextBuffer> ouput)
+{
+  // std::vector<std::string> linesMatching;
+  // for (const auto& line : mLines)
+  //   if (line.find(pattern) != std::string::npos)
+  //     linesMatching.push_back(line);
+}
