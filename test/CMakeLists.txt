@@ -14,4 +14,4 @@ add_executable(perg-test
   ../source/Grep.cpp
 )
 
-target_link_libraries(perg-test gtest gtest_main)
+target_link_libraries(perg-test gtest gtest_main pthread)
