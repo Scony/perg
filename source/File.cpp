@@ -29,5 +29,8 @@ void File::readFile(std::string fileName, std::shared_ptr<TextBuffer> output)
 	}
     }
 
+  if (lines.size() > 0)
+    output->appendData(lines);
+
   output->seal();
 }
