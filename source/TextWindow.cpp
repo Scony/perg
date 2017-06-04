@@ -82,7 +82,11 @@ void TextWindow::render()
       mPreviousBufferSize = mBuffer->size();
       forceRender();
     }
-  // wmove(mWindow, mCursorY, 0);
+}
+
+void TextWindow::focus()
+{
+  wmove(mWindow, mCursorY, 0);
 }
 
 void TextWindow::forceRender()

@@ -83,8 +83,14 @@ void Controller::run()
 		break;
 	      }
 	}
+      else if (ch < 0)
+	{
+	}
       else
-	mMinibuffer->setContent(std::to_string(ch));
+	{
+	  mMinibuffer->setContent(std::to_string(ch));
+	  mTextWindows[mCurrentGid]->focus();
+	}
     }
 }
 

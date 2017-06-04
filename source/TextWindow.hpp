@@ -16,6 +16,8 @@ public:
 
   int getCh();
   void render();
+  void focus();
+
 private:
   static const unsigned mWindowTimeoutMs = 100;
 
