@@ -5,10 +5,16 @@ int Grep::sNextGid = 0;
 Grep::Grep(std::function<void(std::shared_ptr<TextBuffer>)> workerFunction,
 	   std::string name) :
   mGid(sNextGid++),
+  mBuffer(new TextBuffer),
   mName(name),
-  mBuffer(new TextBuffer)
+  mThread(workerFunction, mBuffer)
 {
-  workerFunction(mBuffer);
+}
+
+Grep::~Grep()
+{
+  if (mThread.joinable())
+    mThread.join();
 }
 
 std::shared_ptr<Grep> Grep::grep(std::string pattern)

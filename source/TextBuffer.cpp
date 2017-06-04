@@ -19,7 +19,7 @@ bool TextBuffer::isFull()
 
 void TextBuffer::applyFunctionToSlice(std::function<void(Iterator, Iterator)> function, unsigned pos, unsigned len)
 {
-  assert(pos < mBuffer.size() && pos+len <= mBuffer.size());
+  assert(pos <= mBuffer.size() && pos+len <= mBuffer.size());
   function(mBuffer.begin()+pos, mBuffer.begin()+pos+len);
 }
 

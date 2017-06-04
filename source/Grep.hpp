@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <thread>
 
 #include "TextBuffer.hpp"
 
@@ -11,7 +12,7 @@ class Grep
 public:
   Grep(std::function<void(std::shared_ptr<TextBuffer>)> workerFunction,
        std::string name = "");
-  virtual ~Grep() {};
+  virtual ~Grep();
 
   std::shared_ptr<Grep> grep(std::string pattern);
 
@@ -24,6 +25,7 @@ protected:
   int mGid;
   std::shared_ptr<TextBuffer> mBuffer;
   std::string mName;
+  std::thread mThread;
   // std::vector<std::shared_ptr<Grep> > mGreps;
 
   static int sNextGid;

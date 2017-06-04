@@ -8,6 +8,7 @@ TEST(GrepTests, Init) {		// TODO: use gmock
     x = 1;
   };
   Grep g(f, "name");
+  sleep(1);			// TODO: wait for new data
   EXPECT_EQ(x, 1);
   EXPECT_EQ(g.getName(), "name");
 }

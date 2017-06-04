@@ -16,4 +16,4 @@ add_executable(perg
   Window.cpp
 )
 
-target_link_libraries(perg ncurses)
+target_link_libraries(perg ncurses pthread)

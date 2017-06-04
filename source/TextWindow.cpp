@@ -6,6 +6,7 @@ TextWindow::TextWindow(std::shared_ptr<TextBuffer> buffer, int x, int y, int col
 {
   mWindow = newwin(rows, cols, y, x);
   keypad(mWindow, TRUE);
+  wtimeout(mWindow, 100);	// 100ms
   mCursorY = 0;
   mTextOffsetY = 0;
 }
@@ -28,10 +29,7 @@ int TextWindow::getCh()
 	  if (mCursorY == 0)
 	    {
 	      if (mTextOffsetY > 0)
-		{
-		  mTextOffsetY--;
-		  render();
-		}
+		mTextOffsetY--;
 	    }
 	  else
 	    wmove(mWindow, --mCursorY, 0);
@@ -41,10 +39,7 @@ int TextWindow::getCh()
 	  if (mCursorY == mRows - 1)
 	    {
 	      if (mBuffer->size() - mTextOffsetY > mRows)
-		{
-		  mTextOffsetY++;
-		  render();
-		}
+		mTextOffsetY++;
 	    }
 	  else
 	    wmove(mWindow, ++mCursorY, 0);
@@ -52,7 +47,6 @@ int TextWindow::getCh()
 
 	case KEY_PPAGE:		// PAGE UP
 	  mTextOffsetY = mTextOffsetY > mRows ? mTextOffsetY - mRows : 0;
-	  render();
 	  break;
 
 	case KEY_NPAGE:		// PAGE DOWN
@@ -61,7 +55,6 @@ int TextWindow::getCh()
 	    if (maxTextOffsetY < 0)
 	      break;
 	    mTextOffsetY = mTextOffsetY + mRows < maxTextOffsetY ? mTextOffsetY + mRows : maxTextOffsetY;
-	    render();
 	    break;
 	  }
 
@@ -70,7 +63,10 @@ int TextWindow::getCh()
 	}
 
       if (!unsupportedKey)
-	key = wgetch(mWindow);
+	{
+	  render();
+	  key = wgetch(mWindow);
+	}
     }
 
   return key;

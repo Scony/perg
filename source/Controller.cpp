@@ -12,15 +12,12 @@ Controller::Controller(WINDOW * window, const std::vector<std::string>& fileName
   mCurrentGid = -1;
 
   for (const auto& fileName : fileNames)
-    try
-      {
-	auto file = std::shared_ptr<Grep>(new File(fileName));
-	addGrep(file);
-	mCurrentGid = file->getGid();
-      }
-    catch (...)
-      {
-      }
+    {
+      // TODO: check if file exists
+      auto file = std::shared_ptr<Grep>(new File(fileName));
+      addGrep(file);
+      mCurrentGid = file->getGid();
+    }
 
   mStatusBar.reset(new StatusBar(0, mRows-2, mCols));
   mMinibuffer.reset(new Minibuffer(0, mRows-1, mCols));
@@ -40,8 +37,9 @@ void Controller::run()
       else
 	{
 	  mStatusBar->setContent(mGreps[mCurrentGid]->getName() + " (" + std::to_string(mCurrentGid) + ")");
-	  mTextWindows[mCurrentGid]->render();
+	  // mTextWindows[mCurrentGid]->render();
 	  ch = mTextWindows[mCurrentGid]->getCh();
+	  mTextWindows[mCurrentGid]->render();
 	}
 
       if (ch == 'q')
