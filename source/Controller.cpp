@@ -36,7 +36,8 @@ void Controller::run()
 	ch = wgetch(mWindow);		// TODO: some other window
       else
 	{
-	  mStatusBar->setContent(mGreps[mCurrentGid]->getName() + " (" + std::to_string(mCurrentGid) + ")");
+	  mStatusBar->setContent(mGreps[mCurrentGid]->getName() + " (" + std::to_string(mCurrentGid) + ") " +
+				 "[" + std::to_string(mGreps[mCurrentGid]->getBuffer()->size()) + "]");
 	  mStatusBar->render();
 	  ch = mTextWindows[mCurrentGid]->getCh();
 	  mTextWindows[mCurrentGid]->render();

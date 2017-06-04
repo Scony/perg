@@ -15,9 +15,9 @@ public:
   TextBuffer();
 
   unsigned size();
-  bool isFull();
+  bool full();
   void applyFunctionToSlice(std::function<void(Iterator, Iterator)> function, unsigned pos, unsigned len);
-  // void waitForNewData();
+  void waitForNewSize(unsigned oldSize);
 
   void appendData(const Buffer& data);
   void seal();

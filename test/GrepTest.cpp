@@ -4,11 +4,15 @@
 
 TEST(GrepTests, Init) {		// TODO: use gmock
   int x = 0;
-  auto f = [&](std::shared_ptr<TextBuffer> _) {
+  auto f = [&](std::shared_ptr<TextBuffer> output) {
     x = 1;
+    std::vector<std::string> lines{ "xxx" };
+    output->appendData(lines);
   };
+
   Grep g(f, "name");
-  sleep(1);			// TODO: wait for new data
+  g.getBuffer()->waitForNewSize(0);
+
   EXPECT_EQ(x, 1);
   EXPECT_EQ(g.getName(), "name");
 }

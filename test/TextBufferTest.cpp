@@ -60,3 +60,10 @@ TEST(TextBufferTests, ApplyFunctionToSlice3) {
 
   EXPECT_EQ(contents, "bbbccc");
 }
+
+TEST(TextBufferTests, WaitForNewSize) {
+  TextBuffer tb;
+  tb.appendData(TextBuffer::Buffer{"aaa","bbb","ccc"});
+  tb.waitForNewSize(0);
+  EXPECT_EQ(1, 1);
+}

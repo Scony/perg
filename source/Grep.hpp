@@ -22,13 +22,15 @@ public:
   // const std::vector<Grep>& getGreps();
 
 protected:
+  static const unsigned mLinesToFlush = 10000;
+  static int sNextGid;
+
+protected:
   int mGid;
   std::shared_ptr<TextBuffer> mBuffer;
   std::string mName;
   std::thread mThread;
   // std::vector<std::shared_ptr<Grep> > mGreps;
-
-  static int sNextGid;
 
 private:
   void grepWorker(std::shared_ptr<TextBuffer> ouput);
