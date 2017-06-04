@@ -82,7 +82,7 @@ void TextWindow::render()
       mPreviousBufferSize = mBuffer->size();
       forceRender();
     }
-  wmove(mWindow, mCursorY, 0);
+  // wmove(mWindow, mCursorY, 0);
 }
 
 void TextWindow::forceRender()
@@ -102,5 +102,5 @@ void TextWindow::forceRender()
 
   wclear(mWindow);
   mBuffer->applyFunctionToSlice(renderer, pos, len);
-  // wmove(mWindow, mCursorY, 0);
+  wmove(mWindow, mCursorY, 0);
 }

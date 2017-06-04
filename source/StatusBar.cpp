@@ -3,13 +3,12 @@
 #include "StatusBar.hpp"
 
 StatusBar::StatusBar(int x, int y, int cols) :
-  Window(x, y, cols, 1)
+  Window(x, y, cols, 1),
+  mWindow(newwin(1, cols, y, x)),
+  mContent(""),
+  mPreviousContent(".")
 {
-  mWindow = newwin(1, cols, y, x);
-  std::string bar = std::string(mCols, '-');
   wattron(mWindow, A_REVERSE);
-  mvwprintw(mWindow, 0, 0, bar.c_str());
-  wrefresh(mWindow);
 }
 
 StatusBar::~StatusBar()
@@ -19,12 +18,26 @@ StatusBar::~StatusBar()
 
 void StatusBar::setContent(std::string content)
 {
-  std::string rFill = std::string(mCols - content.size() - 4, '-');
-  wclear(mWindow);
-  mvwprintw(mWindow, 0, 0, ("-- " + content + " " + rFill).c_str());
-  wrefresh(mWindow);
+  mContent = content;
 }
 
 void StatusBar::render()
 {
+  if (mPreviousContent != mContent)
+    {
+      std::string rawText = "";
+      if (mContent == "")
+	rawText = std::string(mCols, '-');
+      else
+	{
+	  std::string rFill = std::string(mCols - mContent.size() - 4, '-');
+	  rawText = "-- " + mContent + " " + rFill;
+	}
+
+      wclear(mWindow);
+      mvwprintw(mWindow, 0, 0, rawText.c_str());
+      wrefresh(mWindow);
+
+      mPreviousContent = mContent;
+    }
 }

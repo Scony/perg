@@ -15,4 +15,7 @@ public:
 
 private:
   WINDOW * mWindow;
+  std::string mContent;
+
+  std::string mPreviousContent;
 };

@@ -37,7 +37,7 @@ void Controller::run()
       else
 	{
 	  mStatusBar->setContent(mGreps[mCurrentGid]->getName() + " (" + std::to_string(mCurrentGid) + ")");
-	  // mTextWindows[mCurrentGid]->render();
+	  mStatusBar->render();
 	  ch = mTextWindows[mCurrentGid]->getCh();
 	  mTextWindows[mCurrentGid]->render();
 	}
