@@ -23,7 +23,7 @@ Grep::~Grep()
 
 std::shared_ptr<Grep> Grep::grep(std::string pattern)
 {
-  auto newGrep = std::make_shared<Grep>(std::bind(&Grep::grepWorker, this, _1), pattern);
+  auto newGrep = std::make_shared<Grep>(std::bind(&Grep::grepWorker, this, pattern, _1), pattern);
   // mGreps.push_back(g);
 
   return newGrep;
@@ -49,10 +49,32 @@ const std::string& Grep::getName()
 //   return mGreps;
 // }
 
-void Grep::grepWorker(std::shared_ptr<TextBuffer> ouput)
+void Grep::grepWorker(std::string pattern, std::shared_ptr<TextBuffer> output)
 {
-  // std::vector<std::string> linesMatching;
-  // for (const auto& line : mLines)
-  //   if (line.find(pattern) != std::string::npos)
-  //     linesMatching.push_back(line);
+  unsigned knownInputSize = 0;
+  bool inputFull = false;
+  while (!inputFull)
+    {
+      mBuffer->waitForNewSize(knownInputSize);
+      inputFull = mBuffer->full();
+      unsigned newInputSize = mBuffer->size();
+
+      auto& pos = knownInputSize;
+      unsigned len = newInputSize - knownInputSize;
+      auto filterer = [&](TextBuffer::Iterator begin, TextBuffer::Iterator end) {
+	std::vector<std::string> linesMatching;
+	auto it = begin;
+	while (it != end)
+	  {
+	    if (it->find(pattern) != std::string::npos)
+	      linesMatching.push_back(*it);
+	    it++;
+	  }
+	output->appendData(linesMatching);
+      };
+
+      mBuffer->applyFunctionToSlice(filterer, pos, len);
+      knownInputSize = newInputSize;
+    }
+  output->seal();
 }

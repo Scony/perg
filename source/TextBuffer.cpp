@@ -22,7 +22,8 @@ bool TextBuffer::full()
 void TextBuffer::applyFunctionToSlice(std::function<void(Iterator, Iterator)> function, unsigned pos, unsigned len)
 {
   std::lock_guard<std::mutex> lock(mBufferLock);
-  assert(pos <= mBuffer.size() && pos+len <= mBuffer.size());
+  assert(pos <= mBuffer.size());
+  assert(pos+len <= mBuffer.size());
   function(mBuffer.begin()+pos, mBuffer.begin()+pos+len);
 }
 

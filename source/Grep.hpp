@@ -33,7 +33,7 @@ protected:
   // std::vector<std::shared_ptr<Grep> > mGreps;
 
 private:
-  void grepWorker(std::shared_ptr<TextBuffer> ouput);
+  void grepWorker(std::string pattern, std::shared_ptr<TextBuffer> output);
 
 private:
   Grep(const Grep&) = delete;
