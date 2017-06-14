@@ -16,6 +16,7 @@ add_executable(perg
   TextBuffer.cpp
   TextWindow.cpp
   Window.cpp
+  Region.cpp
 )
 
 target_link_libraries(perg ncurses pthread)

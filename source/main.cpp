@@ -3,6 +3,7 @@
 #include <string>
 
 #include "ApplicationController.hpp"
+#include "Region.hpp"
 
 int main(int argc, char ** argv)
 {
