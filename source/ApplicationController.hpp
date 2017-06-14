@@ -1,23 +1,24 @@
 #pragma once
 
-#include <ncurses.h>
 #include <string>
 #include <memory>
 
-#include "Controller.hpp"
 #include "StatusBar.hpp"
 #include "Minibuffer.hpp"
+#include "Region.hpp"
 
-class ApplicationController : public Controller
+class ApplicationController
 {
 public:
-  ApplicationController(WINDOW * window);
+  ApplicationController(Region region);
 
   void run();
 
   void openFile(const std::string& filePath);
 
 private:
+  Region mRegion;
+
   std::shared_ptr<StatusBar> mStatusBar;
   std::shared_ptr<Minibuffer> mMinibuffer;
 };

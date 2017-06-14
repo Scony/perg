@@ -1,10 +1,10 @@
 #include "FileController.hpp"
 
-FileController::FileController(WINDOW * window,
+FileController::FileController(Region region,
 			       std::shared_ptr<File> file,
 			       std::shared_ptr<StatusBar> statusBar,
 			       std::shared_ptr<Minibuffer> minibuffer) :
-  Controller(window),
+  mRegion(region),
   mFile(file),
   mStatusBar(statusBar),
   mMinibuffer(minibuffer)
