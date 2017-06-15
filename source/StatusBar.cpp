@@ -2,9 +2,8 @@
 
 #include "StatusBar.hpp"
 
-StatusBar::StatusBar(int x, int y, int cols) :
-  Window(x, y, cols, 1),
-  mWindow(newwin(1, cols, y, x)),
+StatusBar::StatusBar(Region region) :
+  Window(region),
   mContent(""),
   mPreviousContent(".")
 {
@@ -13,7 +12,6 @@ StatusBar::StatusBar(int x, int y, int cols) :
 
 StatusBar::~StatusBar()
 {
-  delwin(mWindow);
 }
 
 void StatusBar::setContent(std::string content)

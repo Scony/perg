@@ -1,20 +1,17 @@
 #pragma once
 
-#include <ncurses.h>
 #include <string>
 
 #include "Window.hpp"
+#include "Region.hpp"
 
 class Minibuffer : public Window
 {
 public:
-  Minibuffer(int x, int y, int cols); // rows = 1
+  Minibuffer(Region region);
   ~Minibuffer();
 
   void setContent(std::string content);
   std::string readStr();
   void render();
-
-private:
-  WINDOW * mWindow;
 };

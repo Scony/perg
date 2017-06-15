@@ -2,16 +2,14 @@
 
 #include "Minibuffer.hpp"
 
-Minibuffer::Minibuffer(int x, int y, int cols) :
-  Window(x, y, cols, 1)
+Minibuffer::Minibuffer(Region region) :
+  Window(region)
 {
-  mWindow = newwin(1, cols, y, x);
   wrefresh(mWindow);
 }
 
 Minibuffer::~Minibuffer()
 {
-  delwin(mWindow);
 }
 
 void Minibuffer::setContent(std::string content)

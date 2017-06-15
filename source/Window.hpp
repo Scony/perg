@@ -1,16 +1,19 @@
 #pragma once
 
+#include <ncurses.h>
+
+#include "Region.hpp"
+
 class Window
 {
 public:
-  Window(int x, int y, int cols, int rows);
+  Window(Region region);
   virtual ~Window();
 
   virtual void render() = 0;
 
 protected:
-  int mX;
-  int mY;
+  WINDOW * mWindow;
   int mCols;
   int mRows;
 };

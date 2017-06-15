@@ -1,13 +1,13 @@
 #include "Window.hpp"
 
-Window::Window(int x, int y, int cols, int rows) :
-  mX(x),
-  mY(y),
-  mCols(cols),
-  mRows(rows)
+Window::Window(Region region) :
+  mWindow(newwin(region.rows, region.cols, region.y, region.x)),
+  mCols(region.cols),
+  mRows(region.rows)
 {
 }
 
 Window::~Window()
 {
+  delwin(mWindow);
 }

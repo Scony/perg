@@ -4,8 +4,8 @@
 
 ApplicationController::ApplicationController(Region region) :
   mRegion(region),
-  mStatusBar(new StatusBar(0, region.rows-2, region.cols)),
-  mMinibuffer(new Minibuffer(0, region.rows-1, region.cols))
+  mStatusBar(new StatusBar(Region(0, region.rows-2, region.cols, 1))),
+  mMinibuffer(new Minibuffer(Region(0, region.rows-1, region.cols, 1)))
 {
 }
 

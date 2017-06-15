@@ -1,21 +1,18 @@
 #pragma once
 
-#include <ncurses.h>
-
 #include "Window.hpp"
+#include "Region.hpp"
 
 class StatusBar : public Window
 {
 public:
-  StatusBar(int x, int y, int cols); // rows = 1
+  StatusBar(Region region);
   ~StatusBar();
 
   void setContent(std::string content);
   void render();
 
 private:
-  WINDOW * mWindow;
   std::string mContent;
-
   std::string mPreviousContent;
 };
