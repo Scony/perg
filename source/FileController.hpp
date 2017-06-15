@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <map>
 
 #include "Region.hpp"
 #include "File.hpp"
@@ -19,8 +20,15 @@ public:
   // ??? getEvent();
 
 private:
+  void addGrep(std::shared_ptr<Grep> grep);
+
+private:
   Region mRegion;
+
   std::shared_ptr<File> mFile;
+  std::map<unsigned, std::shared_ptr<Grep> > mGreps;
+  // std::map<unsigned, std::shared_ptr<TextWindow> > mTextWindows;
+  unsigned mCurrentGid;
 
   std::shared_ptr<StatusBar> mStatusBar;
   std::shared_ptr<Minibuffer> mMinibuffer;

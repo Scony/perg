@@ -9,6 +9,8 @@ FileController::FileController(Region region,
   mStatusBar(statusBar),
   mMinibuffer(minibuffer)
 {
+  addGrep(file);
+  mCurrentGid = file->getGid();
 }
 
 void FileController::run()
@@ -17,4 +19,10 @@ void FileController::run()
   mStatusBar->render();
 
   mMinibuffer->readStr();
+}
+
+void FileController::addGrep(std::shared_ptr<Grep> grep)
+{
+  mGreps.insert({grep->getGid(), grep});
+  // mTextWindows.insert({grep->getGid(), std::make_shared<TextWindow>(grep->getBuffer(), 0, 0, mCols, mRows-2)});
 }
