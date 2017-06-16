@@ -7,11 +7,12 @@
 
 #include "Window.hpp"
 #include "TextBuffer.hpp"
+#include "Region.hpp"
 
 class TextWindow : public Window
 {
 public:
-  TextWindow(std::shared_ptr<TextBuffer> buffer, int x, int y, int cols, int rows);
+  TextWindow(Region region, std::shared_ptr<TextBuffer> buffer);
   ~TextWindow();
 
   int getCh();
@@ -23,7 +24,6 @@ private:
 
   void forceRender();
 
-  WINDOW * mWindow;
   std::shared_ptr<TextBuffer> mBuffer;
   int mCursorY;
   int mTextOffsetY;

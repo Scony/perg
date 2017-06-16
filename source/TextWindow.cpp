@@ -1,8 +1,7 @@
 #include "TextWindow.hpp"
 
-TextWindow::TextWindow(std::shared_ptr<TextBuffer> buffer, int x, int y, int cols, int rows) :
-  Window(x, y, cols, rows),
-  mWindow(newwin(rows, cols, y, x)),
+TextWindow::TextWindow(Region region, std::shared_ptr<TextBuffer> buffer) :
+  Window(region),
   mBuffer(buffer),
   mCursorY(0),
   mTextOffsetY(0),
@@ -15,7 +14,6 @@ TextWindow::TextWindow(std::shared_ptr<TextBuffer> buffer, int x, int y, int col
 
 TextWindow::~TextWindow()
 {
-  delwin(mWindow);
 }
 
 int TextWindow::getCh()
