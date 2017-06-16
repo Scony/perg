@@ -13,6 +13,7 @@ add_executable(perg
   Minibuffer.cpp
   StatusBar.cpp
   TextBuffer.cpp
+  StaticTextBuffer.cpp
   TextWindow.cpp
   Window.cpp
   Region.cpp

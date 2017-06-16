@@ -5,7 +5,9 @@
 #include <mutex>
 #include <condition_variable>
 
-class TextBuffer
+#include "ITextBuffer.hpp"
+
+class TextBuffer : public ITextBuffer
 {
 public:
   using Buffer = std::vector<std::string>;

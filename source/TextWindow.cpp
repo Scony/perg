@@ -1,6 +1,6 @@
 #include "TextWindow.hpp"
 
-TextWindow::TextWindow(Region region, std::shared_ptr<TextBuffer> buffer) :
+TextWindow::TextWindow(Region region, std::shared_ptr<ITextBuffer> buffer) :
   Window(region),
   mBuffer(buffer),
   mCursorY(0),
@@ -91,7 +91,7 @@ void TextWindow::forceRender()
 {
   auto& pos = mTextOffsetY;
   auto len = std::min((unsigned)mRows, mBuffer->size()-pos);
-  auto renderer = [&](TextBuffer::Iterator begin, TextBuffer::Iterator end) {
+  auto renderer = [&](ITextBuffer::Iterator begin, ITextBuffer::Iterator end) {
     int i = 0;
     auto it = begin;
     while (it != end)
