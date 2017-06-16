@@ -9,6 +9,7 @@
 #include "Region.hpp"
 #include "File.hpp"
 #include "FileController.hpp"
+#include "TextWindow.hpp"
 
 class ApplicationController
 {
@@ -28,4 +29,5 @@ private:
 
   std::shared_ptr<StatusBar> mStatusBar;
   std::shared_ptr<Minibuffer> mMinibuffer;
+  std::shared_ptr<TextWindow> mWelcomeWindow;
 };

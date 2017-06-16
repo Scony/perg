@@ -1,10 +1,21 @@
 #include "ApplicationController.hpp"
+#include "StaticTextBuffer.hpp"
+
+std::vector<std::string> welcomeWindowText = {
+  "Welcome to perg, multi-grep-like tool.",
+  "",
+  // "Help         h",
+  // "Open file    f",
+  ""
+};
 
 ApplicationController::ApplicationController(Region region) :
   mRegion(region),
   mCurrentFile(-1),
   mStatusBar(new StatusBar(Region(0, region.rows-2, region.cols, 1))),
-  mMinibuffer(new Minibuffer(Region(0, region.rows-1, region.cols, 1)))
+  mMinibuffer(new Minibuffer(Region(0, region.rows-1, region.cols, 1))),
+  mWelcomeWindow(new TextWindow(Region(0, 0, region.cols, region.rows-2),
+				std::make_shared<StaticTextBuffer>(welcomeWindowText)))
 {
 }
 
@@ -19,7 +30,10 @@ void ApplicationController::run()
       if (mCurrentFile >= 0)
 	event = mFileControllers[mCurrentFile]->proceed();
       else
-	mMinibuffer->readStr();	// TODO: display init screen
+	{
+	  mWelcomeWindow->render();
+	  event = Event(mWelcomeWindow->getCh());
+	}
     }
 }
 
