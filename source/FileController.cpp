@@ -13,7 +13,7 @@ FileController::FileController(Region region,
   mCurrentGid = file->getGid();
 }
 
-void FileController::run()
+Event FileController::proceed()
 {
   mStatusBar->setContent(mFile->getName());
   mStatusBar->render();

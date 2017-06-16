@@ -7,6 +7,7 @@
 #include "File.hpp"
 #include "StatusBar.hpp"
 #include "Minibuffer.hpp"
+#include "Event.hpp"
 
 class FileController
 {
@@ -16,8 +17,7 @@ public:
 		 std::shared_ptr<StatusBar> statusBar,
 		 std::shared_ptr<Minibuffer> minibuffer);
 
-  void run();
-  // ??? getEvent();
+  Event proceed();
 
 private:
   void addGrep(std::shared_ptr<Grep> grep);

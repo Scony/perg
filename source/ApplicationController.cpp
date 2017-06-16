@@ -25,5 +25,5 @@ void ApplicationController::openFile(const std::string& filePath)
 								    file,
 								    mStatusBar,
 								    mMinibuffer));
-  fileController->run();
+  fileController->proceed();
 }
