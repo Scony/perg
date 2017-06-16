@@ -8,6 +8,7 @@
 #include "StatusBar.hpp"
 #include "Minibuffer.hpp"
 #include "Event.hpp"
+#include "TextWindow.hpp"
 
 class FileController
 {
@@ -27,8 +28,8 @@ private:
 
   std::shared_ptr<File> mFile;
   std::map<unsigned, std::shared_ptr<Grep> > mGreps;
-  // std::map<unsigned, std::shared_ptr<TextWindow> > mTextWindows;
-  unsigned mCurrentGid;
+  std::map<unsigned, std::shared_ptr<TextWindow> > mTextWindows;
+  unsigned mCurrentGrep;
 
   std::shared_ptr<StatusBar> mStatusBar;
   std::shared_ptr<Minibuffer> mMinibuffer;

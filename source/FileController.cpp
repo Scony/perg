@@ -10,7 +10,7 @@ FileController::FileController(Region region,
   mMinibuffer(minibuffer)
 {
   addGrep(file);
-  mCurrentGid = file->getGid();
+  mCurrentGrep = file->getGid();
 }
 
 Event FileController::proceed()
@@ -18,11 +18,14 @@ Event FileController::proceed()
   mStatusBar->setContent(mFile->getName());
   mStatusBar->render();
 
-  mMinibuffer->readStr();
+  mTextWindows[mCurrentGrep]->render();
+  return Event(mTextWindows[mCurrentGrep]->getCh());
 }
 
 void FileController::addGrep(std::shared_ptr<Grep> grep)
 {
   mGreps.insert({grep->getGid(), grep});
-  // mTextWindows.insert({grep->getGid(), std::make_shared<TextWindow>(grep->getBuffer(), 0, 0, mCols, mRows-2)});
+  mTextWindows.insert({grep->getGid(), std::make_shared<TextWindow>(Region(0, 0, mRegion.cols, mRegion.rows-2),
+								    grep->getBuffer())});
+  mCurrentGrep = grep->getGid();
 }
