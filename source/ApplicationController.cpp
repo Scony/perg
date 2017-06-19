@@ -24,15 +24,18 @@ void ApplicationController::run()
   mStatusBar->render();
   mMinibuffer->render();
 
-  Event event(-1);
-  while (event.key != 'q')
+  Event event("");
+  while (event != Event("q"))
     {
       if (mCurrentFile >= 0)
 	event = mFileControllers[mCurrentFile]->proceed();
       else
 	{
+	  mStatusBar->setContent(event.describe());
+	  mStatusBar->render();
+
 	  mWelcomeWindow->render();
-	  event = Event(mWelcomeWindow->getCh());
+	  event = mWelcomeWindow->proceed();
 	}
     }
 }

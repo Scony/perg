@@ -22,6 +22,7 @@ add_executable(perg
   Window.cpp
   Region.cpp
   Termkey.cpp
+  Event.cpp
 )
 
 add_subdirectory(libtermkey-0.20)

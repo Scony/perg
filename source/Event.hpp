@@ -1,7 +1,20 @@
 #pragma once
 
-struct Event
+#include <string>
+
+#include "termkey.h"
+
+class Event
 {
-  Event(int aKey) : key(aKey) {};
-  int key;
+public:
+  Event(TermKeyKey termKeyKey);
+  Event(std::string keyString);
+
+  bool operator==(const Event& otherEvent);
+  bool operator!=(const Event& otherEvent);
+
+  std::string describe();
+
+private:
+  std::string mKey;
 };

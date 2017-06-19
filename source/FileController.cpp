@@ -19,7 +19,7 @@ Event FileController::proceed()
   mStatusBar->render();
 
   mTextWindows[mCurrentGrep]->render();
-  return Event(mTextWindows[mCurrentGrep]->getCh());
+  return mTextWindows[mCurrentGrep]->proceed();
 }
 
 void FileController::addGrep(std::shared_ptr<Grep> grep)

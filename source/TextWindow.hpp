@@ -8,6 +8,7 @@
 #include "Window.hpp"
 #include "ITextBuffer.hpp"
 #include "Region.hpp"
+#include "Event.hpp"
 
 class TextWindow : public Window
 {
@@ -16,6 +17,7 @@ public:
   ~TextWindow();
 
   int getCh();
+  Event proceed();
   void render();
   void focus();
 

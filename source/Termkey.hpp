@@ -15,12 +15,13 @@ public:
   static void init();
 
   Event waitEvent();
+  TermKey* getTermKey();
 
 private:
   Termkey();
   ~Termkey();
 
-  TermKey *tk;
+  TermKey* mTermKey;
 
 public:
   Termkey(const Termkey&) = delete;
