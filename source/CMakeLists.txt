@@ -4,8 +4,7 @@ project(perg)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g")
 
-add_executable(perg
-  main.cpp
+add_library(perg-library
   Controller.cpp
   File.cpp
   Grep.cpp
@@ -16,4 +15,11 @@ add_executable(perg
   Window.cpp
 )
 
-target_link_libraries(perg ncurses pthread)
+add_executable(perg
+  main.cpp
+)
+
+target_link_libraries(perg-library ncurses pthread)
+target_link_libraries(perg perg-library)
+
+add_dependencies(perg perg-library)
