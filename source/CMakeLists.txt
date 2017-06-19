@@ -8,8 +8,9 @@ include_directories(
   libtermkey-0.20
 )
 
-add_executable(perg
-  main.cpp
+add_subdirectory(libtermkey-0.20)
+
+add_library(perg-library
   ApplicationController.cpp
   FileController.cpp
   File.cpp
@@ -25,6 +26,11 @@ add_executable(perg
   Event.cpp
 )
 
-add_subdirectory(libtermkey-0.20)
+add_executable(perg
+  main.cpp
+)
 
-target_link_libraries(perg ncurses pthread termkey)
+target_link_libraries(perg-library ncurses pthread termkey)
+target_link_libraries(perg perg-library)
+
+add_dependencies(perg perg-library)
