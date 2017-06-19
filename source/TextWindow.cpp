@@ -1,4 +1,5 @@
 #include "TextWindow.hpp"
+#include "Termkey.hpp"
 
 TextWindow::TextWindow(Region region, std::shared_ptr<ITextBuffer> buffer) :
   Window(region),
@@ -18,6 +19,9 @@ TextWindow::~TextWindow()
 
 int TextWindow::getCh()
 {
+  Termkey& termkey = Termkey::getInstance();
+  termkey.waitEvent();
+
   int key = wgetch(mWindow);
   bool unsupportedKey = false;
 

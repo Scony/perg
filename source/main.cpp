@@ -4,9 +4,11 @@
 
 #include "ApplicationController.hpp"
 #include "Region.hpp"
+#include "Termkey.hpp"
 
 int main(int argc, char ** argv)
 {
+  Termkey::init();
   initscr();
   keypad(stdscr, TRUE);
   noecho();

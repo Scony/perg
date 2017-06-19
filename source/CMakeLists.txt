@@ -21,6 +21,7 @@ add_executable(perg
   TextWindow.cpp
   Window.cpp
   Region.cpp
+  Termkey.cpp
 )
 
 add_subdirectory(libtermkey-0.20)
