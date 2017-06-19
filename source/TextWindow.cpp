@@ -10,67 +10,11 @@ TextWindow::TextWindow(Region region, std::shared_ptr<ITextBuffer> buffer) :
   mPreviousBufferSize(-1)
 {
   keypad(mWindow, TRUE);
-  wtimeout(mWindow, mWindowTimeoutMs);
+  // wtimeout(mWindow, mWindowTimeoutMs);
 }
 
 TextWindow::~TextWindow()
 {
-}
-
-int TextWindow::getCh()
-{
-  int key = wgetch(mWindow);
-  bool unsupportedKey = false;
-
-  while (!unsupportedKey)
-    {
-      switch (key)
-	{
-	case KEY_UP:
-	  if (mCursorY == 0)
-	    {
-	      if (mTextOffsetY > 0)
-		mTextOffsetY--;
-	    }
-	  else
-	    wmove(mWindow, --mCursorY, 0);
-	  break;
-
-	case KEY_DOWN:
-	  if (mCursorY == mRows - 1)
-	    {
-	      if (mBuffer->size() - mTextOffsetY > mRows)
-		mTextOffsetY++;
-	    }
-	  else
-	    wmove(mWindow, ++mCursorY, 0);
-	  break;
-
-	case KEY_PPAGE:		// PAGE UP
-	  mTextOffsetY = mTextOffsetY > mRows ? mTextOffsetY - mRows : 0;
-	  break;
-
-	case KEY_NPAGE:		// PAGE DOWN
-	  {
-	    int maxTextOffsetY = mBuffer->size() - mRows;
-	    if (maxTextOffsetY < 0)
-	      break;
-	    mTextOffsetY = mTextOffsetY + mRows < maxTextOffsetY ? mTextOffsetY + mRows : maxTextOffsetY;
-	    break;
-	  }
-
-	default:
-	  unsupportedKey = true;
-	}
-
-      if (!unsupportedKey)
-	{
-	  render();
-	  key = wgetch(mWindow);
-	}
-    }
-
-  return key;
 }
 
 Event TextWindow::proceed()
@@ -78,9 +22,54 @@ Event TextWindow::proceed()
   wrefresh(mWindow);
 
   Termkey& termkey = Termkey::getInstance();
-  Event e = termkey.waitEvent();
+  Event event = termkey.waitEvent();
 
-  return e;
+  bool unsupportedEvent = false;
+
+  while (!unsupportedEvent)
+    {
+      if (event == Event("<Up>"))
+	{
+	  if (mCursorY == 0)
+	    {
+	      if (mTextOffsetY > 0)
+		mTextOffsetY--;
+	    }
+	  else
+	    wmove(mWindow, --mCursorY, 0);
+	}
+      else if (event == Event("<Down>"))
+	{
+	  if (mCursorY == mRows - 1)
+	    {
+	      if (mBuffer->size() - mTextOffsetY > mRows)
+		mTextOffsetY++;
+	    }
+	  else
+	    wmove(mWindow, ++mCursorY, 0);
+	}
+      else if (event == Event("<PageUp>"))
+	{
+	  mTextOffsetY = mTextOffsetY > mRows ? mTextOffsetY - mRows : 0;
+	}
+      else if (event == Event("<PageDown>"))
+	{
+	  int maxTextOffsetY = mBuffer->size() - mRows;
+	  if (maxTextOffsetY >= 0)
+	    mTextOffsetY = mTextOffsetY + mRows < maxTextOffsetY ? mTextOffsetY + mRows : maxTextOffsetY;
+	}
+      else
+	unsupportedEvent = true;
+
+      if (!unsupportedEvent)
+	{
+	  render();
+	  wrefresh(mWindow);
+	  event = termkey.waitEvent();
+	}
+    }
+
+  return event;
 }
 
 void TextWindow::render()
@@ -116,4 +105,5 @@ void TextWindow::forceRender()
   wclear(mWindow);
   mBuffer->applyFunctionToSlice(renderer, pos, len);
   wmove(mWindow, mCursorY, 0);
+  wrefresh(mWindow);
 }

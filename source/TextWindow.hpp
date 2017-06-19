@@ -16,7 +16,6 @@ public:
   TextWindow(Region region, std::shared_ptr<ITextBuffer> buffer);
   ~TextWindow();
 
-  int getCh();
   Event proceed();
   void render();
   void focus();

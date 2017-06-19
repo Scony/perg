@@ -4,6 +4,7 @@
 std::vector<std::string> welcomeWindowText = {
   "Welcome to perg, multi-grep-like tool.",
   "",
+  "Quit         q",
   // "Help         h",
   // "Open file    f",
   ""
