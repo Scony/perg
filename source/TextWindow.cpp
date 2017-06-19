@@ -19,10 +19,13 @@ TextWindow::~TextWindow()
 
 int TextWindow::getCh()
 {
+  wrefresh(mWindow);
   Termkey& termkey = Termkey::getInstance();
-  termkey.waitEvent();
+  Event e = termkey.waitEvent();
+  return e.key;
 
-  int key = wgetch(mWindow);
+  // int key = wgetch(mWindow);
+  int key = -1;
   bool unsupportedKey = false;
 
   while (!unsupportedKey)

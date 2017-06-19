@@ -22,5 +22,5 @@ Event Termkey::waitEvent()
 
   ret = termkey_waitkey(tk, &xkey);
 
-  return Event(-1);
+  return Event((int)'q');
 }
