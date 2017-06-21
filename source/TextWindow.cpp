@@ -62,7 +62,7 @@ Event TextWindow::proceed()
 
       if (!unsupportedEvent)
 	{
-	  render();
+	  lazyRender();
 	  wrefresh(mWindow);
 	  event = termkey.waitEvent(mWindowTimeoutMs);
 	}
@@ -72,21 +72,6 @@ Event TextWindow::proceed()
 }
 
 void TextWindow::render()
-{
-  if (mPreviousTextOffsetY != mTextOffsetY || mPreviousBufferSize != mBuffer->size())
-    {
-      mPreviousTextOffsetY = mTextOffsetY;
-      mPreviousBufferSize = mBuffer->size();
-      forceRender();
-    }
-}
-
-void TextWindow::focus()
-{
-  wmove(mWindow, mCursorY, 0);
-}
-
-void TextWindow::forceRender()
 {
   auto& pos = mTextOffsetY;
   auto len = std::min((unsigned)mRows, mBuffer->size()-pos);
@@ -105,4 +90,19 @@ void TextWindow::forceRender()
   mBuffer->applyFunctionToSlice(renderer, pos, len);
   wmove(mWindow, mCursorY, 0);
   wrefresh(mWindow);
+}
+
+void TextWindow::focus()
+{
+  wmove(mWindow, mCursorY, 0);
+}
+
+void TextWindow::lazyRender()
+{
+  if (mPreviousTextOffsetY != mTextOffsetY || mPreviousBufferSize != mBuffer->size())
+    {
+      mPreviousTextOffsetY = mTextOffsetY;
+      mPreviousBufferSize = mBuffer->size();
+      render();
+    }
 }

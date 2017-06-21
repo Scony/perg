@@ -23,7 +23,7 @@ public:
 private:
   static const unsigned mWindowTimeoutMs = 100;
 
-  void forceRender();
+  void lazyRender();
 
   std::shared_ptr<ITextBuffer> mBuffer;
   int mCursorY;
