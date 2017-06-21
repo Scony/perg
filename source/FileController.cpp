@@ -15,7 +15,8 @@ FileController::FileController(Region region,
 
 Event FileController::proceed()
 {
-  mStatusBar->setContent(mFile->getName());
+  mStatusBar->setContent(mGreps[mCurrentGrep]->getName() + " (" + std::to_string(mCurrentGrep) + ") " +
+			 "[" + std::to_string(mGreps[mCurrentGrep]->getBuffer()->size()) + "]");
   mStatusBar->render();
 
   mTextWindows[mCurrentGrep]->render();

@@ -10,7 +10,6 @@ TextWindow::TextWindow(Region region, std::shared_ptr<ITextBuffer> buffer) :
   mPreviousBufferSize(-1)
 {
   keypad(mWindow, TRUE);
-  // wtimeout(mWindow, mWindowTimeoutMs);
 }
 
 TextWindow::~TextWindow()
@@ -22,7 +21,7 @@ Event TextWindow::proceed()
   wrefresh(mWindow);
 
   Termkey& termkey = Termkey::getInstance();
-  Event event = termkey.waitEvent(100);
+  Event event = termkey.waitEvent(mWindowTimeoutMs);
 
   bool unsupportedEvent = false;
 
@@ -65,7 +64,7 @@ Event TextWindow::proceed()
 	{
 	  render();
 	  wrefresh(mWindow);
-	  event = termkey.waitEvent(100);
+	  event = termkey.waitEvent(mWindowTimeoutMs);
 	}
     }
 
