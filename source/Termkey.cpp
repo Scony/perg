@@ -25,7 +25,7 @@ Event Termkey::waitEvent(unsigned timeoutMs)
   if (timeoutMs == 0)		// blocking
     ret = termkey_waitkey(mTermKey, &xkey);
   else				// non-blocking
-    {
+    {				// FIXME: bytes are being buffered under heavy load conditions
       pollfd pollFd;
       pollFd.fd = termkey_get_fd(mTermKey);
       pollFd.events = POLLIN;
