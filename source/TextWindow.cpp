@@ -90,7 +90,8 @@ void TextWindow::render()
 
 void TextWindow::focus()
 {
-  wmove(mWindow, mCursorY, 0);
+  // wrefresh(mWindow);
+  lazyRender();
 }
 
 void TextWindow::lazyRender()
