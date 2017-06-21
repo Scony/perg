@@ -18,15 +18,14 @@ TextWindow::~TextWindow()
 
 Event TextWindow::proceed()
 {
-  wrefresh(mWindow);
+  bool eventSupported = true;
+  Event event("");
 
-  Termkey& termkey = Termkey::getInstance();
-  Event event = termkey.waitEvent(mWindowTimeoutMs);
-
-  bool unsupportedEvent = false;
-
-  while (!unsupportedEvent)
+  do
     {
+      Termkey& termkey = Termkey::getInstance();
+      event = termkey.waitEvent(mWindowTimeoutMs);
+
       if (event == Event("<Up>"))
 	{
 	  if (mCursorY == 0)
@@ -58,15 +57,12 @@ Event TextWindow::proceed()
 	    mTextOffsetY = mTextOffsetY + mRows < maxTextOffsetY ? mTextOffsetY + mRows : maxTextOffsetY;
 	}
       else
-	unsupportedEvent = true;
+	eventSupported = false;
 
-      if (!unsupportedEvent)
-	{
-	  lazyRender();
-	  wrefresh(mWindow);
-	  event = termkey.waitEvent(mWindowTimeoutMs);
-	}
+      if (eventSupported)
+	lazyRender();
     }
+  while (eventSupported);
 
   return event;
 }
@@ -105,4 +101,6 @@ void TextWindow::lazyRender()
       mPreviousBufferSize = mBuffer->size();
       render();
     }
+  else
+    wrefresh(mWindow);
 }
