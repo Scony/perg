@@ -22,7 +22,7 @@ Event TextWindow::proceed()
   wrefresh(mWindow);
 
   Termkey& termkey = Termkey::getInstance();
-  Event event = termkey.waitEvent();
+  Event event = termkey.waitEvent(100);
 
   bool unsupportedEvent = false;
 
@@ -65,7 +65,7 @@ Event TextWindow::proceed()
 	{
 	  render();
 	  wrefresh(mWindow);
-	  event = termkey.waitEvent();
+	  event = termkey.waitEvent(100);
 	}
     }
 

@@ -38,6 +38,9 @@ void ApplicationController::run()
 	  mWelcomeWindow->render();
 	  event = mWelcomeWindow->proceed();
 	}
+
+      mMinibuffer->setContent(event.describe());
+      mMinibuffer->render();
     }
 }
 

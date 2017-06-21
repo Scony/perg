@@ -1,0 +1,11 @@
+* ApplicationController
++ q (quit)
+
+* FileController
++ g (grep)
+
+* TextWindow
++ <Up> (navigation)
++ <Down> (navigation)
++ <PageUp> (navigation)
++ <PageDown> (navigation)

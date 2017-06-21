@@ -14,7 +14,7 @@ public:
   }
   static void init();
 
-  Event waitEvent();
+  Event waitEvent(unsigned timeoutMs = 0);
   TermKey* getTermKey();
 
 private:
