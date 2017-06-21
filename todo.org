@@ -1,0 +1,9 @@
+* ASAP [0%]
+** TODO FIXME in Termkey
+
+* Short-term [0%]
+** TODO thread cleanup issue (big files)
+
+* Long-term [0%]
+** TODO help window
+** TODO fix hello window
