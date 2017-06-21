@@ -90,18 +90,28 @@ void TextWindow::render()
 
 void TextWindow::focus()
 {
-  // wrefresh(mWindow);
   lazyRender();
 }
 
 void TextWindow::lazyRender()
 {
-  if (mPreviousTextOffsetY != mTextOffsetY || mPreviousBufferSize != mBuffer->size())
+  if (mPreviousTextOffsetY != mTextOffsetY)
     {
       mPreviousTextOffsetY = mTextOffsetY;
       mPreviousBufferSize = mBuffer->size();
       render();
+      return;
     }
-  else
-    wrefresh(mWindow);
+  else if (mPreviousBufferSize != mBuffer->size())
+    {
+      if (mPreviousBufferSize < mRows)
+	{
+	  mPreviousBufferSize = mBuffer->size();
+	  render();
+	  return;
+	}
+      mPreviousBufferSize = mBuffer->size();
+    }
+
+  wrefresh(mWindow);
 }
