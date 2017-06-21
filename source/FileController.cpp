@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "FileController.hpp"
 
 FileController::FileController(Region region,
@@ -30,6 +32,52 @@ Event FileController::proceed()
 
       if (event == Event("<>"))
 	{
+	}
+      else if (event == Event("g"))
+	{
+	  auto str = mMinibuffer->readStr();
+	  auto grep = mGreps[mCurrentGrep]->grep(str);
+
+	  addGrep(grep);
+
+	  mCurrentGrep = grep->getGid();
+	  mTextWindows[mCurrentGrep]->render();
+	}
+      else if (event == Event("<C-Left>"))
+	{
+	  std::vector<unsigned> gids;
+	  for (const auto& pair : mGreps)
+	    gids.push_back(pair.first);
+	  std::sort(gids.begin(), gids.end());
+	  for (int i = 0; i < gids.size(); i++)
+	    if (gids[i] == mCurrentGrep)
+	      {
+		if (i == 0)
+		  mCurrentGrep = gids[gids.size()-1];
+		else
+		  mCurrentGrep = gids[i-1];
+		break;
+	      }
+
+	  mTextWindows[mCurrentGrep]->render();
+	}
+      else if (event == Event("<C-Right>"))
+	{
+	  std::vector<unsigned> gids;
+	  for (const auto& pair : mGreps)
+	    gids.push_back(pair.first);
+	  std::sort(gids.begin(), gids.end());
+	  for (int i = 0; i < gids.size(); i++)
+	    if (gids[i] == mCurrentGrep)
+	      {
+		if (i == gids.size() - 1)
+		  mCurrentGrep = gids[0];
+		else
+		  mCurrentGrep = gids[i+1];
+		break;
+	      }
+
+	  mTextWindows[mCurrentGrep]->render();
 	}
       else
 	eventSupported = false;

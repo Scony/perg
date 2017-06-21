@@ -3,6 +3,8 @@
 
 * FileController
 + g (grep)
++ <C-Left>
++ <C-Right>
 
 * TextWindow
 + <Up> (navigation)
