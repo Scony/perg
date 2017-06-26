@@ -4,8 +4,11 @@
 TextWindow::TextWindow(Region region, std::shared_ptr<ITextBuffer> buffer) :
   Window(region),
   mBuffer(buffer),
+  mCursorX(0),
   mCursorY(0),
+  mTextOffsetX(0),
   mTextOffsetY(0),
+  mPreviousTextOffsetX(-1),
   mPreviousTextOffsetY(-1),
   mPreviousBufferSize(-1)
 {
@@ -34,7 +37,7 @@ Event TextWindow::proceed()
 		mTextOffsetY--;
 	    }
 	  else
-	    wmove(mWindow, --mCursorY, 0);
+	    wmove(mWindow, --mCursorY, mCursorX);
 	}
       else if (event == Event("<Down>"))
 	{
@@ -44,7 +47,7 @@ Event TextWindow::proceed()
 		mTextOffsetY++;
 	    }
 	  else
-	    wmove(mWindow, ++mCursorY, 0);
+	    wmove(mWindow, ++mCursorY, mCursorX);
 	}
       else if (event == Event("<PageUp>"))
 	{
@@ -55,6 +58,25 @@ Event TextWindow::proceed()
 	  int maxTextOffsetY = mBuffer->size() - mRows;
 	  if (maxTextOffsetY >= 0)
 	    mTextOffsetY = mTextOffsetY + mRows < maxTextOffsetY ? mTextOffsetY + mRows : maxTextOffsetY;
+	}
+      else if(event == Event("<Left>"))
+	{
+	  if (mCursorX == 0)
+	    {
+	      if (mTextOffsetX > 0)
+		mTextOffsetX--;
+	    }
+	  else
+	    wmove(mWindow, mCursorY, --mCursorX);
+	}
+      else if(event == Event("<Right>"))
+	{
+	  if (mCursorX == mCols - 1)
+	    {
+	      mTextOffsetX++;	// TODO: calculate local maximum
+	    }
+	  else
+	    wmove(mWindow, mCursorY, ++mCursorX);
 	}
       else
 	eventSupported = false;
@@ -76,7 +98,8 @@ void TextWindow::render()
     auto it = begin;
     while (it != end)
       {
-	mvwprintw(mWindow, i, 0, it->c_str());
+	if (mTextOffsetX < it->length())
+	  mvwprintw(mWindow, i, 0, it->substr(mTextOffsetX).c_str());
 	i++;
 	it++;
       }
@@ -84,7 +107,7 @@ void TextWindow::render()
 
   wclear(mWindow);
   mBuffer->applyFunctionToSlice(renderer, pos, len);
-  wmove(mWindow, mCursorY, 0);
+  wmove(mWindow, mCursorY, mCursorX);
   wrefresh(mWindow);
 }
 
@@ -95,8 +118,9 @@ void TextWindow::focus()
 
 void TextWindow::lazyRender()
 {
-  if (mPreviousTextOffsetY != mTextOffsetY)
+  if (mPreviousTextOffsetX != mTextOffsetX || mPreviousTextOffsetY != mTextOffsetY)
     {
+      mPreviousTextOffsetX = mTextOffsetX;
       mPreviousTextOffsetY = mTextOffsetY;
       mPreviousBufferSize = mBuffer->size();
       render();

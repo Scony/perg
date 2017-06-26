@@ -1,9 +1,12 @@
 * ASAP [100%]
 ** DONE FIXME in Termkey
 
-* Short-term [0%]
-** TODO thread cleanup issue (big files)
-
+* Short-term [25%]
+** DONE initial move text left & right
+** TODO TextWindow handler functions
+** TODO advanced move text left & right
+** TODO C-a & C-e
 * Long-term [0%]
 ** TODO help window
 ** TODO fix hello window
+** TODO thread cleanup issue (big files)

@@ -26,9 +26,12 @@ private:
   void lazyRender();
 
   std::shared_ptr<ITextBuffer> mBuffer;
+  int mCursorX;
   int mCursorY;
+  int mTextOffsetX;
   int mTextOffsetY;
 
+  int mPreviousTextOffsetX;
   int mPreviousTextOffsetY;
   int mPreviousBufferSize;
 };
