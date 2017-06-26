@@ -1,9 +1,9 @@
 * ASAP [100%]
 ** DONE FIXME in Termkey
 
-* Short-term [25%]
+* Short-term [50%]
 ** DONE initial move text left & right
-** TODO TextWindow handler functions
+** DONE TextWindow handler functions
 ** TODO advanced move text left & right
 ** TODO C-a & C-e
 * Long-term [0%]

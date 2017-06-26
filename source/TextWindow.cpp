@@ -21,70 +21,21 @@ TextWindow::~TextWindow()
 
 Event TextWindow::proceed()
 {
-  bool eventSupported = true;
   Event event("");
 
-  do
+  while (true)
     {
       Termkey& termkey = Termkey::getInstance();
       event = termkey.waitEvent(mWindowTimeoutMs);
 
-      if (event == Event("<Up>"))
+      if (mActiveHandlers.find(event.describe()) != mActiveHandlers.end())
 	{
-	  if (mCursorY == 0)
-	    {
-	      if (mTextOffsetY > 0)
-		mTextOffsetY--;
-	    }
-	  else
-	    wmove(mWindow, --mCursorY, mCursorX);
-	}
-      else if (event == Event("<Down>"))
-	{
-	  if (mCursorY == mRows - 1)
-	    {
-	      if (mBuffer->size() - mTextOffsetY > mRows)
-		mTextOffsetY++;
-	    }
-	  else
-	    wmove(mWindow, ++mCursorY, mCursorX);
-	}
-      else if (event == Event("<PageUp>"))
-	{
-	  mTextOffsetY = mTextOffsetY > mRows ? mTextOffsetY - mRows : 0;
-	}
-      else if (event == Event("<PageDown>"))
-	{
-	  int maxTextOffsetY = mBuffer->size() - mRows;
-	  if (maxTextOffsetY >= 0)
-	    mTextOffsetY = mTextOffsetY + mRows < maxTextOffsetY ? mTextOffsetY + mRows : maxTextOffsetY;
-	}
-      else if(event == Event("<Left>"))
-	{
-	  if (mCursorX == 0)
-	    {
-	      if (mTextOffsetX > 0)
-		mTextOffsetX--;
-	    }
-	  else
-	    wmove(mWindow, mCursorY, --mCursorX);
-	}
-      else if(event == Event("<Right>"))
-	{
-	  if (mCursorX == mCols - 1)
-	    {
-	      mTextOffsetX++;	// TODO: calculate local maximum
-	    }
-	  else
-	    wmove(mWindow, mCursorY, ++mCursorX);
+	  mActiveHandlers[event.describe()]();
+	  lazyRender();
 	}
       else
-	eventSupported = false;
-
-      if (eventSupported)
-	lazyRender();
+	break;
     }
-  while (eventSupported);
 
   return event;
 }
@@ -138,4 +89,59 @@ void TextWindow::lazyRender()
     }
 
   wrefresh(mWindow);
+}
+
+void TextWindow::upHandler()
+{
+  if (mCursorY == 0)
+    {
+      if (mTextOffsetY > 0)
+	mTextOffsetY--;
+    }
+  else
+    wmove(mWindow, --mCursorY, mCursorX);
+}
+
+void TextWindow::downHandler()
+{
+  if (mCursorY == mRows - 1)
+    {
+      if (mBuffer->size() - mTextOffsetY > mRows)
+	mTextOffsetY++;
+    }
+  else
+    wmove(mWindow, ++mCursorY, mCursorX);
+}
+
+void TextWindow::leftHandler()
+{
+  if (mCursorX == 0)
+    {
+      if (mTextOffsetX > 0)
+	mTextOffsetX--;
+    }
+  else
+    wmove(mWindow, mCursorY, --mCursorX);
+}
+
+void TextWindow::rightHandler()
+{
+  if (mCursorX == mCols - 1)
+    {
+      mTextOffsetX++;	// TODO: calculate local maximum
+    }
+  else
+    wmove(mWindow, mCursorY, ++mCursorX);
+}
+
+void TextWindow::pageUpHandler()
+{
+  mTextOffsetY = mTextOffsetY > mRows ? mTextOffsetY - mRows : 0;
+}
+
+void TextWindow::pageDownHandler()
+{
+  int maxTextOffsetY = mBuffer->size() - mRows;
+  if (maxTextOffsetY >= 0)
+    mTextOffsetY = mTextOffsetY + mRows < maxTextOffsetY ? mTextOffsetY + mRows : maxTextOffsetY;
 }
