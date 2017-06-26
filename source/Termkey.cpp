@@ -20,12 +20,12 @@ void Termkey::init()
 Event Termkey::waitEvent(unsigned timeoutMs)
 {
   TermKeyResult ret;
-  TermKeyKey xkey;
+  TermKeyKey retKey;
 
   if (timeoutMs == 0)		// blocking
-    ret = termkey_waitkey(mTermKey, &xkey);
+    ret = termkey_waitkey(mTermKey, &retKey);
   else				// non-blocking
-    {				// FIXME: bytes are being buffered under heavy load conditions
+    {
       pollfd pollFd;
       pollFd.fd = termkey_get_fd(mTermKey);
       pollFd.events = POLLIN;
@@ -36,10 +36,14 @@ Event Termkey::waitEvent(unsigned timeoutMs)
       if (pollFd.revents & (POLLIN|POLLHUP|POLLERR))
 	termkey_advisereadable(mTermKey);
 
-      ret = termkey_getkey(mTermKey, &xkey);
+      ret = termkey_getkey(mTermKey, &retKey);
+
+      TermKeyKey tmpKey;
+      while (ret == TERMKEY_RES_KEY || ret == TERMKEY_RES_AGAIN)
+	ret = termkey_getkey_force(mTermKey, &tmpKey);
     }
 
-  return Event(xkey);
+  return Event(retKey);
 }
 
 TermKey* Termkey::getTermKey()

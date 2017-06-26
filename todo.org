@@ -1,5 +1,5 @@
-* ASAP [0%]
-** TODO FIXME in Termkey
+* ASAP [100%]
+** DONE FIXME in Termkey
 
 * Short-term [0%]
 ** TODO thread cleanup issue (big files)
