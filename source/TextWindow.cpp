@@ -105,7 +105,7 @@ void TextWindow::render()
       }
   };
 
-  wclear(mWindow);
+  werase(mWindow);
   mBuffer->applyFunctionToSlice(renderer, pos, len);
   wmove(mWindow, mCursorY, mCursorX);
   wrefresh(mWindow);
