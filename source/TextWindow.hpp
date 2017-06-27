@@ -32,6 +32,8 @@ private:
   void rightHandler();
   void pageUpHandler();
   void pageDownHandler();
+  void lineBeginHandler();
+  void lineEndHandler();
 
   std::shared_ptr<ITextBuffer> mBuffer;
   std::map<std::string, std::function<void()> > mActiveHandlers = {
@@ -41,6 +43,8 @@ private:
     {"<Right>", std::bind(&TextWindow::rightHandler, this)},
     {"<PageUp>", std::bind(&TextWindow::pageUpHandler, this)},
     {"<PageDown>", std::bind(&TextWindow::pageDownHandler, this)},
+    {"<C-a>", std::bind(&TextWindow::lineBeginHandler, this)},
+    {"<C-e>", std::bind(&TextWindow::lineEndHandler, this)},
   };
 
   int mCursorX;

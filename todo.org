@@ -4,9 +4,12 @@
 * Short-term [50%]
 ** DONE initial move text left & right
 ** DONE TextWindow handler functions
-** TODO advanced move text left & right
-** TODO C-a & C-e
+** TODO advanced move text left, right, up and down ?
+** DONE C-a & C-e
+** TODO M-< & M->
+** TODO M-Left & M-Right
 * Long-term [0%]
+** TODO [#A] unprintable bytes issue
 ** TODO help window
 ** TODO fix hello window
 ** TODO thread cleanup issue (big files)

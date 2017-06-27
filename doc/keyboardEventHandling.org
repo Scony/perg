@@ -3,11 +3,15 @@
 
 * FileController
 + g (grep)
-+ <C-Left>
-+ <C-Right>
++ <S-Left>
++ <S-Right>
 
 * TextWindow
 + <Up> (navigation)
 + <Down> (navigation)
++ <Left> (navigation)
++ <Right> (navigation)
 + <PageUp> (navigation)
 + <PageDown> (navigation)
++ <C-a> (navigation)
++ <C-e> (navigation)

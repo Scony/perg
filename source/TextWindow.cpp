@@ -145,3 +145,36 @@ void TextWindow::pageDownHandler()
   if (maxTextOffsetY >= 0)
     mTextOffsetY = mTextOffsetY + mRows < maxTextOffsetY ? mTextOffsetY + mRows : maxTextOffsetY;
 }
+
+void TextWindow::lineBeginHandler()
+{
+  mCursorX = 0;
+  mTextOffsetX = 0;
+  wmove(mWindow, mCursorY, mCursorX);
+}
+
+void TextWindow::lineEndHandler()
+{
+  unsigned lineLength;
+
+  auto pos = mCursorY + mTextOffsetY;
+  auto len = 1;
+  auto lineLengthFetcher = [&](ITextBuffer::Iterator begin, ITextBuffer::Iterator end) {
+    lineLength = begin->length();
+  };
+  mBuffer->applyFunctionToSlice(lineLengthFetcher, pos, len);
+
+  unsigned desiredCursorPosX = lineLength;
+  if (desiredCursorPosX > mCols - 1)
+    {
+      mCursorX = mCols - 1;
+      mTextOffsetX = desiredCursorPosX - mCols + 1;
+    }
+  else
+    {
+      mCursorX = desiredCursorPosX;
+      mTextOffsetX = 0;
+    }
+
+  wmove(mWindow, mCursorY, mCursorX);
+}
