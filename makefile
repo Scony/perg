@@ -1,10 +1,11 @@
 all: build
 
-test: build
+test:
+	mkdir -p build && cd build && cmake -DBUILD_TESTING=ON .. && make -j
 	./build/test/perg-test
 
 build:
-	mkdir -p build && cd build && cmake .. && make -j
+	mkdir -p build && cd build && cmake -DBUILD_TESTING=OFF .. && make -j
 
 clean:
 	find -name '*~' | xargs rm -f
