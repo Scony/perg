@@ -38,10 +38,12 @@ void TextBuffer::waitForNewSize(unsigned oldSize)
     });
 }
 
-void TextBuffer::appendData(const Buffer& data)
+void TextBuffer::appendData(Buffer && data)
 {
   std::lock_guard<std::mutex> lock(mBufferLock);
-  mBuffer.insert(mBuffer.end(), data.begin(), data.end());
+  mBuffer.insert(mBuffer.end(),
+                 std::make_move_iterator(data.begin()),
+                 std::make_move_iterator(data.end()));
   mNewData.notify_all();
 }
 

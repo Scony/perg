@@ -70,7 +70,7 @@ void Grep::grepWorker(std::string pattern, std::shared_ptr<TextBuffer> output)
 	      linesMatching.push_back(*it);
 	    it++;
 	  }
-	output->appendData(linesMatching);
+	output->appendData(std::move(linesMatching));
       };
 
       mBuffer->applyFunctionToSlice(filterer, pos, len);
