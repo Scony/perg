@@ -257,3 +257,23 @@ void TextWindow::wordRightHandler()
 
   wmove(mWindow, mCursorY, mCursorX);
 }
+
+void TextWindow::textBeginHandler()
+{
+  mCursorX = 0;
+  mCursorY = 0;
+  mTextOffsetX = 0;
+  mTextOffsetY = 0;
+
+  wmove(mWindow, mCursorY, mCursorX);
+}
+
+void TextWindow::textEndHandler()
+{
+  mCursorX = 0;
+  mCursorY = std::min(mRows - 1, mPreviousBufferSize - 1);
+  mTextOffsetX = 0;
+  mTextOffsetY = std::max(mPreviousBufferSize - mRows, 0);
+
+  wmove(mWindow, mCursorY, mCursorX);
+}

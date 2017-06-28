@@ -19,3 +19,5 @@
 + <C-Right> (navigation)
 + <M-Left> (navigation)
 + <M-Right> (navigation)
++ <M-<> (navigation)
++ <M->> (navigation)

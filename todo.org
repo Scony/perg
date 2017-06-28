@@ -1,11 +1,11 @@
 * ASAP [100%]
 ** DONE FIXME in Termkey
 
-* Short-term [66%]
-** TODO M-< & M->
+* Short-term [62%]
 ** TODO refa in FileController
 ** TODO line focus
 ** TODO advanced move text left, right, up and down ?
+** DONE M-< & M->
 ** DONE initial move text left & right
 ** DONE TextWindow handler functions
 ** DONE C-a & C-e

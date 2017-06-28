@@ -36,6 +36,8 @@ private:
   void lineEndHandler();
   void wordLeftHandler();
   void wordRightHandler();
+  void textBeginHandler();
+  void textEndHandler();
 
   std::shared_ptr<ITextBuffer> mBuffer;
   std::map<std::string, std::function<void()> > mActiveHandlers = {
@@ -51,6 +53,8 @@ private:
     {"<C-Right>", std::bind(&TextWindow::wordRightHandler, this)},
     {"<M-Left>", std::bind(&TextWindow::wordLeftHandler, this)},
     {"<M-Right>", std::bind(&TextWindow::wordRightHandler, this)},
+    {"<M-<>", std::bind(&TextWindow::textBeginHandler, this)},
+    {"<M->>", std::bind(&TextWindow::textEndHandler, this)},
   };
 
   int mCursorX;
