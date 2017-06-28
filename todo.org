@@ -1,15 +1,19 @@
 * ASAP [100%]
 ** DONE FIXME in Termkey
 
-* Short-term [50%]
+* Short-term [66%]
+** TODO M-< & M->
+** TODO refa in FileController
+** TODO line focus
+** TODO advanced move text left, right, up and down ?
 ** DONE initial move text left & right
 ** DONE TextWindow handler functions
-** TODO advanced move text left, right, up and down ?
 ** DONE C-a & C-e
-** TODO M-< & M->
-** TODO M-Left & M-Right
+** DONE M-Left & M-Right
+
 * Long-term [0%]
 ** TODO [#A] unprintable bytes issue
 ** TODO help window
 ** TODO fix hello window
 ** TODO thread cleanup issue (big files)
+** TODO investigate core dumps in grepping

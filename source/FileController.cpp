@@ -43,7 +43,7 @@ Event FileController::proceed()
 	  mCurrentGrep = grep->getGid();
 	  mTextWindows[mCurrentGrep]->render();
 	}
-      else if (event == Event("<S-Left>"))
+      else if (event == Event("<M-Up>"))
 	{
 	  std::vector<unsigned> gids;
 	  for (const auto& pair : mGreps)
@@ -61,7 +61,7 @@ Event FileController::proceed()
 
 	  mTextWindows[mCurrentGrep]->render();
 	}
-      else if (event == Event("<S-Right>"))
+      else if (event == Event("<M-Down>"))
 	{
 	  std::vector<unsigned> gids;
 	  for (const auto& pair : mGreps)

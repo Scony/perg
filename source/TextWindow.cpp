@@ -150,6 +150,7 @@ void TextWindow::lineBeginHandler()
 {
   mCursorX = 0;
   mTextOffsetX = 0;
+
   wmove(mWindow, mCursorY, mCursorX);
 }
 
@@ -175,6 +176,84 @@ void TextWindow::lineEndHandler()
       mCursorX = desiredCursorPosX;
       mTextOffsetX = 0;
     }
+
+  wmove(mWindow, mCursorY, mCursorX);
+}
+
+void TextWindow::wordLeftHandler()
+{
+  std::string line = "";
+
+  auto pos = mCursorY + mTextOffsetY;
+  auto len = 1;
+  auto lineFetcher = [&](ITextBuffer::Iterator begin, ITextBuffer::Iterator end) {
+    line = *begin;
+  };
+  mBuffer->applyFunctionToSlice(lineFetcher, pos, len);
+
+  unsigned cursorPosInString = mCursorX + mTextOffsetX;
+  cursorPosInString = std::min(cursorPosInString, (unsigned)line.length());
+
+  int targetPosInString = cursorPosInString - 1;
+
+  // loook for text
+  while (targetPosInString >= 0 && !isalnum(line[targetPosInString]))
+    targetPosInString--;
+
+  // look for text end
+  while (targetPosInString >= 0 && isalnum(line[targetPosInString]))
+    targetPosInString--;
+
+  targetPosInString++;
+
+  int desiredCurorPosX = targetPosInString - mTextOffsetX;
+
+  if (desiredCurorPosX < 0)
+    {
+      mCursorX = 0;
+      mTextOffsetX = targetPosInString;
+    }
+  else
+    mCursorX = desiredCurorPosX;
+
+  wmove(mWindow, mCursorY, mCursorX);
+}
+
+void TextWindow::wordRightHandler()
+{
+  std::string line = "";
+
+  auto pos = mCursorY + mTextOffsetY;
+  auto len = 1;
+  auto lineFetcher = [&](ITextBuffer::Iterator begin, ITextBuffer::Iterator end) {
+    line = *begin;
+  };
+  mBuffer->applyFunctionToSlice(lineFetcher, pos, len);
+
+  unsigned cursorPosInString = mCursorX + mTextOffsetX;
+
+  int targetPosInString = cursorPosInString;
+
+  if (targetPosInString >= line.length())
+    return;
+
+  // loook for text
+  while (targetPosInString < line.length() && !isalnum(line[targetPosInString]))
+    targetPosInString++;
+
+  // look for text end
+  while (targetPosInString < line.length() && isalnum(line[targetPosInString]))
+    targetPosInString++;
+
+  int desiredCurorPosX = targetPosInString - mTextOffsetX;
+
+  if (desiredCurorPosX > mCols - 1)
+    {
+      mCursorX = mCols - 1;
+      mTextOffsetX += desiredCurorPosX - mCols + 1;
+    }
+  else
+    mCursorX = desiredCurorPosX;
 
   wmove(mWindow, mCursorY, mCursorX);
 }
