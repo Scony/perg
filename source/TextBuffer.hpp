@@ -21,7 +21,7 @@ public:
   void applyFunctionToSlice(std::function<void(Iterator, Iterator)> function, unsigned pos, unsigned len);
   void waitForNewSize(unsigned oldSize);
 
-  void appendData(const Buffer& data);
+  void appendData(Buffer && data);
   void seal();
 
 private:

@@ -21,16 +21,16 @@ void File::readFile(std::string fileName, std::shared_ptr<TextBuffer> output)
   std::string line;
   while (getline(fileStream, line))
     {
-      lines.push_back(line);
+      lines.push_back(std::move(line));
       if (lines.size() >= mLinesToFlush)
-	{
-	  output->appendData(lines);
-	  lines.clear();
-	}
+        {
+          output->appendData(std::move(lines));
+          lines.clear();
+        }
     }
 
   if (lines.size() > 0)
-    output->appendData(lines);
+    output->appendData(std::move(lines));
 
   output->seal();
 }
