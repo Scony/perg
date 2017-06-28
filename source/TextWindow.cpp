@@ -50,7 +50,7 @@ void TextWindow::render()
     while (it != end)
       {
 	if (mTextOffsetX < it->length())
-	  mvwprintw(mWindow, i, 0, it->substr(mTextOffsetX).c_str());
+	  mvwprintw(mWindow, i, 0, it->substr(mTextOffsetX, mCols).c_str());
 	i++;
 	it++;
       }
