@@ -20,6 +20,7 @@ public:
   Event proceed();
   void render();
   void focus();
+  std::string getCurrentLine();
 
 private:
   static const unsigned mWindowTimeoutMs = 100;

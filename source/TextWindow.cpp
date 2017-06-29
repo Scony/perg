@@ -67,6 +67,20 @@ void TextWindow::focus()
   lazyRender();
 }
 
+std::string TextWindow::getCurrentLine()
+{
+  std::string currentLine = "";
+
+  auto pos = mCursorY + mTextOffsetY;
+  auto len = 1;
+  auto lineFetcher = [&](ITextBuffer::Iterator begin, ITextBuffer::Iterator end) {
+    currentLine = *begin;
+  };
+  mBuffer->applyFunctionToSlice(lineFetcher, pos, len);
+
+  return currentLine;
+}
+
 void TextWindow::lazyRender()
 {
   if (mPreviousTextOffsetX != mTextOffsetX || mPreviousTextOffsetY != mTextOffsetY)
@@ -156,14 +170,7 @@ void TextWindow::lineBeginHandler()
 
 void TextWindow::lineEndHandler()
 {
-  unsigned lineLength;
-
-  auto pos = mCursorY + mTextOffsetY;
-  auto len = 1;
-  auto lineLengthFetcher = [&](ITextBuffer::Iterator begin, ITextBuffer::Iterator end) {
-    lineLength = begin->length();
-  };
-  mBuffer->applyFunctionToSlice(lineLengthFetcher, pos, len);
+  unsigned lineLength = getCurrentLine().length();
 
   unsigned desiredCursorPosX = lineLength;
   if (desiredCursorPosX > mCols - 1)
@@ -182,14 +189,7 @@ void TextWindow::lineEndHandler()
 
 void TextWindow::wordLeftHandler()
 {
-  std::string line = "";
-
-  auto pos = mCursorY + mTextOffsetY;
-  auto len = 1;
-  auto lineFetcher = [&](ITextBuffer::Iterator begin, ITextBuffer::Iterator end) {
-    line = *begin;
-  };
-  mBuffer->applyFunctionToSlice(lineFetcher, pos, len);
+  std::string line = getCurrentLine();
 
   unsigned cursorPosInString = mCursorX + mTextOffsetX;
   cursorPosInString = std::min(cursorPosInString, (unsigned)line.length());
@@ -221,14 +221,7 @@ void TextWindow::wordLeftHandler()
 
 void TextWindow::wordRightHandler()
 {
-  std::string line = "";
-
-  auto pos = mCursorY + mTextOffsetY;
-  auto len = 1;
-  auto lineFetcher = [&](ITextBuffer::Iterator begin, ITextBuffer::Iterator end) {
-    line = *begin;
-  };
-  mBuffer->applyFunctionToSlice(lineFetcher, pos, len);
+  std::string line = getCurrentLine();
 
   unsigned cursorPosInString = mCursorX + mTextOffsetX;
 
