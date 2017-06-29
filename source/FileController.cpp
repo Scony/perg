@@ -1,6 +1,7 @@
 #include <algorithm>
 
 #include "FileController.hpp"
+#include "StaticTextBuffer.hpp"
 
 FileController::FileController(Region region,
 			       std::shared_ptr<File> file,
@@ -8,6 +9,7 @@ FileController::FileController(Region region,
 			       std::shared_ptr<Minibuffer> minibuffer) :
   mRegion(region),
   mFile(file),
+  mFocusWindow(nullptr),
   mStatusBar(statusBar),
   mMinibuffer(minibuffer)
 {
@@ -17,17 +19,30 @@ FileController::FileController(Region region,
 
 Event FileController::proceed()
 {
-  mTextWindows[mCurrentGrep]->render();
+  if (mFocusWindow == nullptr)
+    mTextWindows[mCurrentGrep]->render();
+  else
+    mFocusWindow->render();
 
   Event event("");
 
   while (true)
     {
-      mStatusBar->setContent(mGreps[mCurrentGrep]->getName() + " (" + std::to_string(mCurrentGrep) + ") " +
-			     "[" + std::to_string(mGreps[mCurrentGrep]->getBuffer()->size()) + "]");
-      mStatusBar->render();
-      mTextWindows[mCurrentGrep]->focus();
-      event = mTextWindows[mCurrentGrep]->proceed();
+      if (mFocusWindow == nullptr)
+	{
+	  mStatusBar->setContent(mGreps[mCurrentGrep]->getName() + " (" + std::to_string(mCurrentGrep) + ") " +
+				 "[" + std::to_string(mGreps[mCurrentGrep]->getBuffer()->size()) + "]");
+	  mStatusBar->render();
+	  mTextWindows[mCurrentGrep]->focus();
+	  event = mTextWindows[mCurrentGrep]->proceed();
+	}
+      else
+	{
+	  mStatusBar->setContent("[line focus]");
+	  mStatusBar->render();
+	  mFocusWindow->focus();
+	  event = mFocusWindow->proceed();
+	}
 
       if (mActiveHandlers.find(event.describe()) != mActiveHandlers.end())
 	mActiveHandlers[event.describe()]();
@@ -61,7 +76,7 @@ void FileController::grepHandler()
   mTextWindows[mCurrentGrep]->render();
 }
 
-void FileController::circleGrepsLeft()
+void FileController::circleGrepsLeftHandler()
 {
   std::vector<unsigned> gids;
   for (const auto& pair : mGreps)
@@ -80,7 +95,7 @@ void FileController::circleGrepsLeft()
   mTextWindows[mCurrentGrep]->render();
 }
 
-void FileController::circleGrepsRight()
+void FileController::circleGrepsRightHandler()
 {
   std::vector<unsigned> gids;
   for (const auto& pair : mGreps)
@@ -95,6 +110,39 @@ void FileController::circleGrepsRight()
 	  mCurrentGrep = gids[i+1];
 	break;
       }
+
+  mTextWindows[mCurrentGrep]->render();
+}
+
+void FileController::focusHandler()
+{
+  std::string currentLine = mTextWindows[mCurrentGrep]->getCurrentLine();
+  std::vector<std::string> lineFragments;
+
+  // algorithm
+  for (unsigned pos = 0; pos < currentLine.length(); pos += mRegion.cols)
+    lineFragments.push_back(currentLine.substr(pos, mRegion.cols));
+
+  mFocusWindow.reset(new TextWindow(Region(0, 0, mRegion.cols, mRegion.rows),
+				    std::make_shared<StaticTextBuffer>(lineFragments)));
+
+  mActiveHandlers = {
+    {"<>", std::bind(&FileController::nopHandler, this)},
+    {"q", std::bind(&FileController::focusReleaseHandler, this)},
+  };
+}
+
+void FileController::focusReleaseHandler()
+{
+  mFocusWindow.reset();
+
+  mActiveHandlers = {
+    {"<>", std::bind(&FileController::nopHandler, this)},
+    {"g", std::bind(&FileController::grepHandler, this)},
+    {"<M-Up>", std::bind(&FileController::circleGrepsLeftHandler, this)},
+    {"<M-Down>", std::bind(&FileController::circleGrepsRightHandler, this)},
+    {"f", std::bind(&FileController::focusHandler, this)},
+  };
 
   mTextWindows[mCurrentGrep]->render();
 }

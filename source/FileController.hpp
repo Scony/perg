@@ -25,14 +25,18 @@ private:
 
   void nopHandler();
   void grepHandler();
-  void circleGrepsLeft();
-  void circleGrepsRight();
+  void circleGrepsLeftHandler();
+  void circleGrepsRightHandler();
+  void focusHandler();
+
+  void focusReleaseHandler();
 
   std::map<std::string, std::function<void()> > mActiveHandlers = {
     {"<>", std::bind(&FileController::nopHandler, this)},
     {"g", std::bind(&FileController::grepHandler, this)},
-    {"<M-Up>", std::bind(&FileController::circleGrepsLeft, this)},
-    {"<M-Down>", std::bind(&FileController::circleGrepsRight, this)},
+    {"<M-Up>", std::bind(&FileController::circleGrepsLeftHandler, this)},
+    {"<M-Down>", std::bind(&FileController::circleGrepsRightHandler, this)},
+    {"f", std::bind(&FileController::focusHandler, this)},
   };
 
   Region mRegion;
@@ -41,6 +45,8 @@ private:
   std::map<unsigned, std::shared_ptr<Grep> > mGreps;
   std::map<unsigned, std::shared_ptr<TextWindow> > mTextWindows;
   unsigned mCurrentGrep;
+
+  std::shared_ptr<TextWindow> mFocusWindow;
 
   std::shared_ptr<StatusBar> mStatusBar;
   std::shared_ptr<Minibuffer> mMinibuffer;

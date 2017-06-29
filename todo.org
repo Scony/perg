@@ -1,9 +1,15 @@
 * ASAP [100%]
 ** DONE FIXME in Termkey
 
-* Short-term [75%]
-** TODO line focus
-** TODO advanced move text left, right, up and down ?
+* Short-term [53%]
+** TODO text selection
+** TODO designations
+** TODO colors rendering
+** TODO line focus: json & ttcn3 formatting
+** TODO line focus: refa
+** TODO help window
+** TODO small initial buffer (rows num) or even progressive ?
+** DONE line focus
 ** DONE refa in FileController
 ** DONE M-< & M->
 ** DONE initial move text left & right
@@ -12,8 +18,8 @@
 ** DONE M-Left & M-Right
 
 * Long-term [0%]
-** TODO [#A] unprintable bytes issue
-** TODO help window
 ** TODO fix hello window
-** TODO thread cleanup issue (big files)
 ** TODO investigate core dumps in grepping
+** TODO thread cleanup issue (big files)
+** TODO unprintable bytes issue
+** TODO advanced move text left, right, up and down ?
