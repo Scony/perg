@@ -19,10 +19,9 @@ Event FileController::proceed()
 {
   mTextWindows[mCurrentGrep]->render();
 
-  bool eventSupported = true;
   Event event("");
 
-  do
+  while (true)
     {
       mStatusBar->setContent(mGreps[mCurrentGrep]->getName() + " (" + std::to_string(mCurrentGrep) + ") " +
 			     "[" + std::to_string(mGreps[mCurrentGrep]->getBuffer()->size()) + "]");
@@ -30,59 +29,11 @@ Event FileController::proceed()
       mTextWindows[mCurrentGrep]->focus();
       event = mTextWindows[mCurrentGrep]->proceed();
 
-      if (event == Event("<>"))
-	{
-	}
-      else if (event == Event("g"))
-	{
-	  auto str = mMinibuffer->readStr();
-	  auto grep = mGreps[mCurrentGrep]->grep(str);
-
-	  addGrep(grep);
-
-	  mCurrentGrep = grep->getGid();
-	  mTextWindows[mCurrentGrep]->render();
-	}
-      else if (event == Event("<M-Up>"))
-	{
-	  std::vector<unsigned> gids;
-	  for (const auto& pair : mGreps)
-	    gids.push_back(pair.first);
-	  std::sort(gids.begin(), gids.end());
-	  for (int i = 0; i < gids.size(); i++)
-	    if (gids[i] == mCurrentGrep)
-	      {
-		if (i == 0)
-		  mCurrentGrep = gids[gids.size()-1];
-		else
-		  mCurrentGrep = gids[i-1];
-		break;
-	      }
-
-	  mTextWindows[mCurrentGrep]->render();
-	}
-      else if (event == Event("<M-Down>"))
-	{
-	  std::vector<unsigned> gids;
-	  for (const auto& pair : mGreps)
-	    gids.push_back(pair.first);
-	  std::sort(gids.begin(), gids.end());
-	  for (int i = 0; i < gids.size(); i++)
-	    if (gids[i] == mCurrentGrep)
-	      {
-		if (i == gids.size() - 1)
-		  mCurrentGrep = gids[0];
-		else
-		  mCurrentGrep = gids[i+1];
-		break;
-	      }
-
-	  mTextWindows[mCurrentGrep]->render();
-	}
+      if (mActiveHandlers.find(event.describe()) != mActiveHandlers.end())
+	mActiveHandlers[event.describe()]();
       else
-	eventSupported = false;
+	break;
     }
-  while (eventSupported);
 
   return event;
 }
@@ -93,4 +44,57 @@ void FileController::addGrep(std::shared_ptr<Grep> grep)
   mTextWindows.insert({grep->getGid(), std::make_shared<TextWindow>(Region(0, 0, mRegion.cols, mRegion.rows),
 								    grep->getBuffer())});
   mCurrentGrep = grep->getGid();
+}
+
+void FileController::nopHandler()
+{
+}
+
+void FileController::grepHandler()
+{
+  auto str = mMinibuffer->readStr();
+  auto grep = mGreps[mCurrentGrep]->grep(str);
+
+  addGrep(grep);
+
+  mCurrentGrep = grep->getGid();
+  mTextWindows[mCurrentGrep]->render();
+}
+
+void FileController::circleGrepsLeft()
+{
+  std::vector<unsigned> gids;
+  for (const auto& pair : mGreps)
+    gids.push_back(pair.first);
+  std::sort(gids.begin(), gids.end());
+  for (int i = 0; i < gids.size(); i++)
+    if (gids[i] == mCurrentGrep)
+      {
+	if (i == 0)
+	  mCurrentGrep = gids[gids.size()-1];
+	else
+	  mCurrentGrep = gids[i-1];
+	break;
+      }
+
+  mTextWindows[mCurrentGrep]->render();
+}
+
+void FileController::circleGrepsRight()
+{
+  std::vector<unsigned> gids;
+  for (const auto& pair : mGreps)
+    gids.push_back(pair.first);
+  std::sort(gids.begin(), gids.end());
+  for (int i = 0; i < gids.size(); i++)
+    if (gids[i] == mCurrentGrep)
+      {
+	if (i == gids.size() - 1)
+	  mCurrentGrep = gids[0];
+	else
+	  mCurrentGrep = gids[i+1];
+	break;
+      }
+
+  mTextWindows[mCurrentGrep]->render();
 }

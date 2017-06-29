@@ -23,7 +23,18 @@ public:
 private:
   void addGrep(std::shared_ptr<Grep> grep);
 
-private:
+  void nopHandler();
+  void grepHandler();
+  void circleGrepsLeft();
+  void circleGrepsRight();
+
+  std::map<std::string, std::function<void()> > mActiveHandlers = {
+    {"<>", std::bind(&FileController::nopHandler, this)},
+    {"g", std::bind(&FileController::grepHandler, this)},
+    {"<M-Up>", std::bind(&FileController::circleGrepsLeft, this)},
+    {"<M-Down>", std::bind(&FileController::circleGrepsRight, this)},
+  };
+
   Region mRegion;
 
   std::shared_ptr<File> mFile;
