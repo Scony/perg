@@ -15,7 +15,8 @@ TextWindow::TextWindow(Region region,
   mSelectionBeginY(-1),
   mPreviousTextOffsetX(-1),
   mPreviousTextOffsetY(-1),
-  mPreviousBufferSize(-1)
+  mPreviousBufferSize(-1),
+  mPreviousDesignationsSize(-1)
 {
   keypad(mWindow, TRUE);
   enableStandardMode();
@@ -58,6 +59,21 @@ void TextWindow::render()
 	if (mTextOffsetX < line->length())
 	  mvwprintw(mWindow, lineNumber, 0, line->substr(mTextOffsetX, mCols).c_str());
 
+	if (mTextOffsetX < line->length())
+	  {
+	    std::string visibleText = line->substr(mTextOffsetX, mCols);
+	    for (auto const& designation : *mDesignations)
+	      {
+		auto designationPos = visibleText.find(designation);
+		if (designationPos != std::string::npos)
+		  {
+		    wattron(mWindow, COLOR_PAIR(1));
+		    mvwprintw(mWindow, lineNumber, designationPos, designation.c_str());
+		    wattroff(mWindow, COLOR_PAIR(1));
+		  }
+	      }
+	  }
+
 	if (pos + lineNumber == mSelectionBeginY)
 	  {
 	    int relativeSelectionEnd1X = std::min(std::max(mSelectionBeginX - mTextOffsetX, 0), mCols);
@@ -66,10 +82,20 @@ void TextWindow::render()
 	    int relativeSelectionBeginX = std::min(relativeSelectionEnd1X, relativeSelectionEnd2X);
 	    int relativeSelectionEndX = std::max(relativeSelectionEnd1X, relativeSelectionEnd2X);
 
+	    std::string fill = "";
+
+	    if (mTextOffsetX < line->length())
+	      fill = line->substr(mTextOffsetX + relativeSelectionBeginX, relativeSelectionEndX - relativeSelectionBeginX);
+
+	    if (fill.length() < relativeSelectionEndX - relativeSelectionBeginX)
+	      fill += std::string(relativeSelectionEndX - relativeSelectionBeginX - fill.length(), ' ');
+
+	    wattron(mWindow, COLOR_PAIR(2));
 	    mvwprintw(mWindow,
 		      lineNumber,
 		      relativeSelectionBeginX,
-		      std::string(relativeSelectionEndX - relativeSelectionBeginX, 'X').c_str());
+		      fill.c_str());
+	    wattroff(mWindow, COLOR_PAIR(2));
 	  }
 
 	lineNumber++;
@@ -121,13 +147,14 @@ std::string TextWindow::getSelectedText()
   return currentLine.substr(absoluteSelectionBeginX, absoluteSelectionEndX - absoluteSelectionBeginX);
 }
 
-void TextWindow::lazyRender()
+void TextWindow::lazyRender()	// TODO: refa
 {
   if (mPreviousTextOffsetX != mTextOffsetX || mPreviousTextOffsetY != mTextOffsetY)
     {
       mPreviousTextOffsetX = mTextOffsetX;
       mPreviousTextOffsetY = mTextOffsetY;
       mPreviousBufferSize = mBuffer->size();
+      mPreviousDesignationsSize = mDesignations->size();
       render();
       return;
     }
@@ -136,6 +163,16 @@ void TextWindow::lazyRender()
       mPreviousTextOffsetX = mTextOffsetX;
       mPreviousTextOffsetY = mTextOffsetY;
       mPreviousBufferSize = mBuffer->size();
+      mPreviousDesignationsSize = mDesignations->size();
+      render();
+      return;
+    }
+  else if (mPreviousDesignationsSize != mDesignations->size())
+    {
+      mPreviousTextOffsetX = mTextOffsetX;
+      mPreviousTextOffsetY = mTextOffsetY;
+      mPreviousBufferSize = mBuffer->size();
+      mPreviousDesignationsSize = mDesignations->size();
       render();
       return;
     }

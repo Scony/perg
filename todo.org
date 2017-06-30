@@ -1,14 +1,17 @@
 * ASAP [100%]
 ** DONE FIXME in Termkey
 
-* Short-term [53%]
-** TODO text selection
-** TODO designations
-** TODO colors rendering
+* Short-term [62%]
+** TODO fix selection printing (ones out of screen)
+** TODO designations disabling
+** TODO boost designations (more colors & coloring algorithm)
 ** TODO line focus: json & ttcn3 formatting
 ** TODO line focus: refa
 ** TODO help window
 ** TODO small initial buffer (rows num) or even progressive ?
+** DONE text selection
+** DONE designations
+** DONE colors rendering
 ** DONE line focus
 ** DONE refa in FileController
 ** DONE M-< & M->
@@ -23,3 +26,4 @@
 ** TODO thread cleanup issue (big files)
 ** TODO unprintable bytes issue
 ** TODO advanced move text left, right, up and down ?
+** TODO tab problems (and other \chars)

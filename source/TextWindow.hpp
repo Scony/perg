@@ -95,4 +95,5 @@ private:
   int mPreviousTextOffsetX;
   int mPreviousTextOffsetY;
   int mPreviousBufferSize;
+  int mPreviousDesignationsSize;
 };
