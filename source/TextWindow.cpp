@@ -1,9 +1,12 @@
 #include "TextWindow.hpp"
 #include "Termkey.hpp"
 
-TextWindow::TextWindow(Region region, std::shared_ptr<ITextBuffer> buffer) :
+TextWindow::TextWindow(Region region,
+		       std::shared_ptr<ITextBuffer> buffer,
+		       std::shared_ptr<Designations> designations) :
   Window(region),
   mBuffer(buffer),
+  mDesignations(designations),
   mCursorX(0),
   mCursorY(0),
   mTextOffsetX(0),

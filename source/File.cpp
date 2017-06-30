@@ -11,6 +11,11 @@ File::File(std::string fileName) :
 {
 }
 
+std::shared_ptr<Designations> File::getDesignations()
+{
+  return mDesignations;
+}
+
 void File::readFile(std::string fileName, std::shared_ptr<TextBuffer> output)
 {
   std::ifstream fileStream(fileName.c_str());

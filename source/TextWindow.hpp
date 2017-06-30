@@ -10,11 +10,14 @@
 #include "ITextBuffer.hpp"
 #include "Region.hpp"
 #include "Event.hpp"
+#include "Designations.hpp"
 
 class TextWindow : public Window
 {
 public:
-  TextWindow(Region region, std::shared_ptr<ITextBuffer> buffer);
+  TextWindow(Region region,
+	     std::shared_ptr<ITextBuffer> buffer,
+	     std::shared_ptr<Designations> designations = std::make_shared<Designations>());
   ~TextWindow();
 
   Event proceed();
@@ -80,6 +83,7 @@ private:
   };
 
   std::shared_ptr<ITextBuffer> mBuffer;
+  std::shared_ptr<Designations> mDesignations;
 
   int mCursorX;
   int mCursorY;

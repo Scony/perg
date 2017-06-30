@@ -57,7 +57,8 @@ void FileController::addGrep(std::shared_ptr<Grep> grep)
 {
   mGreps.insert({grep->getGid(), grep});
   mTextWindows.insert({grep->getGid(), std::make_shared<TextWindow>(Region(0, 0, mRegion.cols, mRegion.rows),
-								    grep->getBuffer())});
+								    grep->getBuffer(),
+								    mFile->getDesignations())});
   mCurrentGrep = grep->getGid();
 }
 
@@ -150,5 +151,6 @@ void FileController::focusReleaseHandler()
 void FileController::designationHandler()
 {
   std::string designation = mTextWindows[mCurrentGrep]->getSelectedText();
-  mMinibuffer->setContent(designation);
+  if (designation != "")
+    mFile->getDesignations()->push_back(designation);
 }
