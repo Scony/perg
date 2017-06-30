@@ -146,3 +146,9 @@ void FileController::focusReleaseHandler()
 
   mTextWindows[mCurrentGrep]->render();
 }
+
+void FileController::designationHandler()
+{
+  std::string designation = mTextWindows[mCurrentGrep]->getSelectedText();
+  mMinibuffer->setContent(designation);
+}

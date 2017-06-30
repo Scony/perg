@@ -99,6 +99,25 @@ std::string TextWindow::getCurrentLine()
   return currentLine;
 }
 
+std::string TextWindow::getSelectedText()
+{
+  if (mSelectionBeginX < 0 || mSelectionBeginY < 0)
+    return "";
+
+  int absoluteSelectionBeginX = std::min(mSelectionBeginX, mCursorX);
+  int absoluteSelectionEndX = std::max(mSelectionBeginX, mCursorX);
+  std::string currentLine = getCurrentLine();
+
+  if (absoluteSelectionBeginX >= currentLine.length())
+    {
+      selectEndHandler();
+      return "";
+    }
+
+  selectEndHandler();
+  return currentLine.substr(absoluteSelectionBeginX, absoluteSelectionEndX - absoluteSelectionBeginX);
+}
+
 void TextWindow::lazyRender()
 {
   if (mPreviousTextOffsetX != mTextOffsetX || mPreviousTextOffsetY != mTextOffsetY)

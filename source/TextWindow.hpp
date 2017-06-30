@@ -21,6 +21,7 @@ public:
   void render();
   void focus();
   std::string getCurrentLine();
+  std::string getSelectedText();
 
 private:
   static const unsigned mWindowTimeoutMs = 100;
