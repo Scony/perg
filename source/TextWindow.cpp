@@ -8,11 +8,14 @@ TextWindow::TextWindow(Region region, std::shared_ptr<ITextBuffer> buffer) :
   mCursorY(0),
   mTextOffsetX(0),
   mTextOffsetY(0),
+  mSelectionBeginX(-1),
+  mSelectionBeginY(-1),
   mPreviousTextOffsetX(-1),
   mPreviousTextOffsetY(-1),
   mPreviousBufferSize(-1)
 {
   keypad(mWindow, TRUE);
+  enableStandardMode();
 }
 
 TextWindow::~TextWindow()
@@ -45,14 +48,14 @@ void TextWindow::render()
   auto& pos = mTextOffsetY;
   auto len = std::min((unsigned)mRows, mBuffer->size()-pos);
   auto renderer = [&](ITextBuffer::Iterator begin, ITextBuffer::Iterator end) {
-    int i = 0;
-    auto it = begin;
-    while (it != end)
+    int lineNumber = 0;
+    auto line = begin;
+    while (line != end)
       {
-	if (mTextOffsetX < it->length())
-	  mvwprintw(mWindow, i, 0, it->substr(mTextOffsetX, mCols).c_str());
-	i++;
-	it++;
+	if (mTextOffsetX < line->length())
+	  mvwprintw(mWindow, lineNumber, 0, line->substr(mTextOffsetX, mCols).c_str());
+	lineNumber++;
+	line++;
       }
   };
 
@@ -269,4 +272,30 @@ void TextWindow::textEndHandler()
   mTextOffsetY = std::max(mPreviousBufferSize - mRows, 0);
 
   wmove(mWindow, mCursorY, mCursorX);
+}
+
+void TextWindow::selectBeginHandler()
+{
+  mSelectionBeginX = mCursorX;
+  mSelectionBeginY = mCursorY;
+
+  enableTextSelectionMode();
+}
+
+void TextWindow::selectEndHandler()
+{
+  mSelectionBeginX = -1;
+  mSelectionBeginY = -1;
+
+  enableStandardMode();
+}
+
+void TextWindow::enableStandardMode()
+{
+  mActiveHandlers = mStandardModeHandlers;
+}
+
+void TextWindow::enableTextSelectionMode()
+{
+  mActiveHandlers = mTextSelectionModeHandlers;
 }

@@ -39,8 +39,15 @@ private:
   void wordRightHandler();
   void textBeginHandler();
   void textEndHandler();
+  void selectBeginHandler();
+  void selectEndHandler();
 
-  std::map<std::string, std::function<void()> > mActiveHandlers = {
+  void enableStandardMode();
+  void enableTextSelectionMode();
+
+  std::map<std::string, std::function<void()> > mActiveHandlers;
+
+  std::map<std::string, std::function<void()> > mStandardModeHandlers = {
     {"<Up>", std::bind(&TextWindow::upHandler, this)},
     {"<Down>", std::bind(&TextWindow::downHandler, this)},
     {"<Left>", std::bind(&TextWindow::leftHandler, this)},
@@ -55,6 +62,20 @@ private:
     {"<M-Right>", std::bind(&TextWindow::wordRightHandler, this)},
     {"<M-<>", std::bind(&TextWindow::textBeginHandler, this)},
     {"<M->>", std::bind(&TextWindow::textEndHandler, this)},
+    {"<C- >", std::bind(&TextWindow::selectBeginHandler, this)},
+  };
+
+  std::map<std::string, std::function<void()> > mTextSelectionModeHandlers = {
+    {"<Left>", std::bind(&TextWindow::leftHandler, this)},
+    {"<Right>", std::bind(&TextWindow::rightHandler, this)},
+    {"<C-a>", std::bind(&TextWindow::lineBeginHandler, this)},
+    {"<C-e>", std::bind(&TextWindow::lineEndHandler, this)},
+    {"<C-Left>", std::bind(&TextWindow::wordLeftHandler, this)},
+    {"<C-Right>", std::bind(&TextWindow::wordRightHandler, this)},
+    {"<M-Left>", std::bind(&TextWindow::wordLeftHandler, this)},
+    {"<M-Right>", std::bind(&TextWindow::wordRightHandler, this)},
+    {"<C- >", std::bind(&TextWindow::selectBeginHandler, this)},
+    {"<C-g>", std::bind(&TextWindow::selectEndHandler, this)},
   };
 
   std::shared_ptr<ITextBuffer> mBuffer;
@@ -63,6 +84,8 @@ private:
   int mCursorY;
   int mTextOffsetX;
   int mTextOffsetY;
+  int mSelectionBeginX;
+  int mSelectionBeginY;
 
   int mPreviousTextOffsetX;
   int mPreviousTextOffsetY;
