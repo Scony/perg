@@ -54,6 +54,21 @@ void TextWindow::render()
       {
 	if (mTextOffsetX < line->length())
 	  mvwprintw(mWindow, lineNumber, 0, line->substr(mTextOffsetX, mCols).c_str());
+
+	if (pos + lineNumber == mSelectionBeginY)
+	  {
+	    int relativeSelectionEnd1X = std::min(std::max(mSelectionBeginX - mTextOffsetX, 0), mCols);
+	    int relativeSelectionEnd2X = mCursorX;
+
+	    int relativeSelectionBeginX = std::min(relativeSelectionEnd1X, relativeSelectionEnd2X);
+	    int relativeSelectionEndX = std::max(relativeSelectionEnd1X, relativeSelectionEnd2X);
+
+	    mvwprintw(mWindow,
+		      lineNumber,
+		      relativeSelectionBeginX,
+		      std::string(relativeSelectionEndX - relativeSelectionBeginX, 'X').c_str());
+	  }
+
 	lineNumber++;
 	line++;
       }
@@ -87,6 +102,14 @@ std::string TextWindow::getCurrentLine()
 void TextWindow::lazyRender()
 {
   if (mPreviousTextOffsetX != mTextOffsetX || mPreviousTextOffsetY != mTextOffsetY)
+    {
+      mPreviousTextOffsetX = mTextOffsetX;
+      mPreviousTextOffsetY = mTextOffsetY;
+      mPreviousBufferSize = mBuffer->size();
+      render();
+      return;
+    }
+  else if (mSelectionBeginX >= 0 && mSelectionBeginY >= 0)
     {
       mPreviousTextOffsetX = mTextOffsetX;
       mPreviousTextOffsetY = mTextOffsetY;
@@ -276,8 +299,8 @@ void TextWindow::textEndHandler()
 
 void TextWindow::selectBeginHandler()
 {
-  mSelectionBeginX = mCursorX;
-  mSelectionBeginY = mCursorY;
+  mSelectionBeginX = mCursorX + mTextOffsetX;
+  mSelectionBeginY = mCursorY + mTextOffsetY;
 
   enableTextSelectionMode();
 }
@@ -288,6 +311,7 @@ void TextWindow::selectEndHandler()
   mSelectionBeginY = -1;
 
   enableStandardMode();
+  render();
 }
 
 void TextWindow::enableStandardMode()
