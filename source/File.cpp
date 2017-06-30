@@ -7,7 +7,8 @@ using namespace std::placeholders;
 #include "File.hpp"
 
 File::File(std::string fileName) :
-  Grep(std::bind(&File::readFile, this, fileName, _1), fileName)
+  Grep(std::bind(&File::readFile, this, fileName, _1), fileName),
+  mDesignations(new Designations)
 {
 }
 
