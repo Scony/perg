@@ -128,6 +128,9 @@ void TextWindow::focus()
 
 std::string TextWindow::getCurrentLine()
 {
+  if (mBuffer->size() == 0)
+    return "";
+
   std::string currentLine = "";
 
   auto pos = mCursorY + mTextOffsetY;
