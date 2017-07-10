@@ -60,19 +60,30 @@ void TextWindow::render()
 	  mvwprintw(mWindow, lineNumber, 0, line->substr(mTextOffsetX, mCols).c_str());
 
 	if (mTextOffsetX < line->length())
-	  {
-	    std::string visibleText = line->substr(mTextOffsetX, mCols);
-	    for (auto const& designation : *mDesignations)
-	      {
-		auto designationPos = visibleText.find(designation);
-		if (designationPos != std::string::npos)
-		  {
-		    wattron(mWindow, COLOR_PAIR(1));
-		    mvwprintw(mWindow, lineNumber, designationPos, designation.c_str());
-		    wattroff(mWindow, COLOR_PAIR(1));
-		  }
-	      }
-	  }
+	  for (auto const& designation : *mDesignations)
+	    {
+	      size_t designationPos = line->find(designation);
+	      while (designationPos != std::string::npos)
+		{
+		  if (designationPos >= mTextOffsetX || designationPos + designation.length() > mTextOffsetX)
+		    {
+		      auto alignedDesignationPos = std::max((int)designationPos - mTextOffsetX, 0);
+		      auto designationTextOffset = std::max(((int)designationPos - mTextOffsetX) * -1, 0);
+		      auto designationVisibleLength = std::min((int)designation.length(),
+							       mCols - alignedDesignationPos);
+		      wattron(mWindow, COLOR_PAIR(1));
+		      auto designationVisibleText = designation.substr(designationTextOffset,
+								       designationVisibleLength);
+		      mvwprintw(mWindow, lineNumber, alignedDesignationPos, designationVisibleText.c_str());
+		      wattroff(mWindow, COLOR_PAIR(1));
+		    }
+
+		  auto offsetX = designationPos + designation.length();
+		  designationPos = line->substr(offsetX).find(designation);
+		  if (designationPos != std::string::npos)
+		    designationPos += offsetX;
+		}
+	    }
 
 	if (pos + lineNumber == mSelectionBeginY)
 	  {
@@ -85,7 +96,8 @@ void TextWindow::render()
 	    std::string fill = "";
 
 	    if (mTextOffsetX < line->length())
-	      fill = line->substr(mTextOffsetX + relativeSelectionBeginX, relativeSelectionEndX - relativeSelectionBeginX);
+	      fill = line->substr(mTextOffsetX + relativeSelectionBeginX,
+				  relativeSelectionEndX - relativeSelectionBeginX);
 
 	    if (fill.length() < relativeSelectionEndX - relativeSelectionBeginX)
 	      fill += std::string(relativeSelectionEndX - relativeSelectionBeginX - fill.length(), ' ');
@@ -133,8 +145,8 @@ std::string TextWindow::getSelectedText()
   if (mSelectionBeginX < 0 || mSelectionBeginY < 0)
     return "";
 
-  int absoluteSelectionBeginX = std::min(mSelectionBeginX, mCursorX);
-  int absoluteSelectionEndX = std::max(mSelectionBeginX, mCursorX);
+  int absoluteSelectionBeginX = std::min(mSelectionBeginX, mCursorX + mTextOffsetX);
+  int absoluteSelectionEndX = std::max(mSelectionBeginX, mCursorX + mTextOffsetX);
   std::string currentLine = getCurrentLine();
 
   if (absoluteSelectionBeginX >= currentLine.length())
