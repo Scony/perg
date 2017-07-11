@@ -1,13 +1,13 @@
 * ASAP [100%]
 ** DONE FIXME in Termkey
 
-* Short-term [64%]
-** TODO designations disabling
+* Short-term [70%]
+** TODO small initial buffer (rows num) or even progressive ?
 ** TODO boost designations (more colors & coloring algorithm)
 ** TODO line focus: json & ttcn3 formatting
 ** TODO line focus: refa
 ** TODO help window
-** TODO small initial buffer (rows num) or even progressive ?
+** DONE designations disabling
 ** DONE fix selection printing (ones out of screen)
 ** DONE text selection
 ** DONE designations

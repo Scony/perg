@@ -152,5 +152,13 @@ void FileController::designationHandler()
 {
   std::string designation = mTextWindows[mCurrentGrep]->getSelectedText();
   if (designation != "")
-    mFile->getDesignations()->push_back(designation);
+    {
+      auto designations = mFile->getDesignations();
+      auto searchResult = std::find(designations->begin(), designations->end(), designation);
+
+      if (searchResult == designations->end())
+	designations->push_back(designation);
+      else
+	designations->erase(searchResult);
+    }
 }
