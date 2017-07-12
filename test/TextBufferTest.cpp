@@ -61,9 +61,17 @@ TEST(TextBufferTests, ApplyFunctionToSlice3) {
   EXPECT_EQ(contents, "bbbccc");
 }
 
-TEST(TextBufferTests, WaitForNewSize) {
+TEST(TextBufferTests, WaitForNewSize1) {
   TextBuffer tb;
   tb.appendData(TextBuffer::Buffer{"aaa","bbb","ccc"});
   tb.waitForNewSize(0);
+  EXPECT_EQ(1, 1);
+}
+
+TEST(TextBufferTests, WaitForNewSize2) {
+  TextBuffer tb;
+  tb.appendData(TextBuffer::Buffer{"aaa","bbb","ccc"});
+  tb.seal();
+  tb.waitForNewSize(3);
   EXPECT_EQ(1, 1);
 }

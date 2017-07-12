@@ -30,11 +30,8 @@ void TextBuffer::applyFunctionToSlice(std::function<void(Iterator, Iterator)> fu
 void TextBuffer::waitForNewSize(unsigned oldSize)
 {
   std::unique_lock<std::mutex> lock(mBufferLock);
-  if (mFull && oldSize >= mBuffer.size())
-    return;
-
   mNewData.wait(lock, [&]() {
-      return mBuffer.size() > oldSize;
+      return mBuffer.size() > oldSize || mFull;
     });
 }
 
