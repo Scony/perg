@@ -1,12 +1,12 @@
 * ASAP [100%]
 ** DONE FIXME in Termkey
 
-* Short-term [76%]
-** TODO investigate core dumps in grepping
+* Short-term [77%]
 ** TODO boost designations (more colors & coloring algorithm)
 ** TODO line focus: simple formating
 ** TODO line focus: refa
 ** TODO help window
+** DONE investigate core dumps in grepping
 ** DONE small initial buffer (rows num) or even progressive ?
 ** DONE designations disabling
 ** DONE fix selection printing (ones out of screen)
