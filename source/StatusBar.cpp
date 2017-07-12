@@ -33,7 +33,7 @@ void StatusBar::render()
 	}
 
       wclear(mWindow);
-      mvwprintw(mWindow, 0, 0, rawText.c_str());
+      mvwprintw(mWindow, 0, 0, "%s", rawText.c_str());
       wrefresh(mWindow);
 
       mPreviousContent = mContent;

@@ -57,7 +57,7 @@ void TextWindow::render()
     while (line != end)
       {
 	if (mTextOffsetX < line->length())
-	  mvwprintw(mWindow, lineNumber, 0, line->substr(mTextOffsetX, mCols).c_str());
+	  mvwprintw(mWindow, lineNumber, 0, "%s", line->substr(mTextOffsetX, mCols).c_str());
 
 	if (mTextOffsetX < line->length())
 	  for (auto const& designation : *mDesignations)
@@ -74,7 +74,7 @@ void TextWindow::render()
 		      wattron(mWindow, COLOR_PAIR(1));
 		      auto designationVisibleText = designation.substr(designationTextOffset,
 								       designationVisibleLength);
-		      mvwprintw(mWindow, lineNumber, alignedDesignationPos, designationVisibleText.c_str());
+		      mvwprintw(mWindow, lineNumber, alignedDesignationPos, "%s", designationVisibleText.c_str());
 		      wattroff(mWindow, COLOR_PAIR(1));
 		    }
 
@@ -106,6 +106,7 @@ void TextWindow::render()
 	    mvwprintw(mWindow,
 		      lineNumber,
 		      relativeSelectionBeginX,
+		      "%s",
 		      fill.c_str());
 	    wattroff(mWindow, COLOR_PAIR(2));
 	  }

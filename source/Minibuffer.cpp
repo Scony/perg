@@ -15,7 +15,7 @@ Minibuffer::~Minibuffer()
 void Minibuffer::setContent(std::string content)
 {
   wclear(mWindow);
-  mvwprintw(mWindow, 0, 0, content.c_str());
+  mvwprintw(mWindow, 0, 0, "%s", content.c_str());
   wrefresh(mWindow);
 }
 
