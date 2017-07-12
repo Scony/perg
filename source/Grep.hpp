@@ -22,7 +22,7 @@ public:
   // const std::vector<Grep>& getGreps();
 
 protected:
-  static const unsigned mLinesToFlush = 10000;
+  static const unsigned mLinesToFlush = 1000;
   static int sNextGid;
 
 protected:

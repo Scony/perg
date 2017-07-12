@@ -1,12 +1,13 @@
 * ASAP [100%]
 ** DONE FIXME in Termkey
 
-* Short-term [70%]
-** TODO small initial buffer (rows num) or even progressive ?
+* Short-term [76%]
+** TODO investigate core dumps in grepping
 ** TODO boost designations (more colors & coloring algorithm)
-** TODO line focus: json & ttcn3 formatting
+** TODO line focus: simple formating
 ** TODO line focus: refa
 ** TODO help window
+** DONE small initial buffer (rows num) or even progressive ?
 ** DONE designations disabling
 ** DONE fix selection printing (ones out of screen)
 ** DONE text selection
@@ -21,8 +22,9 @@
 ** DONE M-Left & M-Right
 
 * Long-term [0%]
+** TODO searching in text window
+** TODO line focus: json & ttcn3 formatting
 ** TODO fix hello window
-** TODO investigate core dumps in grepping
 ** TODO thread cleanup issue (big files)
 ** TODO unprintable bytes issue
 ** TODO advanced move text left, right, up and down ?
