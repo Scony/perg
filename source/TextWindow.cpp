@@ -71,11 +71,11 @@ void TextWindow::render()
 		      auto designationTextOffset = std::max(((int)designationPos - mTextOffsetX) * -1, 0);
 		      auto designationVisibleLength = std::min((int)designation.length(),
 							       mCols - alignedDesignationPos);
-		      wattron(mWindow, COLOR_PAIR(1));
+		      wattron(mWindow, COLOR_PAIR(2));
 		      auto designationVisibleText = designation.substr(designationTextOffset,
 								       designationVisibleLength);
 		      mvwprintw(mWindow, lineNumber, alignedDesignationPos, "%s", designationVisibleText.c_str());
-		      wattroff(mWindow, COLOR_PAIR(1));
+		      wattroff(mWindow, COLOR_PAIR(2));
 		    }
 
 		  auto offsetX = designationPos + designation.length();
@@ -102,13 +102,13 @@ void TextWindow::render()
 	    if (fill.length() < relativeSelectionEndX - relativeSelectionBeginX)
 	      fill += std::string(relativeSelectionEndX - relativeSelectionBeginX - fill.length(), ' ');
 
-	    wattron(mWindow, COLOR_PAIR(2));
+	    wattron(mWindow, COLOR_PAIR(1));
 	    mvwprintw(mWindow,
 		      lineNumber,
 		      relativeSelectionBeginX,
 		      "%s",
 		      fill.c_str());
-	    wattroff(mWindow, COLOR_PAIR(2));
+	    wattroff(mWindow, COLOR_PAIR(1));
 	  }
 
 	lineNumber++;
