@@ -39,4 +39,18 @@ void initColorPairs()
   init_pair(5, COLOR_BLACK, COLOR_MAGENTA);
   init_pair(6, COLOR_BLACK, COLOR_CYAN);
   init_pair(7, COLOR_BLACK, COLOR_WHITE);
+
+  // dynamic ones
+  for (int colorNum = 8; colorNum < COLORS; colorNum++)
+    {
+      short r, g, b;
+      color_content(colorNum, &r, &g, &b);
+      double relativeLuminance = (0.299 * r) + (0.587 * g) + (0.114 * b);
+      // double relativeLuminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+      if (relativeLuminance > 500.0)
+	init_pair(colorNum, COLOR_BLACK, colorNum);
+      else
+	init_pair(colorNum, COLOR_WHITE, colorNum);
+    }
 }

@@ -71,11 +71,12 @@ void TextWindow::render()
 		      auto designationTextOffset = std::max(((int)designationPos - mTextOffsetX) * -1, 0);
 		      auto designationVisibleLength = std::min((int)designation.length(),
 							       mCols - alignedDesignationPos);
-		      wattron(mWindow, COLOR_PAIR(2));
 		      auto designationVisibleText = designation.substr(designationTextOffset,
 								       designationVisibleLength);
+		      auto colorNum = ((int)designation[0] % (COLORS - 2)) + 2;
+		      wattron(mWindow, COLOR_PAIR(colorNum));
 		      mvwprintw(mWindow, lineNumber, alignedDesignationPos, "%s", designationVisibleText.c_str());
-		      wattroff(mWindow, COLOR_PAIR(2));
+		      wattroff(mWindow, COLOR_PAIR(colorNum));
 		    }
 
 		  auto offsetX = designationPos + designation.length();
