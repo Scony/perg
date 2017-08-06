@@ -10,14 +10,14 @@
 #include "ITextBuffer.hpp"
 #include "Region.hpp"
 #include "Event.hpp"
-#include "Designations.hpp"
+#include "Mark.hpp"
 
 class TextWindow : public Window
 {
 public:
   TextWindow(Region region,
 	     std::shared_ptr<ITextBuffer> buffer,
-	     std::shared_ptr<Designations> designations = std::make_shared<Designations>());
+	     std::shared_ptr<Marks> marks = std::make_shared<Marks>());
   ~TextWindow();
 
   Event proceed();
@@ -83,7 +83,7 @@ private:
   };
 
   std::shared_ptr<ITextBuffer> mBuffer;
-  std::shared_ptr<Designations> mDesignations;
+  std::shared_ptr<Marks> mMarks;
 
   int mCursorX;
   int mCursorY;
@@ -95,5 +95,5 @@ private:
   int mPreviousTextOffsetX;
   int mPreviousTextOffsetY;
   int mPreviousBufferSize;
-  int mPreviousDesignationsSize;
+  int mPreviousMarksSize;
 };

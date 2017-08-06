@@ -8,13 +8,13 @@ using namespace std::placeholders;
 
 File::File(std::string fileName) :
   Grep(std::bind(&File::readFile, this, fileName, _1), fileName),
-  mDesignations(new Designations)
+  mMarks(new Marks)
 {
 }
 
-std::shared_ptr<Designations> File::getDesignations()
+std::shared_ptr<Marks> File::getMarks()
 {
-  return mDesignations;
+  return mMarks;
 }
 
 void File::readFile(std::string fileName, std::shared_ptr<TextBuffer> output)

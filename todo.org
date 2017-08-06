@@ -1,11 +1,11 @@
 * ASAP [100%]
 ** DONE FIXME in Termkey
 
-* Short-term [78%]
+* Short-term [84%]
 ** TODO line focus: simple formating
 ** TODO line focus: refa
 ** TODO help window
-** TODO designation colors randomness
+** DONE designation colors randomness
 ** DONE boost designations (more colors & coloring algorithm)
 ** DONE investigate core dumps in grepping
 ** DONE small initial buffer (rows num) or even progressive ?

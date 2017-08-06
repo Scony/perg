@@ -58,7 +58,7 @@ void FileController::addGrep(std::shared_ptr<Grep> grep)
   mGreps.insert({grep->getGid(), grep});
   mTextWindows.insert({grep->getGid(), std::make_shared<TextWindow>(Region(0, 0, mRegion.cols, mRegion.rows),
 								    grep->getBuffer(),
-								    mFile->getDesignations())});
+								    mFile->getMarks())});
   mCurrentGrep = grep->getGid();
 }
 
@@ -148,17 +148,19 @@ void FileController::focusReleaseHandler()
   mTextWindows[mCurrentGrep]->render();
 }
 
-void FileController::designationHandler()
+void FileController::markHandler()
 {
-  std::string designation = mTextWindows[mCurrentGrep]->getSelectedText();
-  if (designation != "")
+  std::string textToMark = mTextWindows[mCurrentGrep]->getSelectedText();
+  if (textToMark != "")
     {
-      auto designations = mFile->getDesignations();
-      auto searchResult = std::find(designations->begin(), designations->end(), designation);
+      auto marks = mFile->getMarks();
+      auto searchResult = std::find_if(marks->begin(), marks->end(), [textToMark](const Mark& mark) {
+	  return textToMark == mark.getText();
+	});
 
-      if (searchResult == designations->end())
-	designations->push_back(designation);
+      if (searchResult == marks->end())
+      	marks->push_back(Mark(textToMark));
       else
-	designations->erase(searchResult);
+      	marks->erase(searchResult);
     }
 }

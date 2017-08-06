@@ -3,10 +3,10 @@
 
 TextWindow::TextWindow(Region region,
 		       std::shared_ptr<ITextBuffer> buffer,
-		       std::shared_ptr<Designations> designations) :
+		       std::shared_ptr<Marks> marks) :
   Window(region),
   mBuffer(buffer),
-  mDesignations(designations),
+  mMarks(marks),
   mCursorX(0),
   mCursorY(0),
   mTextOffsetX(0),
@@ -16,7 +16,7 @@ TextWindow::TextWindow(Region region,
   mPreviousTextOffsetX(-1),
   mPreviousTextOffsetY(-1),
   mPreviousBufferSize(-1),
-  mPreviousDesignationsSize(-1)
+  mPreviousMarksSize(marks->size())
 {
   keypad(mWindow, TRUE);
   enableStandardMode();
@@ -60,29 +60,30 @@ void TextWindow::render()
 	  mvwprintw(mWindow, lineNumber, 0, "%s", line->substr(mTextOffsetX, mCols).c_str());
 
 	if (mTextOffsetX < line->length())
-	  for (auto const& designation : *mDesignations)
+	  for (auto const& mark : *mMarks)
 	    {
-	      size_t designationPos = line->find(designation);
-	      while (designationPos != std::string::npos)
+	      auto markText = mark.getText();
+	      size_t markPos = line->find(markText);
+	      while (markPos != std::string::npos)
 		{
-		  if (designationPos >= mTextOffsetX || designationPos + designation.length() > mTextOffsetX)
+		  if (markPos >= mTextOffsetX || markPos + markText.length() > mTextOffsetX)
 		    {
-		      auto alignedDesignationPos = std::max((int)designationPos - mTextOffsetX, 0);
-		      auto designationTextOffset = std::max(((int)designationPos - mTextOffsetX) * -1, 0);
-		      auto designationVisibleLength = std::min((int)designation.length(),
-							       mCols - alignedDesignationPos);
-		      auto designationVisibleText = designation.substr(designationTextOffset,
-								       designationVisibleLength);
-		      auto colorNum = ((int)designation[0] % (COLORS - 2)) + 2;
+		      auto alignedMarkPos = std::max((int)markPos - mTextOffsetX, 0);
+		      auto markTextOffset = std::max(((int)markPos - mTextOffsetX) * -1, 0);
+		      auto markVisibleLength = std::min((int)markText.length(),
+							mCols - alignedMarkPos);
+		      auto markVisibleText = markText.substr(markTextOffset,
+							     markVisibleLength);
+		      auto colorNum = (mark.getColor() % (COLORS - 2)) + 2;
 		      wattron(mWindow, COLOR_PAIR(colorNum));
-		      mvwprintw(mWindow, lineNumber, alignedDesignationPos, "%s", designationVisibleText.c_str());
+		      mvwprintw(mWindow, lineNumber, alignedMarkPos, "%s", markVisibleText.c_str());
 		      wattroff(mWindow, COLOR_PAIR(colorNum));
 		    }
 
-		  auto offsetX = designationPos + designation.length();
-		  designationPos = line->substr(offsetX).find(designation);
-		  if (designationPos != std::string::npos)
-		    designationPos += offsetX;
+		  auto offsetX = markPos + markText.length();
+		  markPos = line->substr(offsetX).find(markText);
+		  if (markPos != std::string::npos)
+		    markPos += offsetX;
 		}
 	    }
 
@@ -171,7 +172,7 @@ void TextWindow::lazyRender()	// TODO: refa
       mPreviousTextOffsetX = mTextOffsetX;
       mPreviousTextOffsetY = mTextOffsetY;
       mPreviousBufferSize = mBuffer->size();
-      mPreviousDesignationsSize = mDesignations->size();
+      mPreviousMarksSize = mMarks->size();
       render();
       return;
     }
@@ -180,16 +181,16 @@ void TextWindow::lazyRender()	// TODO: refa
       mPreviousTextOffsetX = mTextOffsetX;
       mPreviousTextOffsetY = mTextOffsetY;
       mPreviousBufferSize = mBuffer->size();
-      mPreviousDesignationsSize = mDesignations->size();
+      mPreviousMarksSize = mMarks->size();
       render();
       return;
     }
-  else if (mPreviousDesignationsSize != mDesignations->size())
+  else if (mPreviousMarksSize != mMarks->size())
     {
       mPreviousTextOffsetX = mTextOffsetX;
       mPreviousTextOffsetY = mTextOffsetY;
       mPreviousBufferSize = mBuffer->size();
-      mPreviousDesignationsSize = mDesignations->size();
+      mPreviousMarksSize = mMarks->size();
       render();
       return;
     }

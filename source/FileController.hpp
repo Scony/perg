@@ -29,7 +29,7 @@ private:
   void circleGrepsRightHandler();
   void focusHandler();
   void focusReleaseHandler();
-  void designationHandler();
+  void markHandler();
 
   std::map<std::string, std::function<void()> > mActiveHandlers = {
     {"<>", std::bind(&FileController::nopHandler, this)},
@@ -37,7 +37,7 @@ private:
     {"<M-Up>", std::bind(&FileController::circleGrepsLeftHandler, this)},
     {"<M-Down>", std::bind(&FileController::circleGrepsRightHandler, this)},
     {"f", std::bind(&FileController::focusHandler, this)},
-    {"m", std::bind(&FileController::designationHandler, this)},
+    {"m", std::bind(&FileController::markHandler, this)},
   };
 
   Region mRegion;
