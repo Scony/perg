@@ -10,10 +10,6 @@
 class TextBuffer : public ITextBuffer
 {
 public:
-  using Buffer = std::vector<std::string>;
-  using Iterator = std::vector<std::string>::iterator;
-
-public:
   TextBuffer();
 
   unsigned size();

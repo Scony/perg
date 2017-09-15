@@ -56,14 +56,14 @@ void TextWindow::render()
     auto line = begin;
     while (line != end)
       {
-	if (mTextOffsetX < line->length())
-	  mvwprintw(mWindow, lineNumber, 0, "%s", line->substr(mTextOffsetX, mCols).c_str());
+	if (mTextOffsetX < line->content.length())
+	  mvwprintw(mWindow, lineNumber, 0, "%s", line->content.substr(mTextOffsetX, mCols).c_str());
 
-	if (mTextOffsetX < line->length())
+	if (mTextOffsetX < line->content.length())
 	  for (auto const& mark : *mMarks)
 	    {
 	      auto markText = mark.getText();
-	      size_t markPos = line->find(markText);
+	      size_t markPos = line->content.find(markText);
 	      while (markPos != std::string::npos)
 		{
 		  if (markPos >= mTextOffsetX || markPos + markText.length() > mTextOffsetX)
@@ -81,7 +81,7 @@ void TextWindow::render()
 		    }
 
 		  auto offsetX = markPos + markText.length();
-		  markPos = line->substr(offsetX).find(markText);
+		  markPos = line->content.substr(offsetX).find(markText);
 		  if (markPos != std::string::npos)
 		    markPos += offsetX;
 		}
@@ -97,8 +97,8 @@ void TextWindow::render()
 
 	    std::string fill = "";
 
-	    if (mTextOffsetX < line->length())
-	      fill = line->substr(mTextOffsetX + relativeSelectionBeginX,
+	    if (mTextOffsetX < line->content.length())
+	      fill = line->content.substr(mTextOffsetX + relativeSelectionBeginX,
 				  relativeSelectionEndX - relativeSelectionBeginX);
 
 	    if (fill.length() < relativeSelectionEndX - relativeSelectionBeginX)
@@ -139,7 +139,7 @@ std::string TextWindow::getCurrentLine()
   auto pos = mCursorY + mTextOffsetY;
   auto len = 1;
   auto lineFetcher = [&](ITextBuffer::Iterator begin, ITextBuffer::Iterator end) {
-    currentLine = *begin;
+    currentLine = begin->content; // TODO: make *begin back and make funtion return Line
   };
   mBuffer->applyFunctionToSlice(lineFetcher, pos, len);
 

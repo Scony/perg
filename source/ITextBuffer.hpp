@@ -4,11 +4,13 @@
 #include <string>
 #include <functional>
 
+#include "Line.hpp"
+
 class ITextBuffer
 {
 public:
-  using Buffer = std::vector<std::string>;
-  using Iterator = std::vector<std::string>::iterator;
+  using Buffer = std::vector<Line>;
+  using Iterator = std::vector<Line>::iterator;
 
 public:
   virtual ~ITextBuffer() {};

@@ -118,11 +118,11 @@ void FileController::circleGrepsRightHandler()
 void FileController::focusHandler()
 {
   std::string currentLine = mTextWindows[mCurrentGrep]->getCurrentLine();
-  std::vector<std::string> lineFragments;
+  std::vector<Line> lineFragments;
 
   // algorithm
   for (unsigned pos = 0; pos < currentLine.length(); pos += mRegion.cols)
-    lineFragments.push_back(currentLine.substr(pos, mRegion.cols));
+    lineFragments.push_back(Line(0, currentLine.substr(pos, mRegion.cols)));
 
   mFocusWindow.reset(new TextWindow(Region(0, 0, mRegion.cols, mRegion.rows),
 				    std::make_shared<StaticTextBuffer>(lineFragments)));

@@ -23,11 +23,12 @@ void File::readFile(std::string fileName, std::shared_ptr<TextBuffer> output)
   if (!fileStream.is_open())
     throw std::runtime_error("Cannot open file");
 
-  std::vector<std::string> lines;
-  std::string line;
-  while (getline(fileStream, line))
+  std::vector<Line> lines;
+  long long lineNumber = 1;
+  std::string lineContent;
+  while (getline(fileStream, lineContent))
     {
-      lines.push_back(std::move(line));
+      lines.push_back(Line(lineNumber, lineContent));
       if (lines.size() >= mLinesToFlush)
         {
           output->appendData(std::move(lines));

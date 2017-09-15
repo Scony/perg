@@ -1,13 +1,13 @@
 #include "ApplicationController.hpp"
 #include "StaticTextBuffer.hpp"
 
-std::vector<std::string> welcomeWindowText = {
-  "Welcome to perg, multi-grep-like tool.",
-  "",
-  "Quit         q",
-  // "Help         h",
-  // "Open file    f",
-  ""
+std::vector<Line> welcomeWindowText = {
+  Line(0, "Welcome to perg, multi-grep-like tool."),
+  Line(0, ""),
+  Line(0, "Quit         q"),
+  // Line(0, "Help         h"),
+  // Line(0, "Open file    f"),
+  Line(0, "")
 };
 
 ApplicationController::ApplicationController(Region region) :
