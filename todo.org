@@ -1,7 +1,8 @@
 * ASAP [100%]
 ** DONE FIXME in Termkey
 
-* Short-term [84%]
+* Short-term [80%]
+** TODO bookmarks: prepare pairs lineNo;lineStr
 ** TODO line focus: simple formating
 ** TODO line focus: refa
 ** TODO help window
