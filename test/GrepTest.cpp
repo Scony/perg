@@ -6,7 +6,7 @@ TEST(GrepTests, Init) {		// TODO: use gmock
   int x = 0;
   auto f = [&](std::shared_ptr<TextBuffer> output) {
     x = 1;
-    std::vector<std::string> lines{ "xxx" };
+    std::vector<Line> lines{{0, "xxx"}};
     output->appendData(std::move(lines));
   };
 
