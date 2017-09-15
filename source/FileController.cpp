@@ -122,7 +122,7 @@ void FileController::focusHandler()
 
   // algorithm
   for (unsigned pos = 0; pos < currentLine.length(); pos += mRegion.cols)
-    lineFragments.push_back(Line(0, currentLine.substr(pos, mRegion.cols)));
+    lineFragments.push_back({0, currentLine.substr(pos, mRegion.cols)});
 
   mFocusWindow.reset(new TextWindow(Region(0, 0, mRegion.cols, mRegion.rows),
 				    std::make_shared<StaticTextBuffer>(lineFragments)));

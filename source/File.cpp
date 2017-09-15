@@ -28,7 +28,7 @@ void File::readFile(std::string fileName, std::shared_ptr<TextBuffer> output)
   std::string lineContent;
   while (getline(fileStream, lineContent))
     {
-      lines.push_back(Line(lineNumber, lineContent));
+      lines.push_back({lineNumber, lineContent});
       if (lines.size() >= mLinesToFlush)
         {
           output->appendData(std::move(lines));
