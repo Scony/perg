@@ -1,0 +1,77 @@
+dist: trusty
+sudo: required
+language: cpp
+
+matrix:
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-4.9
+            - libboost-all-dev
+            - clang-format-6.0
+      env:
+         - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
+
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+            - libboost-all-dev
+            - clang-format-6.0
+      env:
+         - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
+
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+            - libboost-all-dev
+            - clang-format-6.0
+      env:
+        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+            - libboost-all-dev
+            - clang-format-6.0
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-8
+            - libboost-all-dev
+            - clang-format-6.0
+      env:
+         - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
+
+before_install:
+    - eval "${MATRIX_EVAL}"
+
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - cmake --build . -- clang-format-run
+  - cmake --build . -- perg -j2
+  - cmake --build . -- perg-ut-run -j2
+  - cmake --build . -- perg-benchmark-run -j2
