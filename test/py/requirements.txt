@@ -1,0 +1,4 @@
+pytest
+pytest-xdist
+pytest-repeat
+git+https://github.com/DRMacIver/hecate.git#egg=hecate
