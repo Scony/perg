@@ -15,6 +15,7 @@ matrix:
             - libboost-all-dev
             - clang-format-6.0
             - libncurses-dev
+            - tmux
       env:
          - MATRIX_EVAL="CC=gcc-4.9 && CXX=g++-4.9"
 
@@ -29,6 +30,7 @@ matrix:
             - libboost-all-dev
             - clang-format-6.0
             - libncurses-dev
+            - tmux
       env:
          - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
 
@@ -43,6 +45,7 @@ matrix:
             - libboost-all-dev
             - clang-format-6.0
             - libncurses-dev
+            - tmux
       env:
         - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
 
@@ -57,6 +60,7 @@ matrix:
             - libboost-all-dev
             - clang-format-6.0
             - libncurses-dev
+            - tmux
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
@@ -71,13 +75,13 @@ matrix:
             - libboost-all-dev
             - clang-format-6.0
             - libncurses-dev
+            - tmux
       env:
          - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
 
 before_install:
     - eval "${MATRIX_EVAL}"
-
-install: pip install tox
+    - pip install --user tox
 
 script:
   - mkdir build
