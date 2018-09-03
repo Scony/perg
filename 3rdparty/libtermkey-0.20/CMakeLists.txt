@@ -4,7 +4,7 @@ project(termkey)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
 
-add_library(termkey
+add_library(${PROJECT_NAME}
   termkey.c
   driver-csi.c
   driver-ti.c
