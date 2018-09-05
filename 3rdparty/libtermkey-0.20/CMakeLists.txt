@@ -9,3 +9,8 @@ add_library(${PROJECT_NAME}
   driver-csi.c
   driver-ti.c
 )
+
+target_include_directories(${PROJECT_NAME}
+  PUBLIC
+  .
+  )
