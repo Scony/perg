@@ -4,7 +4,7 @@
 #include <string>
 #include <termkey.h>
 
-namespace tui
+namespace perg::tui
 {
 class KeyboardInput
 {
@@ -31,4 +31,4 @@ class KeyboardInput
   KeyboardInput(KeyboardInput&&) = delete;
   KeyboardInput& operator=(KeyboardInput&&) = delete;
 };
-} // namespace tui
+} // namespace perg::tui

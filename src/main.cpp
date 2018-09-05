@@ -1,16 +1,16 @@
-#include <ncurses.h>
 #include <cassert>
+#include <ncurses.h>
 
 #include "KeyboardInput.hpp"
 
 int main()
 {
   assert(setenv("TERM", "xterm-256color", 1) == 0);
-  tui::KeyboardInput::init();
+  perg::tui::KeyboardInput::init();
   initscr();
   printw("It works!");
   refresh();
-  tui::KeyboardInput::awaitKeyPressed();
+  perg::tui::KeyboardInput::awaitKeyPressed();
   endwin();
   return 0;
 }

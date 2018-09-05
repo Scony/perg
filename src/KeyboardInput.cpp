@@ -12,7 +12,7 @@ std::string termKeyKeyToString(TermKey* termKey, TermKeyKey termKeyKey)
 }
 } // namespace
 
-namespace tui
+namespace perg::tui
 {
 std::string KeyboardInput::awaitKeyPressed(std::chrono::milliseconds timeout)
 {
@@ -51,4 +51,4 @@ std::string KeyboardInput::awaitKeyPressed(std::chrono::milliseconds timeout)
 
   return ::termKeyKeyToString(keyboardInput.mTermKey, retKey);
 }
-} // namespace tui
+} // namespace perg::tui
