@@ -2,6 +2,10 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 project(perg)
 
+set(BOOST_INCLUDEDIR "/usr/include/")
+find_package(Boost REQUIRED)
+include_directories("${Boost_INCLUDE_DIR}")
+
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "" FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
