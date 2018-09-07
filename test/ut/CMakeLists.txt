@@ -5,10 +5,12 @@ include_directories(
 
 add_executable(${PROJECT_NAME}-ut
   $<TARGET_OBJECTS:gtest>
-  Miscellaneous.cpp
+  MiscellaneousTests.cpp
+  RegionTests.cpp
   )
 
 target_link_libraries(${PROJECT_NAME}-ut
+  ${PROJECT_NAME}-tui
   pthread
   )
 

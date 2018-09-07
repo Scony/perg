@@ -1,11 +1,11 @@
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
-#include <cassert>
 #include <iostream>
-#include <ncurses.h>
 #include <vector>
 
 #include "KeyboardInput.hpp"
+#include "Ncurses.hpp"
+#include "Region.hpp"
 
 namespace
 {
@@ -52,19 +52,20 @@ int main(int argc, char** argv) try
     filepaths = vm["filepath"].as<std::vector<std::string>>();
   }
 
-  assert(setenv("TERM", "xterm-256color", 1) == 0);
   perg::tui::KeyboardInput::init();
-  initscr();
-  printw("It works!\n");
+  perg::tui::Ncurses ncurses;
+  ncurses.printw("It works!\n");
   for (const auto& filepath : filepaths)
   {
-    printw((filepath + "\n").c_str());
+    ncurses.printw(filepath + "\n");
   }
-  refresh();
+  ncurses.printw("\n");
+  auto region = ncurses.getRegion();
+  ncurses.printw("Rows: " + std::to_string(region.rows) + "\n");
+  ncurses.printw("Cols: " + std::to_string(region.cols) + "\n");
+  ncurses.refresh();
   perg::tui::KeyboardInput::awaitKeyPressed();
-  endwin();
   return SUCCESS;
-  ;
 }
 catch (std::exception& e)
 {
