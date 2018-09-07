@@ -1,5 +1,7 @@
 #pragma once
 
+#define BOOST_PP_VARIADICS 1
+
 #include <boost/fusion/include/adapt_struct.hpp>
 
 namespace perg::tui
@@ -13,8 +15,4 @@ struct Region
 };
 } // namespace perg::tui
 
-BOOST_FUSION_ADAPT_STRUCT(
-    perg::tui::Region,
-    (const unsigned, x)(const unsigned, y)(const unsigned, cols)(
-        const unsigned,
-        rows)); // TODO: enable variadic macros support
+BOOST_FUSION_ADAPT_STRUCT(perg::tui::Region, x, y, cols, rows);
