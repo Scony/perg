@@ -1,5 +1,6 @@
 #pragma once
 
+#include <boost/fusion/adapted/struct/adapt_struct.hpp>
 #include <boost/fusion/include/adapt_struct.hpp>
 
 namespace perg::tui
