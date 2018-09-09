@@ -25,7 +25,7 @@ class KeyboardInput
   KeyboardInput();
   ~KeyboardInput();
 
-  TermKey* mTermKey;
+  TermKey* termKey;
 
  public:
   KeyboardInput(const KeyboardInput&) = delete;

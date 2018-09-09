@@ -15,10 +15,10 @@ std::string termKeyKeyToString(TermKey* termKey, TermKeyKey termKeyKey)
 
 namespace perg::tui
 {
-KeyboardInput::KeyboardInput() : mTermKey{termkey_new(0, 0)} {}
+KeyboardInput::KeyboardInput() : termKey{termkey_new(0, 0)} {}
 KeyboardInput::~KeyboardInput()
 {
-  termkey_destroy(mTermKey);
+  termkey_destroy(termKey);
 }
 
 types::Keystroke KeyboardInput::awaitKeyPressed(std::chrono::milliseconds timeout)
@@ -29,12 +29,12 @@ types::Keystroke KeyboardInput::awaitKeyPressed(std::chrono::milliseconds timeou
 
   if (timeout.count() == 0) // blocking
   {
-    ret = termkey_waitkey(keyboardInput.mTermKey, &retKey);
+    ret = termkey_waitkey(keyboardInput.termKey, &retKey);
   }
   else // non-blocking
   {
     pollfd pollFd;
-    pollFd.fd = termkey_get_fd(keyboardInput.mTermKey);
+    pollFd.fd = termkey_get_fd(keyboardInput.termKey);
     pollFd.events = POLLIN;
 
     if (poll(&pollFd, 1, timeout.count()) == 0) // timeout
@@ -44,18 +44,18 @@ types::Keystroke KeyboardInput::awaitKeyPressed(std::chrono::milliseconds timeou
 
     if (pollFd.revents & (POLLIN | POLLHUP | POLLERR))
     {
-      termkey_advisereadable(keyboardInput.mTermKey);
+      termkey_advisereadable(keyboardInput.termKey);
     }
 
-    ret = termkey_getkey(keyboardInput.mTermKey, &retKey);
+    ret = termkey_getkey(keyboardInput.termKey, &retKey);
 
     TermKeyKey tmpKey;
     while (ret == TERMKEY_RES_KEY || ret == TERMKEY_RES_AGAIN)
     {
-      ret = termkey_getkey_force(keyboardInput.mTermKey, &tmpKey);
+      ret = termkey_getkey_force(keyboardInput.termKey, &tmpKey);
     }
   }
 
-  return ::termKeyKeyToString(keyboardInput.mTermKey, retKey);
+  return ::termKeyKeyToString(keyboardInput.termKey, retKey);
 }
 } // namespace perg::tui
