@@ -1,8 +1,3 @@
-include_directories(
-  ${PROJECT_SOURCE_DIR}/src
-  ${PROJECT_SOURCE_DIR}/3rdparty/gtest
-  )
-
 add_executable(${PROJECT_NAME}-ut
   $<TARGET_OBJECTS:gtest>
   MiscellaneousTests.cpp
@@ -11,7 +6,14 @@ add_executable(${PROJECT_NAME}-ut
 
 target_link_libraries(${PROJECT_NAME}-ut
   ${PROJECT_NAME}-tui
+  ${PROJECT_NAME}-types
   pthread
+  )
+
+target_include_directories(${PROJECT_NAME}-ut
+  PUBLIC
+  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_SOURCE_DIR}/3rdparty/gtest
   )
 
 add_test(NAME ${PROJECT_NAME}-ut

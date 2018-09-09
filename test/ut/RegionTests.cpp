@@ -2,7 +2,7 @@
 
 #include "Region.hpp"
 
-namespace perg::tui
+namespace perg::types
 {
 TEST(RegionTests, TestConstruction)
 {
@@ -12,4 +12,4 @@ TEST(RegionTests, TestConstruction)
   EXPECT_EQ(region.cols, 3u);
   EXPECT_EQ(region.rows, 4u);
 }
-} // namespace perg::tui
+} // namespace perg::types

@@ -15,6 +15,10 @@ add_library(${PROJECT_NAME}-presenter
   ApplicationController.cpp
   )
 
+add_library(${PROJECT_NAME}-types
+  INTERFACE
+  )
+
 target_link_libraries(${PROJECT_NAME}
   ${PROJECT_NAME}-tui
   ${PROJECT_NAME}-model
@@ -23,8 +27,20 @@ target_link_libraries(${PROJECT_NAME}
   boost_program_options
   boost_system
   boost_filesystem
+  stdc++fs
   )
 
 target_link_libraries(${PROJECT_NAME}-tui
   termkey
+  ${PROJECT_NAME}-types
+  )
+
+target_link_libraries(${PROJECT_NAME}-presenter
+  ${PROJECT_NAME}-types
+  stdc++fs
+  )
+
+target_include_directories(${PROJECT_NAME}-types
+  INTERFACE
+  types/
   )

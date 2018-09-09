@@ -1,9 +1,12 @@
 #pragma once
 
-namespace perg::tui
+namespace perg::types
 {
 struct Region;
+}
 
+namespace perg::tui
+{
 class Ncurses
 {
  public:
@@ -12,6 +15,6 @@ class Ncurses
 
   void printw(std::string);
   void refresh();
-  Region getRegion();
+  types::Region getRegion();
 };
 } // namespace perg::tui

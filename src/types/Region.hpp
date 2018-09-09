@@ -2,7 +2,7 @@
 
 #include <boost/fusion/include/adapt_struct.hpp>
 
-namespace perg::tui
+namespace perg::types
 {
 struct Region
 {
@@ -11,10 +11,10 @@ struct Region
   const unsigned cols;
   const unsigned rows;
 };
-} // namespace perg::tui
+} // namespace perg::types
 
 BOOST_FUSION_ADAPT_STRUCT(
-    perg::tui::Region,
+    perg::types::Region,
     (const unsigned, x)(const unsigned, y)(const unsigned, cols)(
         const unsigned,
         rows)); // TODO: enable variadic macros support

@@ -21,7 +21,7 @@ KeyboardInput::~KeyboardInput()
   termkey_destroy(mTermKey);
 }
 
-std::string KeyboardInput::awaitKeyPressed(std::chrono::milliseconds timeout)
+types::Keystroke KeyboardInput::awaitKeyPressed(std::chrono::milliseconds timeout)
 {
   TermKeyResult ret;
   TermKeyKey retKey;

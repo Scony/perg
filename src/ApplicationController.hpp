@@ -16,16 +16,13 @@ namespace perg::presenter
 class ApplicationController
 {
  public:
-  ApplicationController(
-      perg::model::ApplicationModel&,
-      perg::tui::KeyboardInput&,
-      perg::tui::Ncurses&);
+  ApplicationController(model::ApplicationModel&, tui::KeyboardInput&, tui::Ncurses&);
 
   void awaitEvent(); // TODO: void -> Event
 
  private:
-  perg::model::ApplicationModel& applicationModel;
-  perg::tui::KeyboardInput& keyboardInput;
-  perg::tui::Ncurses& ncurses;
+  model::ApplicationModel& applicationModel;
+  tui::KeyboardInput& keyboardInput;
+  tui::Ncurses& ncurses;
 };
 } // namespace perg::presenter

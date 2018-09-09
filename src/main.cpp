@@ -47,10 +47,15 @@ int main(int argc, char** argv) try
     return SUCCESS;
   }
 
-  std::vector<std::string> filepaths{};
+  std::vector<std::filesystem::path> filepaths{};
   if (vm.count("filepath"))
   {
-    filepaths = vm["filepath"].as<std::vector<std::string>>();
+    auto raw_filepaths = vm["filepath"].as<std::vector<std::string>>();
+    std::transform(
+        raw_filepaths.begin(),
+        raw_filepaths.end(),
+        std::back_inserter(filepaths),
+        [](const auto& raw_filepath) { return raw_filepath; });
   }
 
   perg::tui::KeyboardInput::init();

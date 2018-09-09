@@ -3,6 +3,8 @@
 #include <chrono>
 #include <string>
 
+#include "Keystroke.hpp"
+
 struct TermKey;
 
 namespace perg::tui
@@ -16,7 +18,7 @@ class KeyboardInput
     return instance;
   }
   static void init() { getInstance(); }
-  static std::string awaitKeyPressed(
+  types::Keystroke awaitKeyPressed(
       std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
 
  private:

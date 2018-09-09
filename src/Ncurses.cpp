@@ -28,11 +28,11 @@ void Ncurses::refresh()
   ::refresh();
 }
 
-Region Ncurses::getRegion()
+types::Region Ncurses::getRegion()
 {
   unsigned cols;
   unsigned rows;
   getmaxyx(stdscr, rows, cols);
-  return Region{0, 0, cols, rows};
+  return types::Region{0, 0, cols, rows};
 }
 } // namespace perg::tui
