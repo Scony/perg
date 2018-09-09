@@ -47,7 +47,7 @@ int main(int argc, char** argv) try
     return SUCCESS;
   }
 
-  std::vector<std::filesystem::path> filepaths{};
+  std::vector<boost::filesystem::path> filepaths{};
   if (vm.count("filepath"))
   {
     auto raw_filepaths = vm["filepath"].as<std::vector<std::string>>();

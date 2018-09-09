@@ -2,7 +2,7 @@
 
 namespace perg::model
 {
-ApplicationModel::ApplicationModel(const std::vector<std::filesystem::path>& filepaths)
+ApplicationModel::ApplicationModel(const std::vector<boost::filesystem::path>& filepaths)
     : filepaths{filepaths}
 {
 }
