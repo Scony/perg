@@ -2,26 +2,26 @@
 
 #include <chrono>
 #include <string>
-#include <termkey.h>
+
+struct TermKey;
 
 namespace perg::tui
 {
 class KeyboardInput
 {
  public:
-  static void init() { getInstance(); }
-  static std::string awaitKeyPressed(
-      std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
-
- private:
   static KeyboardInput& getInstance()
   {
     static KeyboardInput instance;
     return instance;
   }
+  static void init() { getInstance(); }
+  static std::string awaitKeyPressed(
+      std::chrono::milliseconds timeout = std::chrono::milliseconds{0});
 
-  KeyboardInput() : mTermKey{termkey_new(0, 0)} {}
-  ~KeyboardInput() { termkey_destroy(mTermKey); }
+ private:
+  KeyboardInput();
+  ~KeyboardInput();
 
   TermKey* mTermKey;
 

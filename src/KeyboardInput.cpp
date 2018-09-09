@@ -1,4 +1,5 @@
 #include <poll.h>
+#include <termkey.h>
 
 #include "KeyboardInput.hpp"
 
@@ -14,6 +15,12 @@ std::string termKeyKeyToString(TermKey* termKey, TermKeyKey termKeyKey)
 
 namespace perg::tui
 {
+KeyboardInput::KeyboardInput() : mTermKey{termkey_new(0, 0)} {}
+KeyboardInput::~KeyboardInput()
+{
+  termkey_destroy(mTermKey);
+}
+
 std::string KeyboardInput::awaitKeyPressed(std::chrono::milliseconds timeout)
 {
   TermKeyResult ret;

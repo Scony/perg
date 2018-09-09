@@ -3,9 +3,10 @@
 #include <iostream>
 #include <vector>
 
+#include "ApplicationController.hpp"
+#include "ApplicationModel.hpp"
 #include "KeyboardInput.hpp"
 #include "Ncurses.hpp"
-#include "Region.hpp"
 
 namespace
 {
@@ -54,17 +55,10 @@ int main(int argc, char** argv) try
 
   perg::tui::KeyboardInput::init();
   perg::tui::Ncurses ncurses;
-  ncurses.printw("It works!\n");
-  for (const auto& filepath : filepaths)
-  {
-    ncurses.printw(filepath + "\n");
-  }
-  ncurses.printw("\n");
-  auto region = ncurses.getRegion();
-  ncurses.printw("Rows: " + std::to_string(region.rows) + "\n");
-  ncurses.printw("Cols: " + std::to_string(region.cols) + "\n");
-  ncurses.refresh();
-  perg::tui::KeyboardInput::awaitKeyPressed();
+  perg::model::ApplicationModel appModel{filepaths};
+  perg::presenter::ApplicationController appController{
+      appModel, perg::tui::KeyboardInput::getInstance(), ncurses};
+  appController.awaitEvent();
   return SUCCESS;
 }
 catch (std::exception& e)
