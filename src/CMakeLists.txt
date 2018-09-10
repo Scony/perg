@@ -30,7 +30,6 @@ target_link_libraries(${PROJECT_NAME}
   boost_program_options
   boost_system
   boost_filesystem
-  stdc++fs
   )
 
 target_link_libraries(${PROJECT_NAME}-tui
@@ -41,7 +40,6 @@ target_link_libraries(${PROJECT_NAME}-tui
 target_link_libraries(${PROJECT_NAME}-presenter
   ${PROJECT_NAME}-types
   ${PROJECT_NAME}-tui
-  stdc++fs
   )
 
 target_include_directories(${PROJECT_NAME}-types
