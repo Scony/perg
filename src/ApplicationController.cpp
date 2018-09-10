@@ -1,5 +1,6 @@
 #include "ApplicationController.hpp"
 #include "ApplicationModel.hpp"
+#include "FileModel.hpp"
 #include "KeyboardInput.hpp"
 #include "Ncurses.hpp"
 #include "Region.hpp"
@@ -13,8 +14,9 @@ ApplicationController::ApplicationController(
     : applicationModel{applicationModel}, keyboardInput{keyboardInput}, ncurses{ncurses}
 {
   ncurses.printw("It works!\n");
-  for (const auto& filepath : applicationModel.filepaths)
+  for (const auto& fileModel : applicationModel.getFileModels())
   {
+    const auto& filepath = fileModel->getFilepath();
     ncurses.printw(filepath.string() + "\n");
   }
   ncurses.printw("\n");

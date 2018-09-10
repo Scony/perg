@@ -9,6 +9,7 @@ add_library(${PROJECT_NAME}-tui
 
 add_library(${PROJECT_NAME}-model
   ApplicationModel.cpp
+  FileModel.cpp
   )
 
 add_library(${PROJECT_NAME}-presenter
