@@ -7,6 +7,7 @@ add_library(${PROJECT_NAME}-tui
   Ncurses.cpp
   NcursesWindow.cpp
   StatusBar.cpp
+  Minibuffer.cpp
   )
 
 add_library(${PROJECT_NAME}-model

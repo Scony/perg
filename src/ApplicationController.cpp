@@ -2,6 +2,7 @@
 #include "ApplicationModel.hpp"
 #include "FileModel.hpp"
 #include "KeyboardInput.hpp"
+#include "Minibuffer.hpp"
 #include "Ncurses.hpp"
 #include "NcursesWindow.hpp"
 #include "Region.hpp"
@@ -29,7 +30,22 @@ ApplicationController::ApplicationController(
   auto statusWindow = ncurses.createWindow(types::Region{0, region.rows - 2, region.cols, 1});
   tui::StatusBar statusBar{std::move(statusWindow)};
   statusBar.render();
-  keyboardInput.awaitKeyPressed();
+  auto minibufferWindow = ncurses.createWindow(types::Region{0, region.rows - 1, region.cols, 1});
+  tui::Minibuffer minibuffer{std::move(minibufferWindow)};
+  minibuffer.render();
+  while (true)
+  {
+    auto keystroke = keyboardInput.awaitKeyPressed();
+    if (keystroke != "q")
+    {
+      minibuffer.setText(keystroke);
+      minibuffer.render();
+    }
+    else
+    {
+      break;
+    }
+  }
 }
 
 void ApplicationController::awaitEvent() {}
