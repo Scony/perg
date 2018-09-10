@@ -5,6 +5,8 @@ add_executable(${PROJECT_NAME}
 add_library(${PROJECT_NAME}-tui
   KeyboardInput.cpp
   Ncurses.cpp
+  NcursesWindow.cpp
+  StatusBar.cpp
   )
 
 add_library(${PROJECT_NAME}-model
@@ -38,6 +40,7 @@ target_link_libraries(${PROJECT_NAME}-tui
 
 target_link_libraries(${PROJECT_NAME}-presenter
   ${PROJECT_NAME}-types
+  ${PROJECT_NAME}-tui
   stdc++fs
   )
 

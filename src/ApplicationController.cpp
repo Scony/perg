@@ -3,7 +3,9 @@
 #include "FileModel.hpp"
 #include "KeyboardInput.hpp"
 #include "Ncurses.hpp"
+#include "NcursesWindow.hpp"
 #include "Region.hpp"
+#include "StatusBar.hpp"
 
 namespace perg::presenter
 {
@@ -24,6 +26,9 @@ ApplicationController::ApplicationController(
   ncurses.printw("Rows: " + std::to_string(region.rows) + "\n");
   ncurses.printw("Cols: " + std::to_string(region.cols) + "\n");
   ncurses.refresh();
+  auto statusWindow = ncurses.createWindow(types::Region{0, region.rows - 2, region.cols, 1});
+  tui::StatusBar statusBar{std::move(statusWindow)};
+  statusBar.render();
   keyboardInput.awaitKeyPressed();
 }
 

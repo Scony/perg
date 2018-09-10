@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Ncurses.hpp"
+#include "NcursesWindow.hpp"
 #include "Region.hpp"
 
 namespace perg::tui
@@ -34,5 +35,10 @@ types::Region Ncurses::getRegion()
   unsigned rows;
   getmaxyx(stdscr, rows, cols);
   return types::Region{0, 0, cols, rows};
+}
+
+std::unique_ptr<NcursesWindow> Ncurses::createWindow(types::Region region)
+{
+  return std::make_unique<NcursesWindow>(region);
 }
 } // namespace perg::tui

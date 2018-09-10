@@ -15,6 +15,13 @@ def test_initial_screen_with_file(executable_path):
         term.press('q')
 
 
+def test_initial_status_bar(executable_path):
+    with Runner(executable_path) as term:
+        term.await_text('It works!')
+        term.await_text('-- dummy status --')
+        term.press('q')
+
+
 @pytest.mark.parametrize('help_opt', ['-h', '--help'])
 def test_help_screen(executable_path, help_opt):
     with Runner(executable_path, help_opt) as term:
