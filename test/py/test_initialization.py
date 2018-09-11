@@ -4,20 +4,18 @@ from hecate.hecate import Runner
 
 def test_initial_screen(executable_path):
     with Runner(executable_path) as term:
-        term.await_text('It works!')
+        term.await_text('Welcome to perg')
         term.press('q')
 
 
 def test_initial_screen_with_file(executable_path):
     with Runner(executable_path, 'path_to_file') as term:
-        term.await_text('It works!')
         term.await_text('path_to_file')
         term.press('q')
 
 
 def test_initial_status_bar(executable_path):
     with Runner(executable_path) as term:
-        term.await_text('It works!')
         term.await_text('-- dummy status --')
         term.press('q')
 

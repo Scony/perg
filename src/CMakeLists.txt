@@ -17,6 +17,7 @@ add_library(${PROJECT_NAME}-model
 
 add_library(${PROJECT_NAME}-presenter
   ApplicationController.cpp
+  FileController.cpp
   )
 
 add_library(${PROJECT_NAME}-types

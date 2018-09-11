@@ -1,5 +1,6 @@
 #include "ApplicationController.hpp"
 #include "ApplicationModel.hpp"
+#include "FileController.hpp"
 #include "FileModel.hpp"
 #include "KeyboardInput.hpp"
 #include "Minibuffer.hpp"
@@ -16,11 +17,15 @@ ApplicationController::ApplicationController(
     tui::Ncurses& ncurses)
     : applicationModel{applicationModel}, keyboardInput{keyboardInput}, ncurses{ncurses}
 {
-  ncurses.printw("It works!\n");
+}
+
+void ApplicationController::awaitEvent()
+{
+  ncurses.printw("Welcome to perg, multi-grep-like tool.\n");
   for (const auto& fileModel : applicationModel.getFileModels())
   {
-    const auto& filepath = fileModel->getFilepath();
-    ncurses.printw(filepath.string() + "\n");
+    auto fileController = FileController{*fileModel, keyboardInput, ncurses};
+    fileController.awaitEvent();
   }
   ncurses.printw("\n");
   auto region = ncurses.getRegion();
@@ -47,6 +52,4 @@ ApplicationController::ApplicationController(
     }
   }
 }
-
-void ApplicationController::awaitEvent() {}
 } // namespace perg::presenter
