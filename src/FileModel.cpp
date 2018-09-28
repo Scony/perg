@@ -1,3 +1,5 @@
+#include <fstream>
+
 #include "FileModel.hpp"
 
 namespace perg::model
