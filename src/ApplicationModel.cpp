@@ -6,10 +6,17 @@ namespace perg::model
 ApplicationModel::ApplicationModel(const std::vector<boost::filesystem::path>& filepaths)
     : fileModels{}
 {
-  std::transform(
-      filepaths.begin(), filepaths.end(), std::back_inserter(fileModels), [](const auto& filepath) {
-        return std::make_shared<FileModel>(filepath);
-      });
+  for (const auto& filepath : filepaths)
+  {
+    try
+    {
+      auto fileModel = std::make_shared<FileModel>(filepath);
+      fileModels.push_back(fileModel);
+    }
+    catch (...) // TODO: introduce exception
+    {
+    }
+  }
 }
 
 std::vector<std::shared_ptr<FileModel>> ApplicationModel::getFileModels()

@@ -14,6 +14,9 @@ FileController::FileController(
 
 void FileController::awaitEvent()
 {
-  ncurses.printw(fileModel.getFilepath().string() + "\n");
+  for (const auto& line : fileModel.lines)
+  {
+    ncurses.printw(line + "\n");
+  }
 }
 } // namespace perg::presenter

@@ -13,5 +13,8 @@ class FileModel
 
  private:
   const boost::filesystem::path filepath;
+
+ public: // TODO:private
+  std::vector<std::string> lines;
 };
 } // namespace perg::model
