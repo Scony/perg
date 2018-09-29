@@ -14,6 +14,11 @@ class Ncurses;
 class TextWindow;
 } // namespace perg::tui
 
+namespace perg::types
+{
+struct KeyPressed;
+}
+
 namespace perg::presenter
 {
 class TextWindowController
@@ -21,7 +26,7 @@ class TextWindowController
  public:
   TextWindowController(model::TextModel&, tui::KeyboardInput&, tui::Ncurses&);
 
-  void awaitEvent(); // TODO: void -> Event
+  types::KeyPressed awaitEvent();
 
  private:
   model::TextModel& textModel;

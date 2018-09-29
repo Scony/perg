@@ -13,6 +13,7 @@ class Minibuffer
   Minibuffer(std::unique_ptr<NcursesWindow>);
 
   void setText(std::string);
+  std::string readText(std::string);
   void render();
 
  private:

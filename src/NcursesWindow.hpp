@@ -23,6 +23,7 @@ class NcursesWindow
   void clear();
   void mvprintw(unsigned, unsigned, std::string);
   void refresh();
+  std::string getStr(); // TODO: investigate why name cannot be flat
 
  public:
   const unsigned cols;

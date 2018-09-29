@@ -36,4 +36,11 @@ void NcursesWindow::refresh()
 {
   wrefresh(window);
 }
+
+std::string NcursesWindow::getStr()
+{
+  char buff[255] = {0};
+  wgetstr(window, buff);
+  return std::string(buff);
+}
 } // namespace perg::tui

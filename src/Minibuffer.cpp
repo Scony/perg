@@ -12,6 +12,13 @@ void Minibuffer::setText(std::string text)
   this->text = text;
 }
 
+std::string Minibuffer::readText(std::string text)
+{
+  setText(text);
+  render();
+  return window->getStr();
+}
+
 void Minibuffer::render()
 {
   window->clear();

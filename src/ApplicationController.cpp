@@ -8,6 +8,7 @@
 #include "NcursesWindow.hpp"
 #include "Region.hpp"
 #include "StatusBar.hpp"
+#include "types/KeyPressed.hpp"
 
 namespace perg::presenter
 {
@@ -35,8 +36,12 @@ void ApplicationController::awaitEvent()
   minibuffer.render();
   for (const auto& fileModel : applicationModel.getFileModels())
   {
-    auto fileController = FileController{*fileModel, keyboardInput, ncurses};
-    fileController.awaitEvent();
+    auto fileController = FileController{*fileModel, keyboardInput, ncurses, minibuffer};
+    auto keyPressed = fileController.awaitEvent();
+    if (keyPressed.keystroke == "q")
+    {
+      return;
+    }
   }
   while (true)
   {

@@ -1,8 +1,10 @@
 #include "TextWindowController.hpp"
+#include "KeyboardInput.hpp"
 #include "Ncurses.hpp"
 #include "NcursesWindow.hpp"
 #include "TextModel.hpp"
 #include "TextWindow.hpp"
+#include "types/KeyPressed.hpp"
 #include "types/Region.hpp"
 
 namespace perg::presenter
@@ -25,8 +27,10 @@ TextWindowController::TextWindowController(
 {
 }
 
-void TextWindowController::awaitEvent()
+types::KeyPressed TextWindowController::awaitEvent()
 {
   textWindow->render();
+  types::KeyPressed keyPressed{keyboardInput.awaitKeyPressed()};
+  return keyPressed;
 }
 } // namespace perg::presenter
