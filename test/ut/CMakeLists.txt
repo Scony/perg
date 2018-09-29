@@ -1,3 +1,7 @@
+add_subdirectory(tui)
+add_subdirectory(model)
+add_subdirectory(presenter)
+
 add_executable(${PROJECT_NAME}-ut
   $<TARGET_OBJECTS:gtest>
   MiscellaneousTests.cpp
@@ -11,7 +15,7 @@ target_link_libraries(${PROJECT_NAME}-ut
   )
 
 target_include_directories(${PROJECT_NAME}-ut
-  PUBLIC
+  PRIVATE
   ${PROJECT_SOURCE_DIR}/src
   ${PROJECT_SOURCE_DIR}/3rdparty/gtest
   )
@@ -24,4 +28,7 @@ add_test(NAME ${PROJECT_NAME}-ut
 add_custom_target(${PROJECT_NAME}-ut-run
   COMMAND ${CMAKE_CTEST_COMMAND} --verbose
   DEPENDS ${PROJECT_NAME}-ut
+  DEPENDS ${PROJECT_NAME}-tui-ut
+  DEPENDS ${PROJECT_NAME}-model-ut
+  DEPENDS ${PROJECT_NAME}-presenter-ut
   )
