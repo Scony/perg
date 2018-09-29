@@ -1,9 +1,13 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+
 namespace perg::model
 {
 class FileModel;
-}
+struct TextModel;
+} // namespace perg::model
 
 namespace perg::tui
 {
@@ -19,6 +23,8 @@ struct KeyPressed;
 
 namespace perg::presenter
 {
+class TextWindowController;
+
 class FileController
 {
  public:
@@ -31,5 +37,7 @@ class FileController
   tui::KeyboardInput& keyboardInput;
   tui::Ncurses& ncurses;
   tui::Minibuffer& minibuffer;
+  std::vector<std::pair<std::unique_ptr<model::TextModel>, std::unique_ptr<TextWindowController>>>
+      greps;
 };
 } // namespace perg::presenter

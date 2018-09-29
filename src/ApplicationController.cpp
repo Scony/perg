@@ -8,6 +8,9 @@
 #include "NcursesWindow.hpp"
 #include "Region.hpp"
 #include "StatusBar.hpp"
+#include "TextModel.hpp"
+#include "TextWindow.hpp"
+#include "TextWindowController.hpp"
 #include "types/KeyPressed.hpp"
 
 namespace perg::presenter
@@ -34,26 +37,37 @@ void ApplicationController::awaitEvent()
   auto minibufferWindow = ncurses.createWindow(types::Region{0, region.rows - 1, region.cols, 1});
   tui::Minibuffer minibuffer{std::move(minibufferWindow)};
   minibuffer.render();
-  for (const auto& fileModel : applicationModel.getFileModels())
+  if (not applicationModel.getFileModels().empty())
   {
-    auto fileController = FileController{*fileModel, keyboardInput, ncurses, minibuffer};
-    auto keyPressed = fileController.awaitEvent();
-    if (keyPressed.keystroke == "q")
+    for (const auto& fileModel : applicationModel.getFileModels())
     {
-      return;
+      auto fileController = FileController{*fileModel, keyboardInput, ncurses, minibuffer};
+      while (true)
+      {
+        auto keyPressed = fileController.awaitEvent();
+        if (keyPressed.keystroke == "q")
+        {
+          return;
+        }
+        minibuffer.setText(keyPressed.keystroke);
+        minibuffer.render();
+      }
     }
   }
-  while (true)
+  else
   {
-    auto keystroke = keyboardInput.awaitKeyPressed();
-    if (keystroke != "q")
+    while (true)
     {
-      minibuffer.setText(keystroke);
-      minibuffer.render();
-    }
-    else
-    {
-      break;
+      auto keystroke = keyboardInput.awaitKeyPressed();
+      if (keystroke != "q")
+      {
+        minibuffer.setText(keystroke);
+        minibuffer.render();
+      }
+      else
+      {
+        break;
+      }
     }
   }
 }
