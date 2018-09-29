@@ -16,10 +16,10 @@ constexpr size_t UNHANDLED_EXCEPTION = 1;
 constexpr size_t BOOST_PO_ERROR = 2;
 
 perg::types::Configuration configuration{
-    "g",
-    "<Left>",
-    "<Right>",
-    "q",
+  grep_keystroke : "g",
+  grep_circle_left_keystroke : "<Left>",
+  grep_circle_right_keystroke : "<Right>",
+  quit_keystroke : "q",
 };
 } // namespace
 
