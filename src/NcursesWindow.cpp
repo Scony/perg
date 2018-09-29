@@ -8,39 +8,39 @@ namespace perg::tui
 NcursesWindow::NcursesWindow(types::Region region)
     : cols{region.cols}
     , rows{region.rows}
-    , window{newwin(region.rows, region.cols, region.y, region.x)}
+    , window{::newwin(region.rows, region.cols, region.y, region.x)}
 {
 }
 
 NcursesWindow::~NcursesWindow()
 {
-  delwin(window);
+  ::delwin(window);
 }
 
 void NcursesWindow::wattron_reverse()
 {
-  wattron(window, A_REVERSE);
+  ::wattron(window, A_REVERSE);
 }
 
 void NcursesWindow::clear()
 {
-  wclear(window);
+  ::wclear(window);
 }
 
 void NcursesWindow::mvprintw(unsigned x, unsigned y, std::string str)
 {
-  mvwprintw(window, y, x, "%s", str.c_str());
+  ::mvwprintw(window, y, x, "%s", str.c_str());
 }
 
 void NcursesWindow::refresh()
 {
-  wrefresh(window);
+  ::wrefresh(window);
 }
 
 std::string NcursesWindow::getStr()
 {
   char buff[255] = {0};
-  wgetstr(window, buff);
+  ::wgetstr(window, buff);
   return std::string(buff);
 }
 } // namespace perg::tui

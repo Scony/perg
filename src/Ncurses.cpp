@@ -10,13 +10,13 @@ namespace perg::tui
 {
 Ncurses::Ncurses()
 {
-  assert(setenv("TERM", "xterm-256color", 1) == 0);
-  initscr();
+  assert(::setenv("TERM", "xterm-256color", 1) == 0);
+  ::initscr();
 }
 
 Ncurses::~Ncurses()
 {
-  endwin();
+  ::endwin();
 }
 
 void Ncurses::printw(const std::string text)
