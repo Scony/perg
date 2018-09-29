@@ -1,4 +1,5 @@
 #include "FileController.hpp"
+#include "Configuration.hpp"
 #include "FileModel.hpp"
 #include "Minibuffer.hpp"
 #include "Ncurses.hpp"
@@ -11,11 +12,16 @@
 namespace perg::presenter
 {
 FileController::FileController(
+    types::Configuration& configuration,
     model::FileModel& fileModel,
     tui::KeyboardInput& keyboardInput,
     tui::Ncurses& ncurses,
     tui::Minibuffer& minibuffer)
-    : fileModel{fileModel}, keyboardInput{keyboardInput}, ncurses{ncurses}, minibuffer{minibuffer}
+    : configuration{configuration}
+    , fileModel{fileModel}
+    , keyboardInput{keyboardInput}
+    , ncurses{ncurses}
+    , minibuffer{minibuffer}
 {
   std::unique_ptr<model::TextModel> text{new model::TextModel{fileModel.lines}};
   auto textWindow = std::make_unique<TextWindowController>(*text, keyboardInput, ncurses);
@@ -28,17 +34,17 @@ types::KeyPressed FileController::awaitEvent()
   {
     auto& textWindow = greps[visibleGrep].second;
     auto keyPressed = textWindow->awaitEvent();
-    if (keyPressed.keystroke == "<Left>")
+    if (keyPressed.keystroke == configuration.grep_circle_left_keystroke)
     {
       visibleGrep = visibleGrep >= 1 ? visibleGrep - 1 : greps.size() - 1;
       continue;
     }
-    if (keyPressed.keystroke == "<Right>")
+    if (keyPressed.keystroke == configuration.grep_circle_right_keystroke)
     {
       visibleGrep = (visibleGrep + 1) % greps.size();
       continue;
     }
-    if (keyPressed.keystroke != "g") // TODO: take from config
+    if (keyPressed.keystroke != configuration.grep_keystroke)
     {
       return keyPressed;
     }

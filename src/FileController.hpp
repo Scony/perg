@@ -19,7 +19,8 @@ class Minibuffer;
 namespace perg::types
 {
 struct KeyPressed;
-}
+struct Configuration;
+} // namespace perg::types
 
 namespace perg::presenter
 {
@@ -28,11 +29,17 @@ class TextWindowController;
 class FileController
 {
  public:
-  FileController(model::FileModel&, tui::KeyboardInput&, tui::Ncurses&, tui::Minibuffer&);
+  FileController(
+      types::Configuration&,
+      model::FileModel&,
+      tui::KeyboardInput&,
+      tui::Ncurses&,
+      tui::Minibuffer&);
 
   types::KeyPressed awaitEvent();
 
  private:
+  types::Configuration& configuration;
   model::FileModel& fileModel;
   tui::KeyboardInput& keyboardInput;
   tui::Ncurses& ncurses;

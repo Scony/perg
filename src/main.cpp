@@ -5,6 +5,7 @@
 
 #include "ApplicationController.hpp"
 #include "ApplicationModel.hpp"
+#include "Configuration.hpp"
 #include "KeyboardInput.hpp"
 #include "Ncurses.hpp"
 
@@ -13,6 +14,13 @@ namespace
 constexpr size_t SUCCESS = 0;
 constexpr size_t UNHANDLED_EXCEPTION = 1;
 constexpr size_t BOOST_PO_ERROR = 2;
+
+perg::types::Configuration configuration{
+    "g",
+    "<Left>",
+    "<Right>",
+    "q",
+};
 } // namespace
 
 int main(int argc, char** argv) try
@@ -62,7 +70,7 @@ int main(int argc, char** argv) try
   perg::tui::Ncurses ncurses;
   perg::model::ApplicationModel appModel{filepaths};
   perg::presenter::ApplicationController appController{
-      appModel, perg::tui::KeyboardInput::getInstance(), ncurses};
+      configuration, appModel, perg::tui::KeyboardInput::getInstance(), ncurses};
   appController.awaitEvent();
   return SUCCESS;
 }

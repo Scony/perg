@@ -1,5 +1,6 @@
 #include "ApplicationController.hpp"
 #include "ApplicationModel.hpp"
+#include "Configuration.hpp"
 #include "FileController.hpp"
 #include "FileModel.hpp"
 #include "KeyboardInput.hpp"
@@ -16,10 +17,14 @@
 namespace perg::presenter
 {
 ApplicationController::ApplicationController(
+    types::Configuration& configuration,
     model::ApplicationModel& applicationModel,
     tui::KeyboardInput& keyboardInput,
     tui::Ncurses& ncurses)
-    : applicationModel{applicationModel}, keyboardInput{keyboardInput}, ncurses{ncurses}
+    : configuration{configuration}
+    , applicationModel{applicationModel}
+    , keyboardInput{keyboardInput}
+    , ncurses{ncurses}
 {
 }
 
@@ -41,11 +46,17 @@ void ApplicationController::awaitEvent()
   {
     for (const auto& fileModel : applicationModel.getFileModels())
     {
-      auto fileController = FileController{*fileModel, keyboardInput, ncurses, minibuffer};
+      auto fileController = FileController{
+          configuration,
+          *fileModel,
+          keyboardInput,
+          ncurses,
+          minibuffer,
+      };
       while (true)
       {
         auto keyPressed = fileController.awaitEvent();
-        if (keyPressed.keystroke == "q")
+        if (keyPressed.keystroke == configuration.quit_keystroke)
         {
           return;
         }
@@ -59,7 +70,7 @@ void ApplicationController::awaitEvent()
     while (true)
     {
       auto keystroke = keyboardInput.awaitKeyPressed();
-      if (keystroke != "q")
+      if (keystroke != configuration.quit_keystroke)
       {
         minibuffer.setText(keystroke);
         minibuffer.render();
