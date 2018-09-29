@@ -8,7 +8,7 @@ FileModel::FileModel(boost::filesystem::path filepath) : filepath{filepath}
 {
   std::ifstream fileStream;
   fileStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-  fileStream.open(filepath);
+  fileStream.open(filepath.c_str());
   fileStream.exceptions(std::ifstream::goodbit);
   std::string lineContent;
   while (std::getline(fileStream, lineContent))
