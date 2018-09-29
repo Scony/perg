@@ -22,11 +22,6 @@ ApplicationController::ApplicationController(
 void ApplicationController::awaitEvent()
 {
   ncurses.printw("Welcome to perg, multi-grep-like tool.\n");
-  for (const auto& fileModel : applicationModel.getFileModels())
-  {
-    auto fileController = FileController{*fileModel, keyboardInput, ncurses};
-    fileController.awaitEvent();
-  }
   ncurses.printw("\n");
   auto region = ncurses.getRegion();
   ncurses.printw("Rows: " + std::to_string(region.rows) + "\n");
@@ -38,6 +33,11 @@ void ApplicationController::awaitEvent()
   auto minibufferWindow = ncurses.createWindow(types::Region{0, region.rows - 1, region.cols, 1});
   tui::Minibuffer minibuffer{std::move(minibufferWindow)};
   minibuffer.render();
+  for (const auto& fileModel : applicationModel.getFileModels())
+  {
+    auto fileController = FileController{*fileModel, keyboardInput, ncurses};
+    fileController.awaitEvent();
+  }
   while (true)
   {
     auto keystroke = keyboardInput.awaitKeyPressed();

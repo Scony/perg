@@ -8,6 +8,7 @@ add_library(${PROJECT_NAME}-tui
   NcursesWindow.cpp
   StatusBar.cpp
   Minibuffer.cpp
+  TextWindow.cpp
   )
 
 add_library(${PROJECT_NAME}-model
@@ -18,6 +19,7 @@ add_library(${PROJECT_NAME}-model
 add_library(${PROJECT_NAME}-presenter
   ApplicationController.cpp
   FileController.cpp
+  TextWindowController.cpp
   )
 
 add_library(${PROJECT_NAME}-types

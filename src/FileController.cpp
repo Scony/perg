@@ -1,6 +1,9 @@
 #include "FileController.hpp"
 #include "FileModel.hpp"
-#include "Ncurses.hpp"
+#include "NcursesWindow.hpp"
+#include "TextModel.hpp"
+#include "TextWindow.hpp"
+#include "TextWindowController.hpp"
 
 namespace perg::presenter
 {
@@ -14,9 +17,8 @@ FileController::FileController(
 
 void FileController::awaitEvent()
 {
-  for (const auto& line : fileModel.lines)
-  {
-    ncurses.printw(line + "\n");
-  }
+  model::TextModel text{fileModel.lines};
+  TextWindowController textWindow{text, keyboardInput, ncurses};
+  textWindow.awaitEvent();
 }
 } // namespace perg::presenter
