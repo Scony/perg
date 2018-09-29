@@ -39,5 +39,6 @@ class FileController
   tui::Minibuffer& minibuffer;
   std::vector<std::pair<std::unique_ptr<model::TextModel>, std::unique_ptr<TextWindowController>>>
       greps;
+  std::size_t visibleGrep{0};
 };
 } // namespace perg::presenter

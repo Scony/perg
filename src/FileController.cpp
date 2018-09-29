@@ -26,15 +26,25 @@ types::KeyPressed FileController::awaitEvent()
 {
   while (true)
   {
-    auto& textWindow = greps.back().second;
+    auto& textWindow = greps[visibleGrep].second;
     auto keyPressed = textWindow->awaitEvent();
+    if (keyPressed.keystroke == "<Left>")
+    {
+      visibleGrep = visibleGrep >= 1 ? visibleGrep - 1 : greps.size() - 1;
+      continue;
+    }
+    if (keyPressed.keystroke == "<Right>")
+    {
+      visibleGrep = (visibleGrep + 1) % greps.size();
+      continue;
+    }
     if (keyPressed.keystroke != "g") // TODO: take from config
     {
       return keyPressed;
     }
     auto grepPattern = minibuffer.readText("Grep: ");
     std::vector<std::string> newLines;
-    for (const auto& line : greps.back().first->lines)
+    for (const auto& line : greps[visibleGrep].first->lines)
     {
       if (line.find(grepPattern) != std::string::npos)
       {
@@ -44,6 +54,7 @@ types::KeyPressed FileController::awaitEvent()
     std::unique_ptr<model::TextModel> newText{new model::TextModel{newLines}};
     auto newTextWindow = std::make_unique<TextWindowController>(*newText, keyboardInput, ncurses);
     greps.emplace_back(std::move(newText), std::move(newTextWindow));
+    visibleGrep++;
   }
   return types::KeyPressed{""};
 }
