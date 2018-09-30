@@ -1,16 +1,15 @@
 add_subdirectory(tui)
 add_subdirectory(model)
 add_subdirectory(presenter)
+add_subdirectory(types)
 
 add_executable(${PROJECT_NAME}-ut
   $<TARGET_OBJECTS:gtest>
   MiscellaneousTests.cpp
-  RegionTests.cpp
   )
 
 target_link_libraries(${PROJECT_NAME}-ut
   ${PROJECT_NAME}-tui
-  ${PROJECT_NAME}-types
   pthread
   )
 
@@ -31,4 +30,5 @@ add_custom_target(${PROJECT_NAME}-ut-run
   DEPENDS ${PROJECT_NAME}-tui-ut
   DEPENDS ${PROJECT_NAME}-model-ut
   DEPENDS ${PROJECT_NAME}-presenter-ut
+  DEPENDS ${PROJECT_NAME}-types-ut
   )

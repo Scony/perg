@@ -3,6 +3,7 @@ add_executable(${PROJECT_NAME}
   )
 
 add_library(${PROJECT_NAME}-tui
+  STATIC
   KeyboardInput.cpp
   Ncurses.cpp
   NcursesWindow.cpp
@@ -12,18 +13,21 @@ add_library(${PROJECT_NAME}-tui
   )
 
 add_library(${PROJECT_NAME}-model
+  STATIC
   ApplicationModel.cpp
   FileModel.cpp
   )
 
 add_library(${PROJECT_NAME}-presenter
+  STATIC
   ApplicationController.cpp
   FileController.cpp
   TextWindowController.cpp
   )
 
 add_library(${PROJECT_NAME}-types
-  INTERFACE
+  STATIC
+  types/Text.cpp
   )
 
 target_link_libraries(${PROJECT_NAME}
