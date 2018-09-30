@@ -11,7 +11,14 @@ const perg::types::TextView::Container dummy_container{
     "bbb",
     "ccc",
 };
-}
+
+const perg::types::TextView::Container dummy_container2{
+    "xxx",
+    "yyy",
+    "zzz",
+    "kkk",
+};
+} // namespace
 
 namespace perg::types
 {
@@ -90,5 +97,29 @@ TEST_F(TextViewTests, TestWaitForSizeAtLeastBlocking)
   consumer.join();
   producer.join();
   EXPECT_EQ(returnedSize, 3u);
+}
+
+TEST_F(TextViewTests, TestTextViewContentReset)
+{
+  TextView::Container container = dummy_container;
+  text.append(std::move(container));
+  EXPECT_EQ(text.size(), dummy_container.size());
+
+  TextView::Container container2 = dummy_container2;
+  text.reset(std::move(container2));
+  EXPECT_EQ(text.size(), dummy_container2.size());
+
+  TextView::Container collected{};
+  text.applyFunctionToSlice(
+      [&collected](TextView::Iterator begin, TextView::Iterator end) {
+        for (auto it = begin; it != end; it++)
+        {
+          collected.push_back(*it);
+        }
+      },
+      0u,
+      text.size());
+  EXPECT_EQ(collected.size(), dummy_container2.size());
+  EXPECT_EQ(collected, dummy_container2);
 }
 } // namespace perg::types

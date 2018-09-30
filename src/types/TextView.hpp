@@ -23,6 +23,7 @@ class TextView
   std::size_t waitForSizeAtLeast(std::size_t) const;
   // std::size_t waitForSealed(std::size_t) const;
   void append(Container&&);
+  void reset(Container&&);
   void applyFunctionToSlice(
       std::function<void(Iterator, Iterator)>,
       std::size_t pos,
@@ -31,7 +32,7 @@ class TextView
  private:
   Container container;
   bool container_sealed;
-  mutable std::mutex mutex;
-  mutable std::condition_variable newData;
+  mutable std::recursive_mutex mutex;
+  mutable std::condition_variable_any newData;
 };
 } // namespace perg::types
