@@ -2,11 +2,11 @@
 
 #include <gtest/gtest.h>
 
-#include "Text.hpp"
+#include "TextView.hpp"
 
 namespace
 {
-const perg::types::Text::Container dummy_container{
+const perg::types::TextView::Container dummy_container{
     "aaa",
     "bbb",
     "ccc",
@@ -15,27 +15,27 @@ const perg::types::Text::Container dummy_container{
 
 namespace perg::types
 {
-struct TextTests : public ::testing::Test
+struct TextViewTests : public ::testing::Test
 {
-  Text text{};
+  TextView text{};
 };
 
-TEST_F(TextTests, TestTextConstruction)
+TEST_F(TextViewTests, TestTextViewConstruction)
 {
   EXPECT_EQ(text.size(), 0u);
 }
 
-TEST_F(TextTests, TestTextAddition)
+TEST_F(TextViewTests, TestTextAddition)
 {
-  Text::Container container = dummy_container;
+  TextView::Container container = dummy_container;
   text.append(std::move(container));
   EXPECT_EQ(text.size(), 3u);
 }
 
-TEST_F(TextTests, TestTextSealed)
+TEST_F(TextViewTests, TestTextViewSealed)
 {
   EXPECT_FALSE(text.sealed());
-  Text::Container container = dummy_container;
+  TextView::Container container = dummy_container;
   text.append(std::move(container));
   EXPECT_EQ(text.size(), 3u);
   text.seal();
@@ -43,15 +43,15 @@ TEST_F(TextTests, TestTextSealed)
   // TODO: test if append throws exception now
 }
 
-TEST_F(TextTests, TestTextIteration)
+TEST_F(TextViewTests, TestTextViewIteration)
 {
-  Text::Container container = dummy_container;
+  TextView::Container container = dummy_container;
   text.append(std::move(container));
   EXPECT_EQ(text.size(), 3u);
   EXPECT_EQ(container.size(), 3u);
-  Text::Container collected{};
+  TextView::Container collected{};
   text.applyFunctionToSlice(
-      [&collected](Text::Iterator begin, Text::Iterator end) {
+      [&collected](TextView::Iterator begin, TextView::Iterator end) {
         for (auto it = begin; it != end; it++)
         {
           collected.push_back(*it);
@@ -63,28 +63,28 @@ TEST_F(TextTests, TestTextIteration)
   EXPECT_EQ(collected, container);
 }
 
-TEST_F(TextTests, TestWaitForSizeAtLeastInstant)
+TEST_F(TextViewTests, TestWaitForSizeAtLeastInstant)
 {
-  Text::Container container = dummy_container;
+  TextView::Container container = dummy_container;
   text.append(std::move(container));
   EXPECT_EQ(text.waitForSizeAtLeast(2u), 3u);
   EXPECT_EQ(text.waitForSizeAtLeast(3u), 3u);
 }
 
-TEST_F(TextTests, TestWaitForSizeAtLeastLowerIfSealed)
+TEST_F(TextViewTests, TestWaitForSizeAtLeastLowerIfSealed)
 {
-  Text::Container container = dummy_container;
+  TextView::Container container = dummy_container;
   text.append(std::move(container));
   text.seal();
   EXPECT_EQ(text.waitForSizeAtLeast(4u), 3u);
 }
 
-TEST_F(TextTests, TestWaitForSizeAtLeastBlocking)
+TEST_F(TextViewTests, TestWaitForSizeAtLeastBlocking)
 {
   std::size_t returnedSize{0u};
   auto consumer = std::thread([&]() { returnedSize = text.waitForSizeAtLeast(3u); });
   auto producer = std::thread([&]() {
-    Text::Container container = dummy_container;
+    TextView::Container container = dummy_container;
     text.append(std::move(container));
   });
   consumer.join();

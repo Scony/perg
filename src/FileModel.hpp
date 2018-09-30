@@ -5,8 +5,6 @@
 
 #include <boost/filesystem.hpp>
 
-#include "types/Text.hpp"
-
 namespace perg::model
 {
 class IWorker;

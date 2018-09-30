@@ -1,7 +1,7 @@
 add_executable(${PROJECT_NAME}-types-ut
   $<TARGET_OBJECTS:gtest>
   RegionTests.cpp
-  TextTests.cpp
+  TextViewTests.cpp
   )
 
 target_link_libraries(${PROJECT_NAME}-types-ut

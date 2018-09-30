@@ -28,7 +28,7 @@ add_library(${PROJECT_NAME}-presenter
 
 add_library(${PROJECT_NAME}-types
   STATIC
-  types/Text.cpp
+  types/TextView.cpp
   )
 
 target_link_libraries(${PROJECT_NAME}

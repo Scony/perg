@@ -2,6 +2,7 @@
 
 #include "FileModel.hpp"
 #include "FileReader.hpp"
+#include "types/TextView.hpp"
 
 namespace perg::model
 {
@@ -14,14 +15,15 @@ FileModel::FileModel(boost::filesystem::path filepath) : filepath{filepath}
 
   auto reader = std::make_unique<FileReader>(filepath);
   auto text = reader->getText();
+  auto textView = reader->getTextView();
   workers.push_back(std::move(reader));
-  text->applyFunctionToSlice(
-      [&](types::Text::Iterator begin, types::Text::Iterator end) {
+  textView->applyFunctionToSlice(
+      [&](types::TextView::Iterator begin, types::TextView::Iterator end) {
         for (auto it = begin; it != end; it++)
-          lines.push_back(*it);
+          lines.push_back(std::string(*it));
       },
       0,
-      text->size());
+      textView->size());
 }
 
 boost::filesystem::path FileModel::getFilepath() const
