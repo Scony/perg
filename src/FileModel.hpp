@@ -1,9 +1,16 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+
 #include <boost/filesystem.hpp>
+
+#include "types/Text.hpp"
 
 namespace perg::model
 {
+class IWorker;
+
 class FileModel
 {
  public:
@@ -13,6 +20,7 @@ class FileModel
 
  private:
   const boost::filesystem::path filepath;
+  std::vector<std::unique_ptr<IWorker>> workers;
 
  public: // TODO:private
   std::vector<std::string> lines;

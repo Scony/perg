@@ -1,5 +1,6 @@
 #include "ApplicationModel.hpp"
 #include "FileModel.hpp"
+#include "IWorker.hpp"
 
 namespace perg::model
 {

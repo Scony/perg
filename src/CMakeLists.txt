@@ -16,6 +16,7 @@ add_library(${PROJECT_NAME}-model
   STATIC
   ApplicationModel.cpp
   FileModel.cpp
+  FileReader.cpp
   )
 
 add_library(${PROJECT_NAME}-presenter
