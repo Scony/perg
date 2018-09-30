@@ -1,7 +1,7 @@
 #pragma once
 
+#include <deque>
 #include <string>
-#include <vector>
 
 #include <boost/fusion/include/adapt_struct.hpp>
 
@@ -9,7 +9,7 @@ namespace perg::types
 {
 struct Text
 {
-  std::vector<std::string> lines;
+  std::deque<std::string> lines;
 };
 } // namespace perg::types
 

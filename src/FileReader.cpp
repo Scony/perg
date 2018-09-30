@@ -14,7 +14,6 @@ FileReader::FileReader(boost::filesystem::path filepath)
   fileStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
   fileStream.open(filepath.c_str());
   fileStream.exceptions(std::ifstream::goodbit);
-  text->lines.reserve(999);
   std::string lineContent;
   while (std::getline(fileStream, lineContent))
   {
