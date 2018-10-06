@@ -16,7 +16,8 @@ class FileModel
   FileModel(boost::filesystem::path);
 
   boost::filesystem::path getFilepath() const;
-  std::vector<std::shared_ptr<GrepModel>> getGrepsVector();
+  std::vector<std::shared_ptr<GrepModel>> getGrepsVector() const;
+  std::shared_ptr<GrepModel> grep(std::shared_ptr<GrepModel>, std::string pattern);
 
  private:
   const boost::filesystem::path filepath;

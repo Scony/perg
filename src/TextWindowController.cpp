@@ -2,7 +2,6 @@
 #include "KeyboardInput.hpp"
 #include "Ncurses.hpp"
 #include "NcursesWindow.hpp"
-#include "TextModel.hpp"
 #include "TextWindow.hpp"
 #include "types/KeyPressed.hpp"
 #include "types/Region.hpp"
@@ -10,10 +9,10 @@
 namespace perg::presenter
 {
 TextWindowController::TextWindowController(
-    model::TextModel& textModel,
+    std::shared_ptr<types::TextView> textView,
     tui::KeyboardInput& keyboardInput,
     tui::Ncurses& ncurses)
-    : textModel{textModel}
+    : textView{textView}
     , keyboardInput{keyboardInput}
     , ncurses{ncurses}
     , textWindow{std::make_unique<tui::TextWindow>(
@@ -23,7 +22,7 @@ TextWindowController::TextWindowController(
               ncurses.getRegion().cols,
               ncurses.getRegion().rows - 2,
           }),
-          textModel.lines)}
+          textView)}
 {
 }
 

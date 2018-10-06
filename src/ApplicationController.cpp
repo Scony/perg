@@ -9,7 +9,6 @@
 #include "NcursesWindow.hpp"
 #include "Region.hpp"
 #include "StatusBar.hpp"
-#include "TextModel.hpp"
 #include "TextWindow.hpp"
 #include "TextWindowController.hpp"
 #include "types/KeyPressed.hpp"

@@ -1,8 +1,11 @@
 #pragma once
 
 #include <memory>
-#include <string>
-#include <vector>
+
+namespace perg::types
+{
+class TextView;
+}
 
 namespace perg::tui
 {
@@ -11,12 +14,12 @@ class NcursesWindow;
 class TextWindow
 {
  public:
-  TextWindow(std::unique_ptr<NcursesWindow>, const std::vector<std::string>&);
+  TextWindow(std::unique_ptr<NcursesWindow>, std::shared_ptr<types::TextView>);
 
   void render();
 
  private:
   std::unique_ptr<NcursesWindow> window;
-  const std::vector<std::string>& lines;
+  std::shared_ptr<types::TextView> textView;
 };
 } // namespace perg::tui

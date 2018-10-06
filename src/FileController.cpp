@@ -5,7 +5,6 @@
 #include "Minibuffer.hpp"
 #include "Ncurses.hpp"
 #include "NcursesWindow.hpp"
-#include "TextModel.hpp"
 #include "TextView.hpp"
 #include "TextWindow.hpp"
 #include "TextWindowController.hpp"
@@ -25,24 +24,17 @@ FileController::FileController(
     , ncurses{ncurses}
     , minibuffer{minibuffer}
 {
-  std::vector<std::string> lines;
-  fileModel.getGrepsVector()[0]->getTextView()->applyFunctionToSlice(
-      [&](types::TextView::Iterator begin, types::TextView::Iterator end) {
-        for (auto it = begin; it != end; it++)
-          lines.push_back(std::string(*it));
-      },
-      0,
-      fileModel.getGrepsVector()[0]->getTextView()->size());
-  std::unique_ptr<model::TextModel> text{new model::TextModel{lines}};
-  auto textWindow = std::make_unique<TextWindowController>(*text, keyboardInput, ncurses);
-  greps.emplace_back(std::move(text), std::move(textWindow));
+  auto mainTextView = fileModel.getGrepsVector()[0]->getTextView();
+  auto mainTextWindow =
+      std::make_unique<TextWindowController>(mainTextView, keyboardInput, ncurses);
+  greps.emplace_back(std::move(mainTextWindow));
 }
 
 types::KeyPressed FileController::awaitEvent()
 {
   while (true)
   {
-    auto& textWindow = greps[visibleGrep].second;
+    auto& textWindow = greps[visibleGrep];
     auto keyPressed = textWindow->awaitEvent();
     if (keyPressed.keystroke == configuration.grep_circle_left_keystroke)
     {
@@ -59,17 +51,12 @@ types::KeyPressed FileController::awaitEvent()
       return keyPressed;
     }
     auto grepPattern = minibuffer.readText("Grep: ");
-    std::vector<std::string> newLines;
-    for (const auto& line : greps[visibleGrep].first->lines)
-    {
-      if (line.find(grepPattern) != std::string::npos)
-      {
-        newLines.push_back(line);
-      }
-    }
-    std::unique_ptr<model::TextModel> newText{new model::TextModel{newLines}};
-    auto newTextWindow = std::make_unique<TextWindowController>(*newText, keyboardInput, ncurses);
-    greps.emplace_back(std::move(newText), std::move(newTextWindow));
+    auto presentGrep = fileModel.getGrepsVector().at(visibleGrep);
+    auto newGrep = fileModel.grep(presentGrep, grepPattern);
+    auto newTextView = newGrep->getTextView();
+    auto newTextWindow =
+        std::make_unique<TextWindowController>(newTextView, keyboardInput, ncurses);
+    greps.emplace_back(std::move(newTextWindow));
     visibleGrep++;
   }
   return types::KeyPressed{""};

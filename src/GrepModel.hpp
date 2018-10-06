@@ -15,7 +15,7 @@ class GrepModel
   GrepModel(std::string name, std::shared_ptr<types::TextView>);
 
   std::string getName() const;
-  std::shared_ptr<types::TextView> getTextView(); // const?
+  std::shared_ptr<types::TextView> getTextView() const;
 
  private:
   std::string name;

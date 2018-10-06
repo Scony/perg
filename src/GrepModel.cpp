@@ -11,7 +11,7 @@ std::string GrepModel::getName() const
 {
   return name;
 }
-std::shared_ptr<types::TextView> GrepModel::getTextView()
+std::shared_ptr<types::TextView> GrepModel::getTextView() const
 {
   return textView;
 }

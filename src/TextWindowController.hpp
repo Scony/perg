@@ -2,11 +2,6 @@
 
 #include <memory>
 
-namespace perg::model
-{
-struct TextModel;
-}
-
 namespace perg::tui
 {
 class KeyboardInput;
@@ -17,19 +12,20 @@ class TextWindow;
 namespace perg::types
 {
 struct KeyPressed;
-}
+class TextView;
+} // namespace perg::types
 
 namespace perg::presenter
 {
 class TextWindowController
 {
  public:
-  TextWindowController(model::TextModel&, tui::KeyboardInput&, tui::Ncurses&);
+  TextWindowController(std::shared_ptr<types::TextView>, tui::KeyboardInput&, tui::Ncurses&);
 
   types::KeyPressed awaitEvent();
 
  private:
-  model::TextModel& textModel;
+  std::shared_ptr<types::TextView> textView;
   tui::KeyboardInput& keyboardInput;
   tui::Ncurses& ncurses;
   std::unique_ptr<tui::TextWindow> textWindow;
