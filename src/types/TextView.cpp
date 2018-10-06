@@ -16,6 +16,7 @@ void TextView::seal()
 {
   std::lock_guard<std::mutex> lock(mutex);
   container_sealed = true;
+  newData.notify_all();
 }
 
 std::size_t TextView::size() const
@@ -28,6 +29,13 @@ std::size_t TextView::waitForSizeAtLeast(std::size_t size) const
 {
   std::unique_lock<std::mutex> lock(mutex);
   newData.wait(lock, [&]() { return container.size() >= size or container_sealed; });
+  return container.size();
+}
+
+std::size_t TextView::waitForSealed() const
+{
+  std::unique_lock<std::mutex> lock(mutex);
+  newData.wait(lock, [&]() { return container_sealed; });
   return container.size();
 }
 

@@ -21,7 +21,7 @@ class TextView
   void seal();
   std::size_t size() const;
   std::size_t waitForSizeAtLeast(std::size_t) const;
-  // std::size_t waitForSealed(std::size_t) const;
+  std::size_t waitForSealed() const;
   void append(Container&&);
   void applyFunctionToSlice(
       std::function<void(Iterator, Iterator)>,

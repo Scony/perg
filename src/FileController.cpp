@@ -25,6 +25,7 @@ FileController::FileController(
     , minibuffer{minibuffer}
 {
   auto mainTextView = fileModel.getGrepsVector()[0]->getTextView();
+  mainTextView->waitForSizeAtLeast(100u); // TODO: drop from here
   auto mainTextWindow =
       std::make_unique<TextWindowController>(mainTextView, keyboardInput, ncurses);
   greps.emplace_back(std::move(mainTextWindow));

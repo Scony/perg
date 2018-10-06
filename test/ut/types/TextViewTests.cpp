@@ -91,4 +91,12 @@ TEST_F(TextViewTests, TestWaitForSizeAtLeastBlocking)
   producer.join();
   EXPECT_EQ(returnedSize, 3u);
 }
+
+TEST_F(TextViewTests, TestWaitForSealed) // TODO: add threads, fire from thread
+{
+  TextView::Container container = dummy_container;
+  text.append(std::move(container));
+  text.seal();
+  EXPECT_EQ(text.waitForSealed(), 3u);
+}
 } // namespace perg::types

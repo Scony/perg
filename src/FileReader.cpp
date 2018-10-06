@@ -7,21 +7,16 @@
 namespace perg::model
 {
 FileReader::FileReader(boost::filesystem::path filepath)
-    : text{std::make_shared<types::Text>()}, textView{std::make_shared<types::TextView>()}
+    : filepath{filepath}
+    , text{std::make_shared<types::Text>()}
+    , textView{std::make_shared<types::TextView>()}
+    , thread(&FileReader::work, this)
 {
-  std::vector<std::string_view> lines;
-  std::ifstream fileStream;
-  fileStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-  fileStream.open(filepath.c_str());
-  fileStream.exceptions(std::ifstream::goodbit);
-  std::string lineContent;
-  while (std::getline(fileStream, lineContent))
-  {
-    text->lines.push_back(lineContent);
-    lines.push_back(text->lines.back());
-  }
-  fileStream.close();
-  textView->append(std::move(lines));
+}
+
+FileReader::~FileReader()
+{
+  thread.join();
 }
 
 std::shared_ptr<types::Text> FileReader::getText() const
@@ -32,5 +27,29 @@ std::shared_ptr<types::Text> FileReader::getText() const
 std::shared_ptr<types::TextView> FileReader::getTextView() const
 {
   return textView;
+}
+
+void FileReader::work()
+{
+  std::ifstream fileStream;
+  fileStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+  fileStream.open(filepath.c_str());
+  fileStream.exceptions(std::ifstream::goodbit);
+
+  std::vector<std::string_view> buffer;
+  std::string line;
+  while (std::getline(fileStream, line))
+  {
+    text->lines.push_back(line);
+    buffer.push_back(text->lines.back());
+    if (buffer.size() >= bufferFlushThreshold)
+    {
+      textView->append(std::move(buffer));
+      buffer.clear();
+    }
+  }
+  fileStream.close();
+  textView->append(std::move(buffer));
+  textView->seal();
 }
 } // namespace perg::model

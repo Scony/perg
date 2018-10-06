@@ -56,3 +56,7 @@ target_include_directories(${PROJECT_NAME}-types
   INTERFACE
   types/
   )
+
+target_link_libraries(${PROJECT_NAME}-model
+  pthread
+  )
