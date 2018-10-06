@@ -1,7 +1,9 @@
 #include <fstream>
+#include <memory>
 
 #include "FileModel.hpp"
 #include "FileReader.hpp"
+#include "GrepModel.hpp"
 #include "types/TextView.hpp"
 
 namespace perg::model
@@ -17,17 +19,16 @@ FileModel::FileModel(boost::filesystem::path filepath) : filepath{filepath}
   auto text = reader->getText();
   auto textView = reader->getTextView();
   workers.push_back(std::move(reader));
-  textView->applyFunctionToSlice(
-      [&](types::TextView::Iterator begin, types::TextView::Iterator end) {
-        for (auto it = begin; it != end; it++)
-          lines.push_back(std::string(*it));
-      },
-      0,
-      textView->size());
+  greps.emplace_back(std::make_shared<GrepModel>(filepath.leaf().string(), textView));
 }
 
 boost::filesystem::path FileModel::getFilepath() const
 {
   return filepath;
+}
+
+std::vector<std::shared_ptr<GrepModel>> FileModel::getGrepsVector()
+{
+  return greps;
 }
 } // namespace perg::model

@@ -8,6 +8,7 @@
 namespace perg::model
 {
 class IWorker;
+class GrepModel;
 
 class FileModel
 {
@@ -15,12 +16,11 @@ class FileModel
   FileModel(boost::filesystem::path);
 
   boost::filesystem::path getFilepath() const;
+  std::vector<std::shared_ptr<GrepModel>> getGrepsVector();
 
  private:
   const boost::filesystem::path filepath;
   std::vector<std::unique_ptr<IWorker>> workers;
-
- public: // TODO:private
-  std::vector<std::string> lines;
+  std::vector<std::shared_ptr<GrepModel>> greps;
 };
 } // namespace perg::model

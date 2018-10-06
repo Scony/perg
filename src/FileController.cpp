@@ -1,10 +1,12 @@
 #include "FileController.hpp"
 #include "Configuration.hpp"
 #include "FileModel.hpp"
+#include "GrepModel.hpp"
 #include "Minibuffer.hpp"
 #include "Ncurses.hpp"
 #include "NcursesWindow.hpp"
 #include "TextModel.hpp"
+#include "TextView.hpp"
 #include "TextWindow.hpp"
 #include "TextWindowController.hpp"
 #include "types/KeyPressed.hpp"
@@ -23,7 +25,15 @@ FileController::FileController(
     , ncurses{ncurses}
     , minibuffer{minibuffer}
 {
-  std::unique_ptr<model::TextModel> text{new model::TextModel{fileModel.lines}};
+  std::vector<std::string> lines;
+  fileModel.getGrepsVector()[0]->getTextView()->applyFunctionToSlice(
+      [&](types::TextView::Iterator begin, types::TextView::Iterator end) {
+        for (auto it = begin; it != end; it++)
+          lines.push_back(std::string(*it));
+      },
+      0,
+      fileModel.getGrepsVector()[0]->getTextView()->size());
+  std::unique_ptr<model::TextModel> text{new model::TextModel{lines}};
   auto textWindow = std::make_unique<TextWindowController>(*text, keyboardInput, ncurses);
   greps.emplace_back(std::move(text), std::move(textWindow));
 }
