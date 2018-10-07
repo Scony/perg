@@ -17,8 +17,8 @@ constexpr size_t BOOST_PO_ERROR = 2;
 
 perg::types::Configuration configuration{
   grep_keystroke : "g",
-  grep_circle_left_keystroke : "<Left>",
-  grep_circle_right_keystroke : "<Right>",
+  grep_circle_left_keystroke : "<S-Left>",
+  grep_circle_right_keystroke : "<S-Right>",
   quit_keystroke : "q",
 };
 } // namespace

@@ -73,13 +73,13 @@ def test_greps_switching_in_circle(executable_path, tmpdir):
         term.press('Enter')
 
         check_term_lines(term, greps[2], set(lines) - set(greps[2]))
-        term.press('Left')
+        term.press('S-Left')
         check_term_lines(term, greps[1], set(lines) - set(greps[1]))
-        term.press('Left')
+        term.press('S-Left')
         check_term_lines(term, greps[0], set(lines) - set(greps[0]))
-        term.press('Left')
+        term.press('S-Left')
         check_term_lines(term, greps[2], set(lines) - set(greps[2]))
-        term.press('Right')
+        term.press('S-Right')
         check_term_lines(term, greps[0], set(lines) - set(greps[0]))
 
         term.press('q')
