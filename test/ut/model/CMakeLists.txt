@@ -1,9 +1,11 @@
 add_executable(${PROJECT_NAME}-model-ut
   $<TARGET_OBJECTS:gtest>
+  GrepProcessorTests.cpp
   )
 
 target_link_libraries(${PROJECT_NAME}-model-ut
   ${PROJECT_NAME}-model
+  ${PROJECT_NAME}-types
   pthread
   )
 

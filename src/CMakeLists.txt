@@ -18,6 +18,7 @@ add_library(${PROJECT_NAME}-model
   FileModel.cpp
   FileReader.cpp
   GrepModel.cpp
+  GrepProcessor.cpp
   )
 
 add_library(${PROJECT_NAME}-presenter

@@ -14,6 +14,7 @@ TextWindow::TextWindow(
 void TextWindow::render()
 {
   window->clear();
+  textView->waitForSizeAtLeast(window->rows);
   textView->applyFunctionToSlice(
       [&](types::TextView::Iterator begin, types::TextView::Iterator end) {
         unsigned lineNo = 0;
