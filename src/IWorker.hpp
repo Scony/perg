@@ -5,6 +5,6 @@ namespace perg::model
 class IWorker
 {
  public:
-  ~IWorker() = default;
+  virtual ~IWorker() = default;
 };
 } // namespace perg::model
