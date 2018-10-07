@@ -14,7 +14,7 @@ TextWindow::TextWindow(
 void TextWindow::render()
 {
   window->clear();
-  textView->waitForSizeAtLeast(window->rows);
+  auto knownSize = textView->waitForSizeAtLeast(window->rows);
   textView->applyFunctionToSlice(
       [&](types::TextView::Iterator begin, types::TextView::Iterator end) {
         unsigned lineNo = 0;
@@ -22,7 +22,7 @@ void TextWindow::render()
           window->mvprintw(0, lineNo++, std::string(*it));
       },
       0,
-      textView->size());
+      std::min(knownSize, std::size_t{window->rows}));
   window->refresh();
 }
 } // namespace perg::tui
