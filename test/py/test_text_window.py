@@ -2,9 +2,9 @@ import pytest
 from hecate.hecate import Runner
 
 
-ROWS = 52
+ROWS = 32
 TEXT_ROWS = ROWS - 2
-COLS = 200
+COLS = 128
 
 
 @pytest.fixture(scope='function')
