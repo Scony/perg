@@ -1,3 +1,6 @@
+import sys
+
+import pytest
 from hecate.hecate import Runner
 
 
@@ -43,6 +46,7 @@ def test_2_greps(executable_path, tmpdir):
         term.press('q')
 
 
+@pytest.mark.skipif(sys.version_info[:2] == (3, 4), reason='hack for travis')
 def test_greps_switching_in_circle(executable_path, tmpdir):
     lines = ['foo {}'.format(i) for i in range(5)] + ['bar {}'.format(i) for i in range(5)]
     greps = [
