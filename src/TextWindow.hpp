@@ -20,6 +20,7 @@ class TextWindow
 
   void render();
   void moveCursorDown();
+  void moveCursorUp();
 
  private:
   std::unique_ptr<NcursesWindow> window;

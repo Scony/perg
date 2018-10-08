@@ -41,4 +41,17 @@ void TextWindow::moveCursorDown()
     cursorPosition.y++;
   }
 }
+
+void TextWindow::moveCursorUp()
+{
+  if (cursorPosition.y == 0)
+  {
+    visibleTextPosition.y =
+        visibleTextPosition.y > 0 ? visibleTextPosition.y - 1 : visibleTextPosition.y;
+  }
+  else
+  {
+    cursorPosition.y--;
+  }
+}
 } // namespace perg::tui

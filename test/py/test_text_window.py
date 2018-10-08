@@ -35,13 +35,17 @@ def test_window_size(term, lines):
     assert screenshot.count('X') == (ROWS - 2) * COLS
 
 
+def step_down(term):
+    for _ in range(TEXT_ROWS):
+        term.press('Down')
+
+
 @pytest.mark.parametrize('lines', [['line {}'.format(i) for i in range(TEXT_ROWS*2)]])
 def test_step_down(term, lines):
     term.await_text(lines[TEXT_ROWS-1])
     screenshot = screenshot_to_lines(term.screenshot(), 'line')
     assert lines[TEXT_ROWS] not in screenshot
-    for _ in range(TEXT_ROWS):
-        term.press('Down')
+    step_down(term)
     term.await_text(lines[TEXT_ROWS])
     screenshot = screenshot_to_lines(term.screenshot(), 'line')
     assert lines[0] not in screenshot
@@ -57,3 +61,17 @@ def test_multiple_steps_down(term, lines):
     screenshot = screenshot_to_lines(term.screenshot(), 'line')
     assert len(lines[-TEXT_ROWS:]) == len(screenshot)
     assert lines[-TEXT_ROWS:] == screenshot
+
+
+@pytest.mark.parametrize('steps', [1, 5])
+@pytest.mark.parametrize('lines', [['line {}'.format(i) for i in range(TEXT_ROWS*2)]])
+def test_steps_up(term, lines, steps):
+    step_down(term)
+    for _ in range(TEXT_ROWS-1):
+        term.press('Up')
+    for _ in range(steps):
+        term.press('Up')
+    term.await_text(lines[0])
+    screenshot = screenshot_to_lines(term.screenshot(), 'line')
+    assert lines[TEXT_ROWS-1] == screenshot[-1]
+    assert lines[TEXT_ROWS] not in screenshot

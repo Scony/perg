@@ -25,6 +25,7 @@ TextWindowController::TextWindowController(
           textView)}
     , handlers{{
           {"<Down>", std::bind(&tui::TextWindow::moveCursorDown, textWindow.get())},
+          {"<Up>", std::bind(&tui::TextWindow::moveCursorUp, textWindow.get())},
       }}
 {
 }
