@@ -52,7 +52,7 @@ def test_greps_switching_in_circle(executable_path, tmpdir):
     ]
 
     def check_term_lines(term, lines_included, lines_not_included):
-        term.await_text(lines_included[0])
+        term.await_text(lines_included[-1])
         screenshot = term.screenshot()
         for line in lines_included:
             assert line in screenshot
