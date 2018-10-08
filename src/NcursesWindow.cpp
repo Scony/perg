@@ -1,6 +1,7 @@
 #include <ncurses.h>
 
 #include "NcursesWindow.hpp"
+#include "Position.hpp"
 #include "Region.hpp"
 
 namespace perg::tui
@@ -42,5 +43,10 @@ std::string NcursesWindow::getStr()
   char buff[255] = {0};
   ::wgetstr(window, buff);
   return std::string(buff);
+}
+
+void NcursesWindow::move(types::Position position)
+{
+  ::wmove(window, position.y, position.x);
 }
 } // namespace perg::tui

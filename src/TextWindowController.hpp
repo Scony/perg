@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+#include <map>
 #include <memory>
 
 namespace perg::tui
@@ -29,5 +31,6 @@ class TextWindowController
   tui::KeyboardInput& keyboardInput;
   tui::Ncurses& ncurses;
   std::unique_ptr<tui::TextWindow> textWindow;
+  const std::map<std::string, std::function<void()>> handlers;
 };
 } // namespace perg::presenter

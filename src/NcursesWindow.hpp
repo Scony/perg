@@ -7,7 +7,8 @@ typedef struct _win_st WINDOW;
 namespace perg::types
 {
 struct Region;
-}
+struct Position;
+} // namespace perg::types
 
 namespace perg::tui
 {
@@ -24,6 +25,7 @@ class NcursesWindow
   void mvprintw(unsigned, unsigned, std::string);
   void refresh();
   std::string getStr(); // TODO: investigate why name cannot be flat
+  void move(types::Position);
 
  public:
   const unsigned cols;

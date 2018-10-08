@@ -52,8 +52,8 @@ void TextView::applyFunctionToSlice(
     std::size_t len) const
 {
   std::lock_guard<std::mutex> lock(mutex);
-  assert(pos <= container.size());
-  assert(pos + len <= container.size());
+  assert(pos <= container.size()); // TODO: exception
+  assert(pos + len <= container.size()); // TODO: exception
   function(container.cbegin() + pos, container.cbegin() + pos + len);
 }
 } // namespace perg::types

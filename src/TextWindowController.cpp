@@ -23,13 +23,27 @@ TextWindowController::TextWindowController(
               ncurses.getRegion().rows - 2,
           }),
           textView)}
+    , handlers{{
+          {"<Down>", std::bind(&tui::TextWindow::moveCursorDown, textWindow.get())},
+      }}
 {
 }
 
 types::KeyPressed TextWindowController::awaitEvent()
 {
   textWindow->render();
-  types::KeyPressed keyPressed{keyboardInput.awaitKeyPressed()};
-  return keyPressed;
+  while (true)
+  {
+    types::KeyPressed keyPressed{keyboardInput.awaitKeyPressed()};
+    if (handlers.find(keyPressed.keystroke) != handlers.end())
+    {
+      handlers.at(keyPressed.keystroke)();
+      textWindow->render();
+    }
+    else
+    {
+      return keyPressed;
+    }
+  }
 }
 } // namespace perg::presenter

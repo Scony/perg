@@ -21,8 +21,24 @@ void TextWindow::render()
         for (auto it = begin; it != end; it++)
           window->mvprintw(0, lineNo++, std::string(*it));
       },
-      0,
-      std::min(knownSize, std::size_t{window->rows}));
+      visibleTextPosition.y,
+      std::min(
+          knownSize - visibleTextPosition.y, std::size_t{window->rows})); // TODO: check conversion
+  window->move(cursorPosition);
   window->refresh();
+}
+
+void TextWindow::moveCursorDown()
+{
+  if (cursorPosition.y == window->rows - 1)
+  {
+    visibleTextPosition.y = visibleTextPosition.y + window->rows < textView->size()
+        ? visibleTextPosition.y + 1
+        : visibleTextPosition.y;
+  }
+  else
+  {
+    cursorPosition.y++;
+  }
 }
 } // namespace perg::tui
