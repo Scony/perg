@@ -81,3 +81,72 @@ def test_steps_up(term, lines, steps):
     screenshot = screenshot_to_lines(term.screenshot(), 'line')
     assert lines[TEXT_ROWS-1] == screenshot[-1]
     assert lines[TEXT_ROWS] not in screenshot
+
+
+@pytest.mark.skipif(sys.version_info[:2] == (3, 4), reason='hack for travis')
+@pytest.mark.parametrize('lines', [['line {}'.format(i) for i in range(TEXT_ROWS*3)]])
+def test_page_down(term, lines):
+    term.await_text(lines[TEXT_ROWS-1])
+    screenshot = screenshot_to_lines(term.screenshot(), 'line')
+    assert lines[TEXT_ROWS] not in screenshot
+    term.press('PageDown')
+    term.await_text(lines[TEXT_ROWS*2-1])
+    screenshot = screenshot_to_lines(term.screenshot(), 'line')
+    assert lines[TEXT_ROWS*2] not in screenshot
+
+
+@pytest.mark.skipif(sys.version_info[:2] == (3, 4), reason='hack for travis')
+@pytest.mark.parametrize('lines', [['line {}'.format(i) for i in range(TEXT_ROWS*3)]])
+def test_multiple_pages_down(term, lines):
+    term.await_text(lines[TEXT_ROWS-1])
+    screenshot = screenshot_to_lines(term.screenshot(), 'line')
+    assert lines[TEXT_ROWS] not in screenshot
+    for _ in range(4):
+        term.press('PageDown')
+    term.await_text(lines[TEXT_ROWS*3-1])
+    screenshot = screenshot_to_lines(term.screenshot(), 'line')
+    assert lines[TEXT_ROWS*2-1] not in screenshot
+
+
+@pytest.mark.skipif(sys.version_info[:2] == (3, 4), reason='hack for travis')
+@pytest.mark.parametrize('pages', [1, 5])
+@pytest.mark.parametrize('lines', [['line {}'.format(i) for i in range(TEXT_ROWS*3)]])
+def test_page_down(term, lines, pages):
+    term.await_text(lines[TEXT_ROWS-1])
+    term.press('PageDown')
+    term.await_text(lines[TEXT_ROWS*2-1])
+    for _ in range(pages):
+        term.press('PageUp')
+    term.await_text(lines[TEXT_ROWS-1])
+    screenshot = screenshot_to_lines(term.screenshot(), 'line')
+    assert lines[0] in screenshot
+    assert lines[TEXT_ROWS] not in screenshot
+
+
+@pytest.mark.skipif(sys.version_info[:2] == (3, 4), reason='hack for travis')
+@pytest.mark.parametrize('lines', [['line {}'.format(i) for i in range(TEXT_ROWS*3)]])
+def test_text_end(term, lines):
+    term.await_text(lines[TEXT_ROWS-1])
+    term.press('M->')
+    term.await_text(lines[TEXT_ROWS*3-1])
+    screenshot = screenshot_to_lines(term.screenshot(), 'line')
+    assert lines[TEXT_ROWS*2-1] not in screenshot
+    assert lines[TEXT_ROWS*2] in screenshot
+    for _ in range(TEXT_ROWS):
+        term.press('Up')
+    term.await_text(lines[TEXT_ROWS*3-2])
+    screenshot = screenshot_to_lines(term.screenshot(), 'line')
+    assert lines[TEXT_ROWS*3-1] not in screenshot
+
+
+@pytest.mark.skipif(sys.version_info[:2] == (3, 4), reason='hack for travis')
+@pytest.mark.parametrize('lines', [['line {}'.format(i) for i in range(TEXT_ROWS*3)]])
+def test_text_begin(term, lines):
+    term.await_text(lines[TEXT_ROWS-1])
+    term.press('M->')
+    term.await_text(lines[TEXT_ROWS*3-1])
+    term.press('M-<')
+    term.await_text(lines[TEXT_ROWS-1])
+    screenshot = screenshot_to_lines(term.screenshot(), 'line')
+    assert lines[0] in screenshot
+    assert lines[TEXT_ROWS] not in screenshot

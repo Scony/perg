@@ -26,6 +26,10 @@ TextWindowController::TextWindowController(
     , handlers{{
           {"<Down>", std::bind(&tui::TextWindow::moveCursorDown, textWindow.get())},
           {"<Up>", std::bind(&tui::TextWindow::moveCursorUp, textWindow.get())},
+          {"<PageDown>", std::bind(&tui::TextWindow::movePageDown, textWindow.get())},
+          {"<PageUp>", std::bind(&tui::TextWindow::movePageUp, textWindow.get())},
+          {"<M->>", std::bind(&tui::TextWindow::moveToTheTextEnd, textWindow.get())},
+          {"<M-<>", std::bind(&tui::TextWindow::moveToTheTextBegin, textWindow.get())},
       }}
 {
 }

@@ -54,4 +54,37 @@ void TextWindow::moveCursorUp()
     cursorPosition.y--;
   }
 }
+
+void TextWindow::movePageDown()
+{
+  if (textView->size() > window->rows)
+  {
+    auto maxVisibleTextPositionY = textView->size() - window->rows;
+    visibleTextPosition.y = visibleTextPosition.y + window->rows < maxVisibleTextPositionY
+        ? visibleTextPosition.y + window->rows
+        : maxVisibleTextPositionY;
+  }
+}
+
+void TextWindow::movePageUp()
+{
+  visibleTextPosition.y =
+      visibleTextPosition.y > window->rows ? visibleTextPosition.y - window->rows : 0;
+}
+
+void TextWindow::moveToTheTextEnd()
+{
+  cursorPosition.x = 0;
+  cursorPosition.y = std::min(std::size_t{window->rows}, textView->size()) - 1; // TODO: gsl x 2
+  visibleTextPosition.x = 0;
+  visibleTextPosition.y = textView->size() > window->rows ? textView->size() - window->rows : 0;
+}
+
+void TextWindow::moveToTheTextBegin()
+{
+  cursorPosition.x = 0;
+  cursorPosition.y = 0;
+  visibleTextPosition.x = 0;
+  visibleTextPosition.y = 0;
+}
 } // namespace perg::tui

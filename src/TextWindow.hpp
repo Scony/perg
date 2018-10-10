@@ -21,6 +21,10 @@ class TextWindow
   void render();
   void moveCursorDown();
   void moveCursorUp();
+  void movePageDown();
+  void movePageUp();
+  void moveToTheTextEnd();
+  void moveToTheTextBegin();
 
  private:
   std::unique_ptr<NcursesWindow> window;
