@@ -23,14 +23,19 @@ void NcursesWindow::wattron_reverse()
   ::wattron(window, A_REVERSE);
 }
 
+void NcursesWindow::erase()
+{
+  ::werase(window);
+}
+
 void NcursesWindow::clear()
 {
   ::wclear(window);
 }
 
-void NcursesWindow::mvprintw(unsigned x, unsigned y, std::string_view str)
+void NcursesWindow::mvprintw(types::Position pos, std::string_view str)
 {
-  ::mvwprintw(window, y, x, "%s", std::string(str).c_str()); // TODO: fix fmt
+  ::mvwprintw(window, pos.y, pos.x, "%s", std::string(str).c_str());
 }
 
 void NcursesWindow::refresh()

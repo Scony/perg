@@ -31,8 +31,8 @@ void Ncurses::refresh()
 
 types::Region Ncurses::getRegion()
 {
-  unsigned cols;
-  unsigned rows;
+  std::size_t cols;
+  std::size_t rows;
   getmaxyx(stdscr, rows, cols);
   return types::Region{0, 0, cols, rows};
 }

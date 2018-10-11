@@ -6,15 +6,15 @@ namespace perg::types
 {
 struct Region
 {
-  const unsigned x;
-  const unsigned y;
-  const unsigned cols;
-  const unsigned rows;
+  const std::size_t x;
+  const std::size_t y;
+  const std::size_t cols;
+  const std::size_t rows;
 };
 } // namespace perg::types
 
 BOOST_FUSION_ADAPT_STRUCT(
     perg::types::Region,
-    (const unsigned, x)(const unsigned, y)(const unsigned, cols)(
-        const unsigned,
+    (const std::size_t, x)(const std::size_t, y)(const std::size_t, cols)(
+        const std::size_t,
         rows)); // TODO: enable variadic macros support

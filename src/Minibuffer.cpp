@@ -1,5 +1,6 @@
 #include "Minibuffer.hpp"
 #include "NcursesWindow.hpp"
+#include "types/Position.hpp"
 
 namespace perg::tui
 {
@@ -22,7 +23,7 @@ std::string Minibuffer::readText(std::string text)
 void Minibuffer::render()
 {
   window->clear();
-  window->mvprintw(0, 0, text);
+  window->mvprintw({0, 0}, text);
   window->refresh();
 }
 }; // namespace perg::tui

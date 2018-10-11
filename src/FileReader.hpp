@@ -25,7 +25,7 @@ class FileReader : public IWorker
   std::shared_ptr<types::TextView> getTextView() const;
 
  private:
-  const unsigned bufferFlushThreshold = 1024;
+  const std::size_t bufferFlushThreshold = 1024;
 
   void work();
 

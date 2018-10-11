@@ -1,5 +1,6 @@
 #include "StatusBar.hpp"
 #include "NcursesWindow.hpp"
+#include "types/Position.hpp"
 
 namespace perg::tui
 {
@@ -15,7 +16,7 @@ void StatusBar::render()
   std::string rawText = "-- " + text + " " + rFill;
 
   window->clear();
-  window->mvprintw(0, 0, rawText);
+  window->mvprintw({0, 0}, rawText);
   window->refresh();
 }
 }; // namespace perg::tui

@@ -13,17 +13,18 @@ TextWindow::TextWindow(
 
 void TextWindow::render()
 {
-  window->clear(); // TODO: get rid of
+  window->clear(); // TODO: erase (clear only on focus)
   auto knownSize = textView->waitForSizeAtLeast(window->rows);
   textView->applyFunctionToSlice(
       [this](types::TextView::Iterator begin, types::TextView::Iterator end) {
-        unsigned lineNo = 0;
+        std::size_t lineNo = 0;
         for (auto it = begin; it != end; it++)
         {
           const auto& line = *it;
           if (windowPositionInText.x < line.size())
           {
-            window->mvprintw(0, lineNo++, line.substr(windowPositionInText.x, window->cols));
+            window->mvprintw(
+                types::Position{0, lineNo++}, line.substr(windowPositionInText.x, window->cols));
           }
         }
       },
