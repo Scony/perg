@@ -22,7 +22,7 @@ class NcursesWindow
 
   void wattron_reverse();
   void clear();
-  void mvprintw(unsigned, unsigned, std::string);
+  void mvprintw(unsigned, unsigned, std::string_view); // TODO: std::size_t
   void refresh();
   std::string getStr(); // TODO: investigate why name cannot be flat
   void move(types::Position);

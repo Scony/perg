@@ -28,9 +28,9 @@ void NcursesWindow::clear()
   ::wclear(window);
 }
 
-void NcursesWindow::mvprintw(unsigned x, unsigned y, std::string str)
+void NcursesWindow::mvprintw(unsigned x, unsigned y, std::string_view str)
 {
-  ::mvwprintw(window, y, x, "%s", str.c_str());
+  ::mvwprintw(window, y, x, "%s", std::string(str).c_str()); // TODO: fix fmt
 }
 
 void NcursesWindow::refresh()

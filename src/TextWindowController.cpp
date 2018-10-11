@@ -30,6 +30,12 @@ TextWindowController::TextWindowController(
           {"<PageUp>", std::bind(&tui::TextWindow::movePageUp, textWindow.get())},
           {"<M->>", std::bind(&tui::TextWindow::moveToTheTextEnd, textWindow.get())},
           {"<M-<>", std::bind(&tui::TextWindow::moveToTheTextBegin, textWindow.get())},
+          {"<Right>", std::bind(&tui::TextWindow::moveCursorRight, textWindow.get())},
+          {"<Left>", std::bind(&tui::TextWindow::moveCursorLeft, textWindow.get())},
+          {"<M-Right>", std::bind(&tui::TextWindow::moveCursorOneWordRight, textWindow.get())},
+          {"<M-Left>", std::bind(&tui::TextWindow::moveCursorOneWordLeft, textWindow.get())},
+          {"<C-e>", std::bind(&tui::TextWindow::moveCursorToLineEnd, textWindow.get())},
+          {"<C-a>", std::bind(&tui::TextWindow::moveCursorToLineBegin, textWindow.get())},
       }}
 {
 }

@@ -25,11 +25,21 @@ class TextWindow
   void movePageUp();
   void moveToTheTextEnd();
   void moveToTheTextBegin();
+  void moveCursorRight();
+  void moveCursorLeft();
+  void moveCursorOneWordRight();
+  void moveCursorOneWordLeft();
+  void moveCursorToLineEnd();
+  void moveCursorToLineBegin();
 
  private:
+  std::string_view getCurrentLine() const;
+  types::Position getCursorPositionInText() const;
+  void setCursorPositionInText(types::Position);
+
   std::unique_ptr<NcursesWindow> window;
   std::shared_ptr<types::TextView> textView;
   types::Position cursorPosition{0, 0};
-  types::Position visibleTextPosition{0, 0};
+  types::Position windowPositionInText{0, 0};
 };
 } // namespace perg::tui

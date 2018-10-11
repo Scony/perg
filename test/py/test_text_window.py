@@ -5,8 +5,9 @@ from hecate.hecate import Runner
 
 
 ROWS = 32
-TEXT_ROWS = ROWS - 2
 COLS = 128
+TEXT_ROWS = ROWS - 2
+TEXT_COLS = COLS
 
 
 @pytest.fixture(scope='function')
@@ -150,3 +151,130 @@ def test_text_begin(term, lines):
     screenshot = screenshot_to_lines(term.screenshot(), 'line')
     assert lines[0] in screenshot
     assert lines[TEXT_ROWS] not in screenshot
+
+
+@pytest.mark.skipif(sys.version_info[:2] == (3, 4), reason='hack for travis')
+@pytest.mark.parametrize('lines', [['abc' + '_'*(TEXT_COLS-4) + 'xyz', '_']])
+def test_character_right(term, lines):
+    term.await_text(lines[0][:TEXT_COLS])
+    screenshot = screenshot_to_lines(term.screenshot(), '___')
+    assert '___x' in screenshot[0]
+    assert '___xy' not in screenshot[0]
+    for _ in range(TEXT_COLS):
+        term.press('Right')
+    term.await_text('____xy')
+    screenshot = screenshot_to_lines(term.screenshot(), '___')
+    assert 'abc___' not in screenshot[0]
+    assert 'bc___' in screenshot[0]
+
+
+@pytest.mark.skipif(sys.version_info[:2] == (3, 4), reason='hack for travis')
+@pytest.mark.parametrize('lines', [['abc' + '_'*(TEXT_COLS-4) + 'xyz', '_']])
+def test_character_right_end(term, lines):
+    term.await_text(lines[0][:TEXT_COLS])
+    for _ in range(TEXT_COLS+5):
+        term.press('Right')
+    term.await_text('____xyz')
+    screenshot = screenshot_to_lines(term.screenshot(), '___')
+    assert screenshot[0].startswith('___')
+    assert len(screenshot[0]) == TEXT_COLS - 1
+    assert screenshot[0].endswith('___xyz')
+
+
+@pytest.mark.skipif(sys.version_info[:2] == (3, 4), reason='hack for travis')
+@pytest.mark.parametrize('steps', [1, 5])
+@pytest.mark.parametrize('lines', [['abc' + '_'*(TEXT_COLS-3) + 'xyz', '_']])
+def test_character_left(term, lines, steps):
+    term.await_text(lines[0][:TEXT_COLS])
+    screenshot = screenshot_to_lines(term.screenshot(), '___')
+    assert '___x' not in screenshot[0]
+    for _ in range(TEXT_COLS):
+        term.press('Right')
+    term.await_text('____x')
+    for _ in range(TEXT_COLS-1):
+        term.press('Left')
+    for _ in range(steps):
+        term.press('Left')
+    term.await_text('abc____')
+    screenshot = screenshot_to_lines(term.screenshot(), '___')
+    assert screenshot[0].startswith('abc___')
+    assert screenshot[0].endswith('___')
+
+
+@pytest.mark.skipif(sys.version_info[:2] == (3, 4), reason='hack for travis')
+@pytest.mark.parametrize('lines', [['abc' + '_'*(TEXT_COLS-4) + 'xyz', '_']])
+def test_line_end(term, lines):
+    term.await_text(lines[0][:TEXT_COLS])
+    term.press('C-e')
+    term.await_text('____xyz')
+    screenshot = screenshot_to_lines(term.screenshot(), '___')
+    assert screenshot[0].startswith('___')
+    assert len(screenshot[0]) == TEXT_COLS - 1
+    assert screenshot[0].endswith('___xyz')
+
+
+@pytest.mark.skipif(sys.version_info[:2] == (3, 4), reason='hack for travis')
+@pytest.mark.parametrize('lines', [['abc' + '_'*(TEXT_COLS-3) + 'xyz', '_']])
+def test_line_begin(term, lines):
+    term.await_text(lines[0][:TEXT_COLS])
+    term.press('C-e')
+    term.press('C-a')
+    term.await_text('abc__')
+    screenshot = screenshot_to_lines(term.screenshot(), '___')
+    assert screenshot[0].startswith('abc___')
+    assert screenshot[0].endswith('___')
+
+
+@pytest.mark.skipif(sys.version_info[:2] == (3, 4), reason='hack for travis')
+@pytest.mark.parametrize('lines', [['abc' + '_'*(TEXT_COLS-4) + 'xyz', '_']])
+def test_word_right(term, lines):
+    term.await_text(lines[0][:TEXT_COLS])
+    term.press('M-Right')
+    for _ in range(TEXT_COLS-3):
+        term.press('Right')
+    term.await_text('___xy')
+    screenshot = screenshot_to_lines(term.screenshot(), '___')
+    assert screenshot[0].endswith('___xy')
+    assert screenshot[0].startswith('bc___')
+
+
+@pytest.mark.skipif(sys.version_info[:2] == (3, 4), reason='hack for travis')
+@pytest.mark.parametrize('lines', [['abc' + '_'*(TEXT_COLS-5) + 'xyz', '_']])
+def test_word_right_end(term, lines):
+    term.await_text(lines[0][:TEXT_COLS])
+    term.press('M-Right')
+    term.press('M-Right')
+    term.await_text('___xyz')
+    screenshot = screenshot_to_lines(term.screenshot(), '___')
+    assert screenshot[0].startswith('c__')
+    assert len(screenshot[0]) == TEXT_COLS - 1
+    assert screenshot[0].endswith('___xyz')
+
+
+@pytest.mark.skipif(sys.version_info[:2] == (3, 4), reason='hack for travis')
+@pytest.mark.parametrize('lines', [['abc' + '_'*(TEXT_COLS-5) + 'xyz', '_']])
+def test_word_left(term, lines):
+    term.await_text(lines[0][:TEXT_COLS])
+    term.press('M-Right')
+    term.press('M-Right')
+    term.press('M-Left')
+    for _ in range(TEXT_COLS-3):
+        term.press('Left')
+    term.await_text('___xyz')
+    screenshot = screenshot_to_lines(term.screenshot(), '___')
+    assert screenshot[0].startswith('bc__')
+    assert screenshot[0].endswith('__xyz')
+
+
+@pytest.mark.skipif(sys.version_info[:2] == (3, 4), reason='hack for travis')
+@pytest.mark.parametrize('lines', [['abc' + '_'*(TEXT_COLS-5) + 'xyz', '_']])
+def test_word_left_begin(term, lines):
+    term.await_text(lines[0][:TEXT_COLS])
+    term.press('M-Right')
+    term.press('M-Right')
+    term.press('M-Left')
+    term.press('M-Left')
+    term.await_text('___xy')
+    screenshot = screenshot_to_lines(term.screenshot(), '___')
+    assert screenshot[0].startswith('abc__')
+    assert screenshot[0].endswith('__xy')
