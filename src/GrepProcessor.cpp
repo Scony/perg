@@ -29,6 +29,10 @@ void GrepProcessor::work(std::string substring)
     auto knownSize = inputTextView->waitForSizeAtLeast(nextPosToCheck + 1u);
     if (knownSize >= nextPosToCheck + 1u)
     {
+      if (isStopped())
+      {
+        break;
+      }
       auto lenToCheck = knownSize - nextPosToCheck;
       inputTextView->applyFunctionToSlice(
           [&buffer, &substring](types::TextView::Iterator begin, types::TextView::Iterator end) {
@@ -48,9 +52,9 @@ void GrepProcessor::work(std::string substring)
     }
     else
     {
-      outputTextView->seal();
       break;
     }
   }
+  outputTextView->seal();
 }
 } // namespace perg::model

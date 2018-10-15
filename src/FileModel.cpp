@@ -23,6 +23,14 @@ FileModel::FileModel(boost::filesystem::path filepath) : filepath{filepath}
   greps.emplace_back(std::make_shared<GrepModel>(filepath.leaf().string(), textView));
 }
 
+FileModel::~FileModel()
+{
+  for (auto& worker : workers)
+  {
+    worker->stop();
+  }
+}
+
 boost::filesystem::path FileModel::getFilepath() const
 {
   return filepath;

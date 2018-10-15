@@ -17,6 +17,7 @@ add_library(${PROJECT_NAME}-model
   ApplicationModel.cpp
   FileModel.cpp
   FileReader.cpp
+  IWorker.cpp
   GrepModel.cpp
   GrepProcessor.cpp
   )

@@ -44,6 +44,10 @@ void FileReader::work()
     buffer.push_back(text->lines.back());
     if (buffer.size() >= bufferFlushThreshold)
     {
+      if (isStopped())
+      {
+        break;
+      }
       textView->append(std::move(buffer));
       buffer.clear();
     }

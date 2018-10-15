@@ -45,7 +45,7 @@ types::KeyPressed TextWindowController::awaitEvent()
   textWindow->render();
   while (true)
   {
-    types::KeyPressed keyPressed{keyboardInput.awaitKeyPressed()};
+    types::KeyPressed keyPressed{keyboardInput.awaitKeyPressed(std::chrono::milliseconds{200})};
     if (handlers.find(keyPressed.keystroke) != handlers.end())
     {
       handlers.at(keyPressed.keystroke)();

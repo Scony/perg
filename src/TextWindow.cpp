@@ -14,7 +14,7 @@ TextWindow::TextWindow(
 void TextWindow::render()
 {
   window->clear(); // TODO: erase (clear only on focus)
-  auto knownSize = textView->waitForSizeAtLeast(window->rows);
+  auto knownSize = textView->size();
   textView->applyFunctionToSlice(
       [this](types::TextView::Iterator begin, types::TextView::Iterator end) {
         std::size_t lineNo = 0;
