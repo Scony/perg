@@ -42,7 +42,8 @@ std::size_t TextView::waitForSealed() const
 void TextView::append(Container&& data)
 {
   std::lock_guard<std::mutex> lock(mutex);
-  container.insert(container.end(), data.begin(), data.end()); // TODO: use std::make_move_iterator?
+  container.insert(
+      container.end(), std::make_move_iterator(data.begin()), std::make_move_iterator(data.end()));
   newData.notify_all();
 }
 
