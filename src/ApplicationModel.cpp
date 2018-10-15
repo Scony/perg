@@ -2,6 +2,7 @@
 #include "FileModel.hpp"
 #include "GrepModel.hpp"
 #include "IWorker.hpp"
+#include "exceptions/FileOpenError.hpp"
 
 namespace perg::model
 {
@@ -15,7 +16,7 @@ ApplicationModel::ApplicationModel(const std::vector<boost::filesystem::path>& f
       auto fileModel = std::make_shared<FileModel>(filepath);
       fileModels.push_back(fileModel);
     }
-    catch (...) // TODO: introduce exception
+    catch (perg::exceptions::FileOpenError&)
     {
     }
   }

@@ -1,20 +1,26 @@
 #include <fstream>
 #include <memory>
 
+#include <boost/throw_exception.hpp>
+
 #include "FileModel.hpp"
 #include "FileReader.hpp"
 #include "GrepModel.hpp"
 #include "GrepProcessor.hpp"
+#include "exceptions/FileOpenError.hpp"
 #include "types/TextView.hpp"
 
 namespace perg::model
 {
 FileModel::FileModel(boost::filesystem::path filepath) : filepath{filepath}
 {
-  std::ifstream fileStream;
-  fileStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-  fileStream.open(filepath.c_str());
-  fileStream.close();
+  {
+    std::ifstream fileStream(filepath.c_str());
+    if (not fileStream)
+    {
+      BOOST_THROW_EXCEPTION(perg::exceptions::FileOpenError{});
+    }
+  }
 
   auto reader = std::make_unique<FileReader>(filepath);
   auto text = reader->getText();
