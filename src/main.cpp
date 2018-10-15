@@ -1,7 +1,9 @@
-#include <boost/filesystem.hpp>
-#include <boost/program_options.hpp>
+#include <chrono>
 #include <iostream>
 #include <vector>
+
+#include <boost/filesystem.hpp>
+#include <boost/program_options.hpp>
 
 #include "ApplicationController.hpp"
 #include "ApplicationModel.hpp"
@@ -16,10 +18,25 @@ constexpr size_t UNHANDLED_EXCEPTION = 1;
 constexpr size_t BOOST_PO_ERROR = 2;
 
 perg::types::Configuration configuration{
-  grep_keystroke : "g",
-  grep_circle_left_keystroke : "<S-Left>",
-  grep_circle_right_keystroke : "<S-Right>",
-  quit_keystroke : "q",
+  keystrokes : perg::types::Configuration::Keystrokes{
+    grep : "g",
+    grepCircleLeft : "<S-Left>",
+    grepCircleRight : "<S-Right>",
+    quit : "q",
+    cursorDown : "<Down>",
+    cursorUp : "<Up>",
+    pageUp : "<PageUp>",
+    pageDown : "<PageDown>",
+    textBegin : "<M-<>",
+    textEnd : "<M->>",
+    cursorRight : "<Right>",
+    cursorLeft : "<Left>",
+    wordRight : "<M-Right>",
+    wordLeft : "<M-Left>",
+    lineEnd : "<C-e>",
+    lineBegin : "<C-a>",
+  },
+  keyPressTimeout : std::chrono::milliseconds{200},
 };
 } // namespace
 

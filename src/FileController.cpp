@@ -26,7 +26,7 @@ FileController::FileController(
 {
   auto mainTextView = fileModel.getGrepsVector().at(0)->getTextView();
   auto mainTextWindow =
-      std::make_unique<TextWindowController>(mainTextView, keyboardInput, ncurses);
+      std::make_unique<TextWindowController>(configuration, mainTextView, keyboardInput, ncurses);
   greps.emplace_back(std::move(mainTextWindow));
 }
 
@@ -36,17 +36,17 @@ types::KeyPressed FileController::awaitEvent()
   {
     auto& textWindow = greps[visibleGrep];
     auto keyPressed = textWindow->awaitEvent();
-    if (keyPressed.keystroke == configuration.grep_circle_left_keystroke)
+    if (keyPressed.keystroke == configuration.keystrokes.grepCircleLeft)
     {
       visibleGrep = visibleGrep >= 1 ? visibleGrep - 1 : greps.size() - 1;
       continue;
     }
-    if (keyPressed.keystroke == configuration.grep_circle_right_keystroke)
+    if (keyPressed.keystroke == configuration.keystrokes.grepCircleRight)
     {
       visibleGrep = (visibleGrep + 1) % greps.size();
       continue;
     }
-    if (keyPressed.keystroke != configuration.grep_keystroke)
+    if (keyPressed.keystroke != configuration.keystrokes.grep)
     {
       return keyPressed;
     }
@@ -55,7 +55,7 @@ types::KeyPressed FileController::awaitEvent()
     auto newGrep = fileModel.grep(presentGrep, grepPattern);
     auto newTextView = newGrep->getTextView();
     auto newTextWindow =
-        std::make_unique<TextWindowController>(newTextView, keyboardInput, ncurses);
+        std::make_unique<TextWindowController>(configuration, newTextView, keyboardInput, ncurses);
     greps.emplace_back(std::move(newTextWindow));
     visibleGrep++;
   }

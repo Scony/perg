@@ -15,6 +15,7 @@ namespace perg::types
 {
 struct KeyPressed;
 class TextView;
+struct Configuration;
 } // namespace perg::types
 
 namespace perg::presenter
@@ -22,11 +23,16 @@ namespace perg::presenter
 class TextWindowController
 {
  public:
-  TextWindowController(std::shared_ptr<types::TextView>, tui::KeyboardInput&, tui::Ncurses&);
+  TextWindowController(
+      types::Configuration&,
+      std::shared_ptr<types::TextView>,
+      tui::KeyboardInput&,
+      tui::Ncurses&);
 
   types::KeyPressed awaitEvent();
 
  private:
+  types::Configuration& configuration;
   std::shared_ptr<types::TextView> textView;
   tui::KeyboardInput& keyboardInput;
   tui::Ncurses& ncurses;

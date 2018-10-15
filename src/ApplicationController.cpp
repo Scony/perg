@@ -55,7 +55,7 @@ void ApplicationController::awaitEvent()
       while (true)
       {
         auto keyPressed = fileController.awaitEvent();
-        if (keyPressed.keystroke == configuration.quit_keystroke)
+        if (keyPressed.keystroke == configuration.keystrokes.quit)
         {
           return;
         }
@@ -69,7 +69,7 @@ void ApplicationController::awaitEvent()
     while (true)
     {
       auto keystroke = keyboardInput.awaitKeyPressed();
-      if (keystroke != configuration.quit_keystroke)
+      if (keystroke != configuration.keystrokes.quit)
       {
         minibuffer.setText(keystroke);
         minibuffer.render();
