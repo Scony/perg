@@ -29,7 +29,7 @@ int main(int argc, char** argv) try
   po::options_description visibleOptions("Options");
   visibleOptions.add_options()("help,h", "Print help messages");
   po::options_description allOptions("");
-  allOptions.add_options()("filepath", po::value<std::vector<std::string>>(), "filepath");
+  allOptions.add_options()("filepath", po::value<std::string>(), "filepath");
   allOptions.add(visibleOptions);
   po::positional_options_description positionalOptions;
   positionalOptions.add("filepath", -1);
@@ -50,7 +50,7 @@ int main(int argc, char** argv) try
   if (vm.count("help"))
   {
     const auto execName = boost::filesystem::basename(argv[0]);
-    std::cerr << "Usage: " << execName << " [OPTION]... [FILE]..." << std::endl << std::endl;
+    std::cerr << "Usage: " << execName << " [OPTION]... [FILE]" << std::endl << std::endl;
     std::cerr << visibleOptions << std::endl;
     return SUCCESS;
   }
@@ -58,12 +58,8 @@ int main(int argc, char** argv) try
   std::vector<boost::filesystem::path> filepaths{};
   if (vm.count("filepath"))
   {
-    auto raw_filepaths = vm["filepath"].as<std::vector<std::string>>();
-    std::transform(
-        raw_filepaths.begin(),
-        raw_filepaths.end(),
-        std::back_inserter(filepaths),
-        [](const auto& raw_filepath) { return raw_filepath; });
+    auto raw_filepath = vm["filepath"].as<std::string>();
+    filepaths.emplace_back(raw_filepath);
   }
 
   perg::tui::KeyboardInput::init();
