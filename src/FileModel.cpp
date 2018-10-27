@@ -54,7 +54,7 @@ std::shared_ptr<GrepModel> FileModel::grep(std::shared_ptr<GrepModel> grep, std:
   auto newTextView = grepProcessor->getTextView();
   workers.emplace_back(std::move(grepProcessor));
   auto fileName = filepath.leaf().string();
-  auto grepName = fileName + ": \"" + substring + "\"";  // TODO: move this logic to presenter
+  auto grepName = fileName + ": \"" + substring + "\""; // TODO: move this logic to presenter
   auto newGrep = std::make_shared<GrepModel>(grepName, newTextView);
   greps.emplace_back(newGrep);
   return newGrep;
