@@ -5,6 +5,7 @@
 #include "Minibuffer.hpp"
 #include "Ncurses.hpp"
 #include "NcursesWindow.hpp"
+#include "StatusBar.hpp"
 #include "TextView.hpp"
 #include "TextWindow.hpp"
 #include "TextWindowController.hpp"
@@ -17,12 +18,14 @@ FileController::FileController(
     model::FileModel& fileModel,
     tui::KeyboardInput& keyboardInput,
     tui::Ncurses& ncurses,
-    tui::Minibuffer& minibuffer)
+    tui::Minibuffer& minibuffer,
+    tui::StatusBar& statusBar)
     : configuration{configuration}
     , fileModel{fileModel}
     , keyboardInput{keyboardInput}
     , ncurses{ncurses}
     , minibuffer{minibuffer}
+    , statusBar{statusBar}
 {
   auto mainTextView = fileModel.getGrepsVector().at(0)->getTextView();
   auto mainTextWindow =
@@ -35,6 +38,9 @@ types::KeyPressed FileController::awaitEvent()
   while (true)
   {
     auto& textWindow = greps[visibleGrep];
+    auto grepName = fileModel.getGrepsVector().at(visibleGrep)->getName();
+    statusBar.setText(grepName);
+    statusBar.render();
     auto keyPressed = textWindow->awaitEvent();
     if (keyPressed.keystroke == configuration.keystrokes.grepCircleLeft)
     {

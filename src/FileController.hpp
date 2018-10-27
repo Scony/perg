@@ -14,6 +14,7 @@ namespace perg::tui
 class KeyboardInput;
 class Ncurses;
 class Minibuffer;
+class StatusBar;
 } // namespace perg::tui
 
 namespace perg::types
@@ -34,7 +35,8 @@ class FileController
       model::FileModel&,
       tui::KeyboardInput&,
       tui::Ncurses&,
-      tui::Minibuffer&);
+      tui::Minibuffer&,
+      tui::StatusBar&);
 
   types::KeyPressed awaitEvent();
 
@@ -44,6 +46,7 @@ class FileController
   tui::KeyboardInput& keyboardInput;
   tui::Ncurses& ncurses;
   tui::Minibuffer& minibuffer;
+  tui::StatusBar& statusBar;
   std::vector<std::unique_ptr<TextWindowController>> greps;
   std::size_t visibleGrep{0};
 };

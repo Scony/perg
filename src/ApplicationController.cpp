@@ -51,6 +51,7 @@ void ApplicationController::awaitEvent()
           keyboardInput,
           ncurses,
           minibuffer,
+          statusBar,
       };
       while (true)
       {

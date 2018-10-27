@@ -11,6 +11,7 @@ class StatusBar
  public:
   StatusBar(std::unique_ptr<NcursesWindow>);
 
+  void setText(const std::string&);
   void render();
 
  private:
