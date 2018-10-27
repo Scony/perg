@@ -27,7 +27,7 @@ def test_initial_screen_with_nonexistent_file(executable_path):
 
 def test_initial_status_bar(executable_path):
     with Runner(executable_path) as term:
-        term.await_text('-- dummy status --')
+        term.await_text('------')
         term.press('q')
 
 
