@@ -1,6 +1,5 @@
 #include "TextWindow.hpp"
 #include "NcursesWindow.hpp"
-#include "types/TextView.hpp"
 
 namespace perg::tui
 {
@@ -11,23 +10,49 @@ TextWindow::TextWindow(
 {
 }
 
+void TextWindow::renderingVisitor(types::TextView::Iterator begin, types::TextView::Iterator end)
+{
+  std::size_t lineNo = 0;
+  for (auto it = begin; it != end; it++)
+  {
+    const auto& line = *it;
+    if (windowPositionInText.x < line.size())
+    {
+      auto selectionMarkPositionInWindow = getSelectionMarkPositionInWindow();
+      if (selectionMarkPositionInWindow and selectionMarkPositionInWindow->y == lineNo)
+      {
+        auto visibleLineFragment = line.substr(windowPositionInText.x, window->cols);
+        auto selectionBegin = std::min(cursorPosition.x, selectionMarkPositionInWindow->x);
+        auto selectionEnd = std::min(
+            std::max(cursorPosition.x, selectionMarkPositionInWindow->x),
+            visibleLineFragment.size());
+
+        window->mvprintw(types::Position{0, lineNo}, visibleLineFragment.substr(0, selectionBegin));
+        window->attron();
+        window->mvprintw(
+            types::Position{selectionBegin, lineNo},
+            visibleLineFragment.substr(selectionBegin, selectionEnd - selectionBegin));
+        window->attroff();
+        window->mvprintw(
+            types::Position{selectionEnd, lineNo},
+            visibleLineFragment.substr(selectionEnd, visibleLineFragment.size() - selectionEnd));
+      }
+      else
+      {
+        window->mvprintw(
+            types::Position{0, lineNo}, line.substr(windowPositionInText.x, window->cols));
+      }
+      lineNo++;
+    }
+  }
+}
+
 void TextWindow::render()
 {
   window->clear(); // TODO: erase (clear only on focus)
   auto knownSize = textView->size();
   textView->applyFunctionToSlice(
-      [this](types::TextView::Iterator begin, types::TextView::Iterator end) {
-        std::size_t lineNo = 0;
-        for (auto it = begin; it != end; it++)
-        {
-          const auto& line = *it;
-          if (windowPositionInText.x < line.size())
-          {
-            window->mvprintw(
-                types::Position{0, lineNo++}, line.substr(windowPositionInText.x, window->cols));
-          }
-        }
-      },
+      std::bind(&TextWindow::renderingVisitor, this, std::placeholders::_1, std::placeholders::_2),
       windowPositionInText.y,
       std::min(
           knownSize - windowPositionInText.y, std::size_t{window->rows})); // TODO: check conversion
@@ -168,33 +193,42 @@ void TextWindow::moveCursorOneWordLeft()
 void TextWindow::moveCursorToLineEnd()
 {
   auto currentLine = getCurrentLine();
-  if (currentLine.size() < window->cols)
-  {
-    windowPositionInText.x = 0;
-    cursorPosition.x = currentLine.size() - 1;
-  }
-  else
-  {
-    windowPositionInText.x = currentLine.size() - window->cols + 1;
-    cursorPosition.x = window->cols - 1;
-  }
+  setCursorPositionInText({
+      currentLine.size(),
+      cursorPosition.y,
+  });
 }
 
 void TextWindow::moveCursorToLineBegin()
 {
-  windowPositionInText.x = 0;
-  cursorPosition.x = 0;
+  setCursorPositionInText({
+      0,
+      cursorPosition.y,
+  });
+}
+
+void TextWindow::enableTextSelection()
+{
+  selectionMarkPositionInText = getCursorPositionInText();
+}
+
+void TextWindow::disableTextSelection()
+{
+  selectionMarkPositionInText = {};
 }
 
 std::string_view TextWindow::getCurrentLine() const
 {
   std::string_view currentLine;
-  textView->applyFunctionToSlice(
-      [&currentLine](types::TextView::Iterator begin, types::TextView::Iterator) {
-        currentLine = *begin;
-      },
-      windowPositionInText.y + cursorPosition.y,
-      1);
+  if (windowPositionInText.y + cursorPosition.y < textView->size())
+  {
+    textView->applyFunctionToSlice(
+        [&currentLine](types::TextView::Iterator begin, types::TextView::Iterator) {
+          currentLine = *begin;
+        },
+        windowPositionInText.y + cursorPosition.y,
+        1);
+  }
   return currentLine;
 }
 
@@ -223,5 +257,20 @@ void TextWindow::setCursorPositionInText(types::Position newCursorPositionInText
     cursorPosition.x = newCursorPositionInText.x - windowPositionInText.x;
   }
   // TODO: handle y (extract generic funtion - same for x and y)
+}
+
+std::optional<types::Position> TextWindow::getSelectionMarkPositionInWindow() const
+{
+  if (not selectionMarkPositionInText)
+  {
+    return {};
+  }
+  auto xPosInWindow = (int)selectionMarkPositionInText->x - (int)windowPositionInText.x;
+  auto yPosInWindow = (int)selectionMarkPositionInText->y - (int)windowPositionInText.y;
+  auto maxSizeT = std::numeric_limits<std::size_t>::max();
+  return types::Position{
+      std::min((std::size_t)std::max(xPosInWindow, 0), window->cols),
+      yPosInWindow < 0 ? maxSizeT : yPosInWindow >= (int)window->rows ? maxSizeT : yPosInWindow,
+  };
 }
 } // namespace perg::tui

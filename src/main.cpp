@@ -35,6 +35,8 @@ perg::types::Configuration configuration{
     wordLeft : "<M-Left>",
     lineEnd : "<C-e>",
     lineBegin : "<C-a>",
+    textSelection : "<C- >",
+    generalPurposeCancel : "<C-g>",
   },
   keyPressTimeout : std::chrono::milliseconds{200},
 };

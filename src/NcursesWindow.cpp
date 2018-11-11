@@ -18,9 +18,25 @@ NcursesWindow::~NcursesWindow()
   ::delwin(window);
 }
 
-void NcursesWindow::wattron_reverse()
+#pragma push_macro("attron")
+#undef attron
+void NcursesWindow::attron()
+#pragma pop_macro("attron")
+{
+  ::wattron(window, COLOR_PAIR(1));
+}
+
+void NcursesWindow::attron_reverse()
 {
   ::wattron(window, A_REVERSE);
+}
+
+#pragma push_macro("attroff")
+#undef attroff
+void NcursesWindow::attroff()
+#pragma pop_macro("attroff")
+{
+  ::wattroff(window, COLOR_PAIR(1));
 }
 
 void NcursesWindow::erase()
@@ -43,7 +59,10 @@ void NcursesWindow::refresh()
   ::wrefresh(window);
 }
 
-std::string NcursesWindow::getStr()
+#pragma push_macro("getstr")
+#undef getstr
+std::string NcursesWindow::getstr()
+#pragma pop_macro("getstr")
 {
   char buff[255] = {0};
   ::wgetstr(window, buff);

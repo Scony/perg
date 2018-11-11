@@ -20,12 +20,23 @@ class NcursesWindow
   NcursesWindow(types::Region);
   ~NcursesWindow();
 
-  void wattron_reverse();
+#pragma push_macro("attron")
+#undef attron
+  void attron();
+#pragma pop_macro("attron")
+  void attron_reverse();
+#pragma push_macro("attroff")
+#undef attroff
+  void attroff();
+#pragma pop_macro("attroff")
   void clear();
   void erase();
   void mvprintw(types::Position, std::string_view);
   void refresh();
-  std::string getStr(); // TODO: investigate why name cannot be flat
+#pragma push_macro("getstr")
+#undef getstr
+  std::string getstr();
+#pragma pop_macro("getstr")
   void move(types::Position);
 
  public:

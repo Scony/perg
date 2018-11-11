@@ -6,12 +6,23 @@
 #include "NcursesWindow.hpp"
 #include "Region.hpp"
 
+namespace
+{
+void initStaticColors()
+{
+  init_pair(1, COLOR_WHITE, COLOR_BLUE); // reserved for text selection
+}
+} // namespace
+
 namespace perg::tui
 {
 Ncurses::Ncurses()
 {
   assert(::setenv("TERM", "xterm-256color", 1) == 0);
   ::initscr();
+  assert(start_color() == OK);
+  assert(COLORS >= 8);
+  initStaticColors();
 }
 
 Ncurses::~Ncurses()

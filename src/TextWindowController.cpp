@@ -26,7 +26,7 @@ TextWindowController::TextWindowController(
               ncurses.getRegion().rows - 2,
           }),
           textView)}
-    , handlers{{
+    , defaultHandlers{{
           {
               configuration.keystrokes.cursorDown,
               std::bind(&tui::TextWindow::moveCursorDown, textWindow.get()),
@@ -75,7 +75,46 @@ TextWindowController::TextWindowController(
               configuration.keystrokes.lineBegin,
               std::bind(&tui::TextWindow::moveCursorToLineBegin, textWindow.get()),
           },
+          {
+              configuration.keystrokes.textSelection,
+              std::bind(&TextWindowController::enableTextSelectionMode, this),
+          },
       }}
+    , textSelectionHandlers{{
+          {
+              configuration.keystrokes.cursorRight,
+              std::bind(&tui::TextWindow::moveCursorRight, textWindow.get()),
+          },
+          {
+              configuration.keystrokes.cursorLeft,
+              std::bind(&tui::TextWindow::moveCursorLeft, textWindow.get()),
+          },
+          {
+              configuration.keystrokes.wordRight,
+              std::bind(&tui::TextWindow::moveCursorOneWordRight, textWindow.get()),
+          },
+          {
+              configuration.keystrokes.wordLeft,
+              std::bind(&tui::TextWindow::moveCursorOneWordLeft, textWindow.get()),
+          },
+          {
+              configuration.keystrokes.lineEnd,
+              std::bind(&tui::TextWindow::moveCursorToLineEnd, textWindow.get()),
+          },
+          {
+              configuration.keystrokes.lineBegin,
+              std::bind(&tui::TextWindow::moveCursorToLineBegin, textWindow.get()),
+          },
+          {
+              configuration.keystrokes.textSelection,
+              std::bind(&TextWindowController::disableTextSelectionMode, this),
+          },
+          {
+              configuration.keystrokes.generalPurposeCancel,
+              std::bind(&TextWindowController::disableTextSelectionMode, this),
+          },
+      }}
+    , activeHandlers{defaultHandlers}
 {
 }
 
@@ -85,9 +124,9 @@ types::KeyPressed TextWindowController::awaitEvent()
   while (true)
   {
     types::KeyPressed keyPressed{keyboardInput.awaitKeyPressed(configuration.keyPressTimeout)};
-    if (handlers.find(keyPressed.keystroke) != handlers.end())
+    if (activeHandlers.find(keyPressed.keystroke) != activeHandlers.end())
     {
-      handlers.at(keyPressed.keystroke)();
+      activeHandlers.at(keyPressed.keystroke)();
       textWindow->render();
     }
     else
@@ -95,5 +134,19 @@ types::KeyPressed TextWindowController::awaitEvent()
       return keyPressed;
     }
   }
+}
+
+void TextWindowController::enableTextSelectionMode()
+{
+  activeHandlers = textSelectionHandlers;
+  textWindow->enableTextSelection();
+  // TODO: integration test
+}
+
+void TextWindowController::disableTextSelectionMode()
+{
+  activeHandlers = defaultHandlers;
+  textWindow->disableTextSelection();
+  // TODO: integration test
 }
 } // namespace perg::presenter

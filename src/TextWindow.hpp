@@ -3,11 +3,7 @@
 #include <memory>
 
 #include "types/Position.hpp"
-
-namespace perg::types
-{
-class TextView;
-}
+#include "types/TextView.hpp"
 
 namespace perg::tui
 {
@@ -31,15 +27,20 @@ class TextWindow
   void moveCursorOneWordLeft();
   void moveCursorToLineEnd();
   void moveCursorToLineBegin();
+  void enableTextSelection();
+  void disableTextSelection();
 
  private:
   std::string_view getCurrentLine() const;
   types::Position getCursorPositionInText() const;
   void setCursorPositionInText(types::Position);
+  void renderingVisitor(types::TextView::Iterator begin, types::TextView::Iterator end);
+  std::optional<types::Position> getSelectionMarkPositionInWindow() const;
 
   std::unique_ptr<NcursesWindow> window;
   std::shared_ptr<types::TextView> textView;
   types::Position cursorPosition{0, 0};
   types::Position windowPositionInText{0, 0};
+  std::optional<types::Position> selectionMarkPositionInText;
 };
 } // namespace perg::tui

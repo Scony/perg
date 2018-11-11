@@ -32,11 +32,16 @@ class TextWindowController
   types::KeyPressed awaitEvent();
 
  private:
+  void enableTextSelectionMode();
+  void disableTextSelectionMode();
+
   types::Configuration& configuration;
   std::shared_ptr<types::TextView> textView;
   tui::KeyboardInput& keyboardInput;
   tui::Ncurses& ncurses;
   std::unique_ptr<tui::TextWindow> textWindow;
-  const std::map<std::string, std::function<void()>> handlers;
+  const std::map<std::string, std::function<void()>> defaultHandlers;
+  const std::map<std::string, std::function<void()>> textSelectionHandlers;
+  std::map<std::string, std::function<void()>> activeHandlers;
 };
 } // namespace perg::presenter

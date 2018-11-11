@@ -17,7 +17,7 @@ std::string Minibuffer::readText(std::string text)
 {
   setText(text);
   render();
-  return window->getStr();
+  return window->getstr();
 }
 
 void Minibuffer::render()

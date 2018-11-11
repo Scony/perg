@@ -6,7 +6,7 @@ namespace perg::tui
 {
 StatusBar::StatusBar(std::unique_ptr<NcursesWindow> window) : window{std::move(window)}, text{""}
 {
-  this->window->wattron_reverse();
+  this->window->attron_reverse();
 }
 
 void StatusBar::setText(const std::string& text)
