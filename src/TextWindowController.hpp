@@ -30,10 +30,11 @@ class TextWindowController
       tui::Ncurses&);
 
   types::KeyPressed awaitEvent();
+  std::string_view getSelectedText() const;
+  void disableTextSelectionMode();
 
  private:
   void enableTextSelectionMode();
-  void disableTextSelectionMode();
 
   types::Configuration& configuration;
   std::shared_ptr<types::TextView> textView;

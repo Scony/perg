@@ -136,6 +136,11 @@ types::KeyPressed TextWindowController::awaitEvent()
   }
 }
 
+std::string_view TextWindowController::getSelectedText() const
+{
+  return textWindow->getSelectedText();
+}
+
 void TextWindowController::enableTextSelectionMode()
 {
   activeHandlers = textSelectionHandlers;

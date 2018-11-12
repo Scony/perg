@@ -1,5 +1,7 @@
-#include "TextWindow.hpp"
+#include <cassert>
+
 #include "NcursesWindow.hpp"
+#include "TextWindow.hpp"
 
 namespace perg::tui
 {
@@ -215,6 +217,26 @@ void TextWindow::enableTextSelection()
 void TextWindow::disableTextSelection()
 {
   selectionMarkPositionInText = {};
+}
+
+std::string_view TextWindow::getSelectedText() const
+{
+  std::string_view selectedText;
+  textView->applyFunctionToSlice(
+      [&selectedText, this](types::TextView::Iterator begin, types::TextView::Iterator) {
+        auto selectionMarkPositionInWindow = getSelectionMarkPositionInWindow();
+        assert(selectionMarkPositionInWindow);
+        auto line = *begin;
+        auto visibleLineFragment = line.substr(windowPositionInText.x, window->cols);
+        auto selectionBegin = std::min(cursorPosition.x, selectionMarkPositionInWindow->x);
+        auto selectionEnd = std::min(
+            std::max(cursorPosition.x, selectionMarkPositionInWindow->x),
+            visibleLineFragment.size());
+        selectedText = visibleLineFragment.substr(selectionBegin, selectionEnd - selectionBegin);
+      },
+      windowPositionInText.y + cursorPosition.y,
+      1);
+  return selectedText;
 }
 
 std::string_view TextWindow::getCurrentLine() const

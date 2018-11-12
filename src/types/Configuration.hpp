@@ -28,6 +28,7 @@ struct Configuration
     const std::string lineBegin;
     const std::string textSelection;
     const std::string generalPurposeCancel;
+    const std::string mark;
   };
   const Keystrokes keystrokes;
   const std::chrono::milliseconds keyPressTimeout;
@@ -36,18 +37,19 @@ struct Configuration
 
 BOOST_FUSION_ADAPT_STRUCT(
     perg::types::Configuration::Keystrokes,
-    (const std::string,
-     grep)(const std::string, grepCircleLeft)(const std::string, grepCircleRight)(
+    (const std::string, grep)(const std::string, grepCircleLeft)(
         const std::string,
-        quit)(const std::string, cursorDown)(const std::string, cursorUp)(
+        grepCircleRight)(const std::string, quit)(const std::string, cursorDown)(
         const std::string,
-        pageUp)(const std::string, pageDown)(const std::string, textBegin)(
+        cursorUp)(const std::string, pageUp)(const std::string, pageDown)(
         const std::string,
-        textEnd)(const std::string, cursorRight)(const std::string, cursorLeft)(
+        textBegin)(const std::string, textEnd)(const std::string, cursorRight)(
         const std::string,
-        wordRight)(const std::string, wordLeft)(const std::string, lineEnd)(
+        cursorLeft)(const std::string, wordRight)(const std::string, wordLeft)(
         const std::string,
-        lineBegin)(const std::string, textSelection)(const std::string, generalPurposeCancel)
+        lineEnd)(const std::string, lineBegin)(const std::string, textSelection)(
+        const std::string,
+        generalPurposeCancel)(const std::string, mark)
 
 );
 

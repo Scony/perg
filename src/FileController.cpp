@@ -26,6 +26,14 @@ FileController::FileController(
     , ncurses{ncurses}
     , minibuffer{minibuffer}
     , statusBar{statusBar}
+    , handlers{
+          {configuration.keystrokes.grepCircleLeft,
+           std::bind(&FileController::grepCircleLeft, this)},
+          {configuration.keystrokes.grepCircleRight,
+           std::bind(&FileController::grepCircleRight, this)},
+          {configuration.keystrokes.grep, std::bind(&FileController::grepBySubstring, this)},
+          {configuration.keystrokes.mark, std::bind(&FileController::toggleTextMark, this)},
+      }
 {
   auto mainTextView = fileModel.getGrepsVector().at(0)->getTextView();
   auto mainTextWindow =
@@ -42,29 +50,49 @@ types::KeyPressed FileController::awaitEvent()
     statusBar.setText(grepName);
     statusBar.render();
     auto keyPressed = textWindow->awaitEvent();
-    if (keyPressed.keystroke == configuration.keystrokes.grepCircleLeft)
+    if (handlers.find(keyPressed.keystroke) != handlers.end())
     {
-      visibleGrep = visibleGrep >= 1 ? visibleGrep - 1 : greps.size() - 1;
+      handlers.at(keyPressed.keystroke)();
       continue;
     }
-    if (keyPressed.keystroke == configuration.keystrokes.grepCircleRight)
-    {
-      visibleGrep = (visibleGrep + 1) % greps.size();
-      continue;
-    }
-    if (keyPressed.keystroke != configuration.keystrokes.grep)
+    else
     {
       return keyPressed;
     }
-    auto grepPattern = minibuffer.readText("Grep: ");
-    auto presentGrep = fileModel.getGrepsVector().at(visibleGrep);
-    auto newGrep = fileModel.grep(presentGrep, grepPattern);
-    auto newTextView = newGrep->getTextView();
-    auto newTextWindow =
-        std::make_unique<TextWindowController>(configuration, newTextView, keyboardInput, ncurses);
-    greps.emplace_back(std::move(newTextWindow));
-    visibleGrep++;
   }
   return types::KeyPressed{""};
+}
+
+void FileController::grepCircleLeft()
+{
+  visibleGrep = visibleGrep >= 1 ? visibleGrep - 1 : greps.size() - 1;
+}
+
+void FileController::grepCircleRight()
+{
+  visibleGrep = (visibleGrep + 1) % greps.size();
+}
+
+void FileController::grepBySubstring()
+{
+  auto grepPattern = minibuffer.readText("Grep: ");
+  auto presentGrep = fileModel.getGrepsVector().at(visibleGrep);
+  auto newGrep = fileModel.grep(presentGrep, grepPattern);
+  auto newTextView = newGrep->getTextView();
+  auto newTextWindow =
+      std::make_unique<TextWindowController>(configuration, newTextView, keyboardInput, ncurses);
+  greps.emplace_back(std::move(newTextWindow));
+  visibleGrep = greps.size() - 1;
+}
+
+void FileController::toggleTextMark()
+{
+  auto& textWindow = greps[visibleGrep];
+  std::string selectedText{textWindow->getSelectedText()};
+  textWindow->disableTextSelectionMode();
+  // TODO: toggle mark in model
+  // TODO: remove below
+  minibuffer.setText(selectedText);
+  minibuffer.render();
 }
 } // namespace perg::presenter

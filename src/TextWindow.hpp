@@ -29,6 +29,7 @@ class TextWindow
   void moveCursorToLineBegin();
   void enableTextSelection();
   void disableTextSelection();
+  std::string_view getSelectedText() const;
 
  private:
   std::string_view getCurrentLine() const;

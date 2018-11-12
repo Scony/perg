@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -41,6 +43,11 @@ class FileController
   types::KeyPressed awaitEvent();
 
  private:
+  void grepCircleLeft();
+  void grepCircleRight();
+  void grepBySubstring();
+  void toggleTextMark();
+
   types::Configuration& configuration;
   model::FileModel& fileModel;
   tui::KeyboardInput& keyboardInput;
@@ -49,5 +56,6 @@ class FileController
   tui::StatusBar& statusBar;
   std::vector<std::unique_ptr<TextWindowController>> greps;
   std::size_t visibleGrep{0};
+  std::map<std::string, std::function<void()>> handlers;
 };
 } // namespace perg::presenter

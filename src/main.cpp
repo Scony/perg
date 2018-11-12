@@ -37,6 +37,7 @@ perg::types::Configuration configuration{
     lineBegin : "<C-a>",
     textSelection : "<C- >",
     generalPurposeCancel : "<C-g>",
+    mark : "m",
   },
   keyPressTimeout : std::chrono::milliseconds{200},
 };
