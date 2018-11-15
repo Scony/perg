@@ -12,10 +12,12 @@ namespace perg::presenter
 TextWindowController::TextWindowController(
     types::Configuration& configuration,
     std::shared_ptr<types::TextView> textView,
+    const std::vector<types::Mark>& marks,
     tui::KeyboardInput& keyboardInput,
     tui::Ncurses& ncurses)
     : configuration{configuration}
     , textView{textView}
+    , marks{marks}
     , keyboardInput{keyboardInput}
     , ncurses{ncurses}
     , textWindow{std::make_unique<tui::TextWindow>(
@@ -25,7 +27,8 @@ TextWindowController::TextWindowController(
               ncurses.getRegion().cols,
               ncurses.getRegion().rows - 2,
           }),
-          textView)}
+          textView,
+          marks)}
     , defaultHandlers{{
           {
               configuration.keystrokes.cursorDown,

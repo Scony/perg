@@ -8,6 +8,7 @@
 #include "GrepModel.hpp"
 #include "GrepProcessor.hpp"
 #include "exceptions/FileOpenError.hpp"
+#include "types/Mark.hpp"
 #include "types/TextView.hpp"
 
 namespace perg::model
@@ -58,5 +59,24 @@ std::shared_ptr<GrepModel> FileModel::grep(std::shared_ptr<GrepModel> grep, std:
   auto newGrep = std::make_shared<GrepModel>(grepName, newTextView);
   greps.emplace_back(newGrep);
   return newGrep;
+}
+
+const std::vector<types::Mark>& FileModel::getMarks() const
+{
+  return marks;
+}
+
+void FileModel::toggleMark(std::string text)
+{
+  auto it = std::find_if(
+      marks.begin(), marks.end(), [&text](const auto& mark) { return mark.text == text; });
+  if (it == marks.end())
+  {
+    marks.push_back(types::Mark{text, 1u});
+  }
+  else
+  {
+    marks.erase(it);
+  }
 }
 } // namespace perg::model

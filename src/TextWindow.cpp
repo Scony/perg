@@ -2,49 +2,70 @@
 
 #include "NcursesWindow.hpp"
 #include "TextWindow.hpp"
+#include "types/Mark.hpp"
 
 namespace perg::tui
 {
 TextWindow::TextWindow(
     std::unique_ptr<NcursesWindow> window,
-    std::shared_ptr<types::TextView> textView)
-    : window{std::move(window)}, textView{textView}
+    std::shared_ptr<types::TextView> textView,
+    const std::vector<types::Mark>& marks)
+    : window{std::move(window)}, textView{textView}, marks{marks}
 {
+}
+
+void TextWindow::printVisibleLineFragment(const std::size_t& y, const std::string_view& line)
+{
+  window->mvprintw(types::Position{0, y}, line.substr(windowPositionInText.x, window->cols));
+}
+
+void TextWindow::highlightMarkedLineFragments(const std::size_t& y, const std::string_view& line)
+{
+  for (const auto& mark : marks)
+  {
+    auto visibleLineFragment = line.substr(windowPositionInText.x, window->cols);
+    auto markPos = visibleLineFragment.find(mark.text);
+    if (markPos != std::string::npos)
+    {
+      window->attron();
+      window->mvprintw(
+          types::Position{windowPositionInText.x + markPos, y},
+          visibleLineFragment.substr(markPos, mark.text.size()));
+      window->attroff();
+    }
+  }
+}
+
+void TextWindow::highlightSelectedLineFragment(const std::size_t& y, const std::string_view& line)
+{
+  auto selectionMarkPositionInWindow = getSelectionMarkPositionInWindow();
+  auto visibleLineFragment = line.substr(windowPositionInText.x, window->cols);
+  auto selectionBegin = std::min(cursorPosition.x, selectionMarkPositionInWindow->x);
+  auto selectionEnd = std::min(
+      std::max(cursorPosition.x, selectionMarkPositionInWindow->x), visibleLineFragment.size());
+
+  window->attron();
+  window->mvprintw(
+      types::Position{selectionBegin, y},
+      visibleLineFragment.substr(selectionBegin, selectionEnd - selectionBegin));
+  window->attroff();
 }
 
 void TextWindow::renderingVisitor(types::TextView::Iterator begin, types::TextView::Iterator end)
 {
-  std::size_t lineNo = 0;
   for (auto it = begin; it != end; it++)
   {
+    std::size_t lineNumber = std::distance(begin, it);
     const auto& line = *it;
     if (windowPositionInText.x < line.size())
     {
+      printVisibleLineFragment(lineNumber, line);
+      highlightMarkedLineFragments(lineNumber, line);
       auto selectionMarkPositionInWindow = getSelectionMarkPositionInWindow();
-      if (selectionMarkPositionInWindow and selectionMarkPositionInWindow->y == lineNo)
+      if (selectionMarkPositionInWindow and selectionMarkPositionInWindow->y == lineNumber)
       {
-        auto visibleLineFragment = line.substr(windowPositionInText.x, window->cols);
-        auto selectionBegin = std::min(cursorPosition.x, selectionMarkPositionInWindow->x);
-        auto selectionEnd = std::min(
-            std::max(cursorPosition.x, selectionMarkPositionInWindow->x),
-            visibleLineFragment.size());
-
-        window->mvprintw(types::Position{0, lineNo}, visibleLineFragment.substr(0, selectionBegin));
-        window->attron();
-        window->mvprintw(
-            types::Position{selectionBegin, lineNo},
-            visibleLineFragment.substr(selectionBegin, selectionEnd - selectionBegin));
-        window->attroff();
-        window->mvprintw(
-            types::Position{selectionEnd, lineNo},
-            visibleLineFragment.substr(selectionEnd, visibleLineFragment.size() - selectionEnd));
+        highlightSelectedLineFragment(lineNumber, line);
       }
-      else
-      {
-        window->mvprintw(
-            types::Position{0, lineNo}, line.substr(windowPositionInText.x, window->cols));
-      }
-      lineNo++;
     }
   }
 }

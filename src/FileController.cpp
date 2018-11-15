@@ -36,8 +36,8 @@ FileController::FileController(
       }
 {
   auto mainTextView = fileModel.getGrepsVector().at(0)->getTextView();
-  auto mainTextWindow =
-      std::make_unique<TextWindowController>(configuration, mainTextView, keyboardInput, ncurses);
+  auto mainTextWindow = std::make_unique<TextWindowController>(
+      configuration, mainTextView, fileModel.getMarks(), keyboardInput, ncurses);
   greps.emplace_back(std::move(mainTextWindow));
 }
 
@@ -79,8 +79,8 @@ void FileController::grepBySubstring()
   auto presentGrep = fileModel.getGrepsVector().at(visibleGrep);
   auto newGrep = fileModel.grep(presentGrep, grepPattern);
   auto newTextView = newGrep->getTextView();
-  auto newTextWindow =
-      std::make_unique<TextWindowController>(configuration, newTextView, keyboardInput, ncurses);
+  auto newTextWindow = std::make_unique<TextWindowController>(
+      configuration, newTextView, fileModel.getMarks(), keyboardInput, ncurses);
   greps.emplace_back(std::move(newTextWindow));
   visibleGrep = greps.size() - 1;
 }
@@ -90,9 +90,6 @@ void FileController::toggleTextMark()
   auto& textWindow = greps[visibleGrep];
   std::string selectedText{textWindow->getSelectedText()};
   textWindow->disableTextSelectionMode();
-  // TODO: toggle mark in model
-  // TODO: remove below
-  minibuffer.setText(selectedText);
-  minibuffer.render();
+  fileModel.toggleMark(selectedText);
 }
 } // namespace perg::presenter
